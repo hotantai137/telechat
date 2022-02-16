@@ -2,11 +2,12 @@ import React from 'react';
 import './index.css';
 import {Route} from 'react-router-dom';
 import Home from '../home';
+import avatar from '../../assets/image/taiht.jpg';
 
 function Login() {
-    function onClickSignUp(){
-        this.props.history.push('/');
-    }
+    // function onClickSignUp(){
+    //     this.props.history.push('/');
+    // }
 
     // render() {
     //     return (
@@ -19,7 +20,8 @@ function Login() {
     //     );
     //   }
 
-    return( <div className="signup">
+    return( 
+        <div className="signup">
                 <h1 className="signup-heading">Sign up</h1>
                 <button className="signup-social">
                     <i className="fa fa-google signup-social-icon"></i>
@@ -31,14 +33,13 @@ function Login() {
                     <input type="text" id="fullname" className="signup-input" placeholder="Eg: Tấn Tài"/>
                     <label htmlFor="email" className="signup-label">Email</label>
                     <input type="text" id="email" className="signup-input" placeholder="Eg: taidepzai@gmail.com"/>
-                    <button className="signup-submit" onClick={onClickSignUp}>Sign up</button>
+                    <button className="signup-submit" >Sign up</button>
                 </form>
                 <p className="signup-already">
                     <span>Already have an account ?</span>
                     <a href="google.com" className="signup-login-link">Login</a>
                 </p>
-                <Route path="/" component={Home}/>
-            </div>
+        </div>
     )
 }
 export default Login;
