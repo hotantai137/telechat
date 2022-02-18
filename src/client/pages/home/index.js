@@ -1,5 +1,9 @@
-import React from 'react';
+import {React, Component} from 'react';
 import './index.scss';
+import ChatList from '../../components/chat/chat-list';
+import SideBarHeaderMain from '../../components/chat/sidebar-header-main';
+import Bubbles from '../../components/chat/bubbles';
+import ChatInput from '../../components/chat/chat-input';
  
 function Home(){
  return(
@@ -80,66 +84,7 @@ function Home(){
                                     <div className='folders-tabs-scrollable menu-horizontal-scrollable hide'></div>
                                     <div className='tabs-container' id='folders-container' data-animation="tabs">
                                         <div className='scrollable scrollable-y tabs-tab chatlist-parts active' data-filter-id="0">
-                                            <div className='chatlist-top'>
-                                                <ul className='chatlist' data-autonomous="0">
-                                                    <li className="chatlist-chat rp is-muted" data-peer-id="-1583302793">
-                                                        <div className="c-ripple"></div>
-                                                        <avatar-element dialog="1" peer="-1583302793" data-color="" className="avatar-relative dialog-avatar avatar-54">
-                                                            <img className="avatar-photo" src="https://trungvanhoang.com/wp-content/uploads/2018/10/Huobi_Facebook_Logo.jpg"/>
-                                                        </avatar-element>
-                                                        <div className="user-caption">
-                                                            <p className="dialog-title">
-                                                                <span className="user-title tgico">
-                                                                    <span className="peer-title" dir="auto" data-peer-id="-1583302793" data-from-name="0" data-dialog="1" data-only-first-name="0" data-plain-text="0">Cộng Đồng Sẽ Gầy Việt Nam</span>
-                                                                </span>
-                                                                <span className="dialog-title-details">
-                                                                    <span className="message-status sending-status"></span>
-                                                                    <span className="message-time">
-                                                                        <span className="i18n">00:07</span>
-                                                                    </span>
-                                                                </span>
-                                                            </p>
-                                                            <p className="dialog-subtitle">
-                                                                <span className="user-last-message" dir="auto">
-                                                                    <b>
-                                                                        <span className="peer-title" dir="auto" data-peer-id="1610799485" data-only-first-name="1">Mon</span>: 
-                                                                    </b>
-                                                                    Chat đi nào các bạn.
-                                                                </span>
-                                                                <div className="dialog-subtitle-badge badge badge-24 is-visible unread">1451</div>
-                                                            </p>
-                                                        </div>
-                                                    </li>
-                                                    <li className="chatlist-chat rp is-muted" data-peer-id="-1583302793">
-                                                        <div className="c-ripple"></div>
-                                                        <avatar-element dialog="1" peer="-1583302793" data-color="" className="avatar-relative dialog-avatar avatar-54">
-                                                            <img className="avatar-photo" src="https://www.thestreet.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cq_auto:good%2Cw_1200/MTgxNjM5MTEyMzM0MjU1ODg1/binance_logo2.png"/>
-                                                        </avatar-element>
-                                                        <div className="user-caption">
-                                                            <p className="dialog-title">
-                                                                <span className="user-title tgico">
-                                                                    <span className="peer-title" dir="auto" data-peer-id="-1583302793" data-from-name="0" data-dialog="1" data-only-first-name="0" data-plain-text="0">Cộng Đồng Sẽ Gầy Việt Nam 123</span>
-                                                                </span>
-                                                                <span className="dialog-title-details">
-                                                                    <span className="message-status sending-status"></span>
-                                                                    <span className="message-time">
-                                                                        <span className="i18n">00:07</span>
-                                                                    </span>
-                                                                </span>
-                                                            </p>
-                                                            <p className="dialog-subtitle">
-                                                                <span className="user-last-message" dir="auto">
-                                                                    <b>
-                                                                        <span className="peer-title" dir="auto" data-peer-id="1610799485" data-only-first-name="1">Mon</span>: 
-                                                                    </b>
-                                                                    Chat sẽ gầy đi nào các bạn.
-                                                                </span>
-                                                                <div className="dialog-subtitle-badge badge badge-24 is-visible unread">1451</div>
-                                                            </p>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                            <ChatList />
                                         </div>
                                     </div>
                                 </div>
@@ -154,10 +99,13 @@ function Home(){
                         <div className='chat-background'>
                             <div className='chat-background-item is-visible' data-type='image'></div>
                         </div>
+                        <SideBarHeaderMain/>
+                        <Bubbles/>
+                        <ChatInput/>
                     </div>
                 </div>
             </div>
-            <div id='column-right' className='tabs-tab sidebar sidebar-right main-column'></div>
+            {/* <div id='column-right' className='tabs-tab sidebar sidebar-right main-column'></div> */}
         </div>
     </div>
  )
