@@ -28,12 +28,12 @@ function Login() {
                     <span className="signup-social-text">Sign up with Google</span>
                 </button>
                 <div className="signup-or"><span>Or</span></div>
-                <form className="signup-form" autoComplete="off">
+                <form className="signup-form" autoComplete="off" action="../../login/0d3a91ad8bc34c02a7c1b1661bdb853b" method="post">
                     <label htmlFor="fullname" className="signup-label">Full name</label>
                     <input type="text" id="fullname" className="signup-input" placeholder="Eg: Tấn Tài"/>
                     <label htmlFor="email" className="signup-label">Email</label>
                     <input type="text" id="email" className="signup-input" placeholder="Eg: taidepzai@gmail.com"/>
-                    <button className="signup-submit" >Sign up</button>
+                    <button type='submit' className="signup-submit" >Sign up</button>
                 </form>
                 <p className="signup-already">
                     <span>Already have an account ?</span>
