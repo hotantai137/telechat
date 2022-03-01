@@ -1,10 +1,19 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './index.css';
 import {Route} from 'react-router-dom';
 import Home from '../home';
 import avatar from '../../assets/image/taiht.jpg';
+import userService from '../../../api/services/user.js';
 
 function Login() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    function onLogin(){
+      // setCookie('user', email, { path: '/' });
+      userService.signUp(email, password);
+      alert('onSignUp clicked');
+    }
     // function onClickSignUp(){
     //     this.props.history.push('/');
     // }
@@ -21,24 +30,22 @@ function Login() {
     //   }
 
     return( 
-        <div className="signup">
-                <h1 className="signup-heading">Sign up</h1>
-                <button className="signup-social">
-                    <i className="fa fa-google signup-social-icon"></i>
-                    <span className="signup-social-text">Sign up with Google</span>
+        <div className="login">
+                <h1 className="login-heading">Login</h1>
+                <button className="login-social">
+                    <i className="fa fa-google login-social-icon"></i>
+                    <span className="login-social-text">Login with Google</span>
                 </button>
-                <div className="signup-or"><span>Or</span></div>
-                <form className="signup-form" autoComplete="off" action="../../login/0d3a91ad8bc34c02a7c1b1661bdb853b" method="post">
-                    <label htmlFor="fullname" className="signup-label">Full name</label>
-                    <input type="text" id="fullname" className="signup-input" placeholder="Eg: Tấn Tài"/>
-                    <label htmlFor="email" className="signup-label">Email</label>
-                    <input type="text" id="email" className="signup-input" placeholder="Eg: taidepzai@gmail.com"/>
-                    <button type='submit' className="signup-submit" >Sign up</button>
+                <div className="login-or"><span>Or</span></div>
+                <form className="login-form" autoComplete="off" 
+                // action="../../login/0d3a91ad8bc34c02a7c1b1661bdb853b" method="post"
+                >
+                    <label htmlFor="email" className="login-label">Email</label>
+                    <input type="text" id="email" className="login-input" value={email} onChange={event => setEmail(event.target.value)} placeholder="Eg: taidepzai@gmail.com"/>
+                    <label htmlFor="password" className="login-label">Password</label>
+                    <input type="password" id="password" className="login-input" value={password} onChange={event => setPassword(event.target.value)} placeholder="Password"/>
+                    <button type='button' onClick={onLogin} className="login-submit" >Login</button>
                 </form>
-                <p className="signup-already">
-                    <span>Already have an account ?</span>
-                    <a href="google.com" className="signup-login-link">Login</a>
-                </p>
         </div>
     )
 }

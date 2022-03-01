@@ -1,43 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './index.css';
 import {Route} from 'react-router-dom';
 import Home from '../home';
 import avatar from '../../assets/image/taiht.jpg';
 import { useCookies } from 'react-cookie';
+import userService from '../../../api/services/user.js';
 
 function showUsers() {
+  alert('showUsers clicked');
     fetch('http://localhost:3001/users')
     .then(res => res.json())
     .then(data => console.log(data));
 }
 
-async function postData(url = '', data = {}) {
-  // Default options are marked with *
-  const response = await fetch(url, {
-    method: 'GET', // *GET, POST, PUT, DELETE, etc.
-    mode: 'no-cors', // no-cors, *cors, same-origin
-    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: 'same-origin', // include, *same-origin, omit
-    headers: {
-      'Content-Type': 'application/json'
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    redirect: 'follow', // manual, *follow, error
-    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    // body: JSON.stringify(data) // body data type must match "Content-Type" header
-  });
-//   console.log(response);
-  return response.json(); // parses JSON response into native JavaScript objects
-}
-
-
 
 
 function SignUp() {    
-    const [cookies, setCookie, removeCookie] = useCookies(['user']);
-    function onSignUp(email){
-        setCookie('user', email, { path: '/' });
+    // const [cookies, setCookie, removeCookie] = useCookies(['user']);
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    function onSignUp(){
+      // setCookie('user', email, { path: '/' });
+      userService.signUp(firstName, email, password);
+      alert('onSignUp clicked');
     }
+    
     
     // function onClickSignUp(){
     //     this.props.history.push('/');
@@ -66,14 +56,14 @@ function SignUp() {
                 // action="../../login/0d3a91ad8bc34c02a7c1b1661bdb853b" method="post"
                 >
                     <label htmlFor="fullname" className="signup-label">Full name</label>
-                    <input type="text" id="fullname" className="signup-input" placeholder="Eg: Tấn Tài"/>
+                    <input type="text" id="fullname" className="signup-input" value={firstName} onChange={event => setFirstName(event.target.value)} placeholder="Eg: Tấn Tài"/>
                     <label htmlFor="email" className="signup-label">Email</label>
-                    <input type="text" id="email" className="signup-input" placeholder="Eg: taidepzai@gmail.com"/>
+                    <input type="text" id="email" className="signup-input" value={email} onChange={event => setEmail(event.target.value)} placeholder="Eg: taidepzai@gmail.com"/>
                     <label htmlFor="password" className="signup-label">Password</label>
-                    <input type="password" id="password" className="signup-input" placeholder="Password"/>
-                    <button onClick={setCookie('taiht')} className="signup-submit" >Sign up</button>
+                    <input type="password" id="password" className="signup-input" value={password} onChange={event => setPassword(event.target.value)} placeholder="Password"/>
+                    {/* <button onClick={setCookie('taiht')} className="signup-submit" >Sign up</button> */}
+                    <button type="button" onClick={onSignUp} className="signup-submit" >Sign up</button>
                 </form>
-                <button onClick={onSignUp('taiht')} className="signup-submit" >Sign up</button>
                 <p className="signup-already">
                     <span>Already have an account ?</span>
                     <a href="google.com" className="signup-login-link">Login</a>

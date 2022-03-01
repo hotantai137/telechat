@@ -19,8 +19,8 @@ function ChatInput(){
                                 dir="auto" data-placeholder="Message" style={{transitionDuration: '152ms', height: '37px'}} contentEditable="true">
                             </div>
                         </div>
-                        <div class="btn-icon btn-menu-toggle attach-file tgico-attach">
-                            <i class="far fa-paperclip"></i>
+                        <div className="btn-icon btn-menu-toggle attach-file tgico-attach">
+                            <i className="far fa-paperclip"></i>
                             {/* <div class="btn-menu top-left">
                                 <div class="btn-menu-item rp-overflow tgico-image rp">
                                     <div class="c-ripple"></div>

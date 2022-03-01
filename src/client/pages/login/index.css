@@ -14,22 +14,26 @@
     justify-content: center;
     padding: 10px 0;
 } */
-.signup{
+.login{
     background-color: #fff;
     padding: 90px 75px;
     width: 100%;
     max-width: 600px;
     border-radius: 30px;
     margin: 0 auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
-.signup-heading{
+.login-heading{
     font-size: 40px;
     font-weight: bold;
     color: #373941;
     margin-bottom: 35px;
     text-align: center;
 }
-.signup-social{
+.login-social{
     padding: 10px;
     border-radius: 20px;
     display: block;
@@ -45,7 +49,7 @@
     cursor: pointer;
     box-shadow: 0 5px 10px 0 rgba(76, 111, 244, 0.5);
 }
-.signup-social-icon{
+.login-social-icon{
     width: 60px;
     height: 60px;
     border-radius: 10px;
@@ -56,25 +60,25 @@
     color: #4c6ff4;
     font-size: 30px !important;
 }
-.signup-social-text{
+.login-social-text{
     margin: 0 auto;
     display: block;
 }
-.signup-or{
+.login-or{
     text-align: center;
     font-size: 16px;
     color: #999;
     margin: 55px auto;
     position: relative;
 }
-.signup-or span{
+.login-or span{
     display: inline-block;
     padding: 10px 30px;
     background-color: #fff;
     z-index: 2;
     position: relative;
 }
-.signup-or:after{
+.login-or:after{
     content: "";
     width: 100%;
     height: 1px;
@@ -84,7 +88,7 @@
     left: 0;
     transform: translateY(-50%);
 }
-.signup-label{
+.login-label{
     color: #63676B;
     font-size: 16px;
     margin-bottom: 10px;
@@ -92,7 +96,7 @@
     cursor: pointer;
     font-weight: 500;
 }
-.signup-input{
+.login-input{
     display: block;
     width: 100%;
     padding: 25px;
@@ -104,15 +108,15 @@
     font-size: 18px;
     margin-bottom: 30px;
 }
-.signup-input::-webkit-input-placeholder{
+.login-input::-webkit-input-placeholder{
     color: #B4BAC0;
     font-weight: 500;
 }
-.signup-input::-moz-input-placeholder{
+.login-input::-moz-input-placeholder{
     color: #B4BAC0;
     font-weight: 500;
 }
-.signup-submit{
+.login-submit{
     padding: 25px;
     color:white;
     font-size: 18px;
@@ -129,12 +133,12 @@
     box-shadow: 0 5px 10px 0 rgba(130, 201, 30, 0.5);
     margin-top: 25px;
 }
-.signup-already{
+.login-already{
     text-align: center;
     font-size: 16px;
     color:#999;
 }
-.signup-login-link{
+.login-login-link{
     color: #2979ff;
     text-decoration: none;
 }
