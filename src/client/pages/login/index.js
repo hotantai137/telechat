@@ -1,18 +1,21 @@
 import React, {useState} from 'react';
 import './index.css';
-import {Route} from 'react-router-dom';
+import {Route, useNavigate} from 'react-router-dom';
 import Home from '../home';
 import avatar from '../../assets/image/taiht.jpg';
 import userService from '../../../api/services/user.js';
+import { useCookies, Cookies } from 'react-cookie';
 
 function Login() {
+    const navigate = useNavigate();
+    const cookies = new Cookies();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    function onLogin(){
-      // setCookie('user', email, { path: '/' });
-      userService.signUp(email, password);
-      alert('onSignUp clicked');
+    async function onLogin(){
+      
+    //   const res = await userService.signUp(email, password);
+    //   setCookie('user-token', email, { path: '/' });
     }
     // function onClickSignUp(){
     //     this.props.history.push('/');

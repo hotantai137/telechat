@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import './index.css';
-import {Route} from 'react-router-dom';
+import {Route, useNavigate } from 'react-router-dom';
 import Home from '../home';
 import avatar from '../../assets/image/taiht.jpg';
-import { useCookies } from 'react-cookie';
+import { useCookies, Cookies } from 'react-cookie';
 import userService from '../../../api/services/user.js';
 
 function showUsers() {
@@ -16,33 +16,30 @@ function showUsers() {
 
 
 function SignUp() {    
-    // const [cookies, setCookie, removeCookie] = useCookies(['user']);
+    const navigate = useNavigate();
+    const [cookieUser, setCookieUser, removeCookieUser] = useCookies('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    function onSignUp(){
-      // setCookie('user', email, { path: '/' });
-      userService.signUp(firstName, email, password);
-      alert('onSignUp clicked');
+    async function onSignUp(){
+      const res = await userService.signUp(firstName, email, password); 
+      var today = new Date();   
+      var tomorrow = new Date();
+      tomorrow.setDate(today.getDate()+1);
+      setCookieUser('user-token', res.token, {
+        expires: tomorrow,
+        // maxAge: 3600 // Will expire after 1hr (value is in number of sec.)
+      });
+      // this.props.history.push('/');
+      navigate("/");
     }
     
     
     // function onClickSignUp(){
     //     this.props.history.push('/');
     // }
-
-    // render() {
-    //     return (
-    //       <div className="App">
-    //         <div className="container">
-    //             <button id="b1" onClick ={this.try}>Click me</button>
-    //             <Route path="/hello" component={Hello}/>
-    //         </div>
-    //       </div>
-    //     );
-    //   }
 
     return( 
         <div className="signup">

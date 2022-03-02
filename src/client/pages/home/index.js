@@ -1,11 +1,21 @@
 import {React, Component} from 'react';
+import {useNavigate} from 'react-router-dom';
+import { Cookies } from 'react-cookie';
 import './index.scss';
 import ChatList from '../../components/chat/chat-list';
 import SideBarHeaderMain from '../../components/chat/sidebar-header-main';
 import Bubbles from '../../components/chat/bubbles';
 import ChatInput from '../../components/chat/chat-input';
+import Login from '../login';
  
 function Home(){
+    const navigate = useNavigate();
+    const cookies = new Cookies();
+    let userToken = cookies.get('user-token');
+    if(!userToken){
+        navigate("/login");
+        return <Login/>;
+    }
  return(
     <div className='whole page-chats' id='page-chats'>
         <div id='main-columns' className='tabs-container'>
