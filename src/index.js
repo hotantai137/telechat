@@ -5,11 +5,12 @@ import App from './client/app/App';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
-  <React.StrictMode>
+  // <React.StrictMode></React.StrictMode>
+  <React.Fragment>    
     <React.Suspense fallback={<div>Loading... </div>}>
       <App />
     </React.Suspense>
-  </React.StrictMode>,
+  </React.Fragment>,
   document.getElementById('root')
 );
 

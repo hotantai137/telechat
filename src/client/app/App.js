@@ -8,6 +8,7 @@ import SignUp from '../pages/signup';
 import routes from '../pages/routes';
 
 function App() {
+  console.log(routes);
   return (
     <div className="App">
       <Router>

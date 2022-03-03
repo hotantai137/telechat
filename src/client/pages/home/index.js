@@ -1,4 +1,4 @@
-import {React, Component} from 'react';
+import {React, Component, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import { Cookies } from 'react-cookie';
 import './index.scss';
@@ -7,15 +7,33 @@ import SideBarHeaderMain from '../../components/chat/sidebar-header-main';
 import Bubbles from '../../components/chat/bubbles';
 import ChatInput from '../../components/chat/chat-input';
 import Login from '../login';
+import auth from '../../../api/auth';
  
 function Home(){
     const navigate = useNavigate();
     const cookies = new Cookies();
-    let userToken = cookies.get('user-token');
-    if(!userToken){
-        navigate("/login");
-        return <Login/>;
-    }
+
+    useEffect(() => {
+        let userInfo = JSON.parse(localStorage.getItem('userInfo'));
+        let userToken = cookies.get('user-token');
+        if(!userToken){
+            navigate("/login");
+            return <Login/>;
+        }
+
+        if(!userInfo){
+            auth.checkToken(userToken).then(data => 
+                {
+                    if(data.user){
+                        localStorage.setItem('userInfo', JSON.stringify(data.user));
+                    }else{
+                        navigate("/login");
+                        return <Login/>;
+                    }     
+                }
+            )           
+        }
+    }, []);
  return(
     <div className='whole page-chats' id='page-chats'>
         <div id='main-columns' className='tabs-container'>
