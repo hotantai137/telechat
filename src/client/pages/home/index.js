@@ -1,4 +1,4 @@
-import {React, Component, useEffect} from 'react';
+import {React, Component, useEffect, useRef } from 'react';
 import {useNavigate} from 'react-router-dom';
 import { Cookies } from 'react-cookie';
 import './index.scss';
@@ -8,10 +8,13 @@ import Bubbles from '../../components/chat/bubbles';
 import ChatInput from '../../components/chat/chat-input';
 import Login from '../login';
 import auth from '../../../api/auth';
+import socketIOClient from "socket.io-client";
  
 function Home(){
     const navigate = useNavigate();
     const cookies = new Cookies();
+    const socketRef = useRef();
+    const host = "http://localhost:3001";
 
     useEffect(() => {
         let userInfo = JSON.parse(localStorage.getItem('userInfo'));
@@ -33,6 +36,8 @@ function Home(){
                 }
             )           
         }
+
+        socketRef.current = socketIOClient.connect(host);
     }, []);
  return(
     <div className='whole page-chats' id='page-chats'>

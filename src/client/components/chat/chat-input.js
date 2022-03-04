@@ -1,6 +1,16 @@
-import React from "react";
+import React, {useState, setState} from "react";
 
 function ChatInput(){
+    const [chatContent, setChatContent] = useState('Tài nè');
+
+    function onChatPush(event){
+        if(event.key === 'Enter' && !event.shiftKey){
+            console.log('user chat: ' + event.target.innerText);
+            event.target.textContent  = '';
+            event.preventDefault();
+        }
+    }
+
     return <div className="chat-input">
         <div className="chat-input-container">
             <div className="rows-wrapper-wrapper">
@@ -16,7 +26,10 @@ function ChatInput(){
                         </button>
                         <div className="input-message-container">
                             <div className="input-message-input scrollable scrollable-y i18n no-scrollbar"
-                                dir="auto" data-placeholder="Message" style={{transitionDuration: '152ms', height: '37px'}} contentEditable="true">
+                                dir="auto" data-placeholder="Message" style={{transitionDuration: '152ms', height: '37px'}} contentEditable="true"
+                                onKeyPress={onChatPush}
+                                // onInput={event => setChatContent(event.target.innerText)}
+                                >
                             </div>
                         </div>
                         <div className="btn-icon btn-menu-toggle attach-file tgico-attach">

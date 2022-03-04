@@ -21,10 +21,8 @@ async function postData(url = '', data = {}) {
 export default{
     checkToken: async (token) => {
         return await postData('http://localhost:3001/users/token', { token: token});
-
-        // .then(data => {
-        //   console.log(data); // JSON data parsed by `data.json()` call
-        //   return data;
-        // });
-    }    
+    },
+    login: async (email, password) => {
+      return await postData('http://localhost:3001/users/login', { email: email, password: password});
+  }
 }

@@ -18,13 +18,14 @@ function showUsers() {
 function SignUp() {    
     const navigate = useNavigate();
     const [cookieUser, setCookieUser, removeCookieUser] = useCookies('');
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
+    const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     async function onSignUp(){
-      const res = await userService.signUp(firstName, email, password); 
+      const res = await userService.signUp(fullName, email, password);
+      if(!res.success) return;
+
       var today = new Date();   
       var tomorrow = new Date();
       tomorrow.setDate(today.getDate()+1);
@@ -53,7 +54,7 @@ function SignUp() {
                 // action="../../login/0d3a91ad8bc34c02a7c1b1661bdb853b" method="post"
                 >
                     <label htmlFor="fullname" className="signup-label">Full name</label>
-                    <input type="text" id="fullname" className="signup-input" value={firstName} onChange={event => setFirstName(event.target.value)} placeholder="Eg: Tấn Tài"/>
+                    <input type="text" id="fullname" className="signup-input" value={fullName} onChange={event => setFullName(event.target.value)} placeholder="Eg: Tấn Tài"/>
                     <label htmlFor="email" className="signup-label">Email</label>
                     <input type="text" id="email" className="signup-input" value={email} onChange={event => setEmail(event.target.value)} placeholder="Eg: taidepzai@gmail.com"/>
                     <label htmlFor="password" className="signup-label">Password</label>

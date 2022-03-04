@@ -3,34 +3,30 @@ import './index.css';
 import {Route, useNavigate} from 'react-router-dom';
 import Home from '../home';
 import avatar from '../../assets/image/taiht.jpg';
-import userService from '../../../api/services/user.js';
+import authService from '../../../api/auth';
 import { useCookies, Cookies } from 'react-cookie';
 
 function Login() {
     const navigate = useNavigate();
-    const cookies = new Cookies();
+    const [cookieUser, setCookieUser, removeCookieUser] = useCookies('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     async function onLogin(){
-      
-    //   const res = await userService.signUp(email, password);
-    //   setCookie('user-token', email, { path: '/' });
-    }
-    // function onClickSignUp(){
-    //     this.props.history.push('/');
-    // }
-
-    // render() {
-    //     return (
-    //       <div className="App">
-    //         <div className="container">
-    //             <button id="b1" onClick ={this.try}>Click me</button>
-    //             <Route path="/hello" component={Hello}/>
-    //         </div>
-    //       </div>
-    //     );
-    //   }
+        const res = await authService.login(email, password);
+        console.log(res);
+        if(!res.success) return;
+  
+        var today = new Date();   
+        var tomorrow = new Date();
+        tomorrow.setDate(today.getDate()+1);
+        setCookieUser('user-token', res.token, {
+          expires: tomorrow,
+          // maxAge: 3600 // Will expire after 1hr (value is in number of sec.)
+        });
+        // this.props.history.push('/');
+        navigate("/");
+      }
 
     return( 
         <div className="login">

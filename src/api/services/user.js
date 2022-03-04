@@ -24,12 +24,7 @@ async function postData(url = '', data = {}) {
 }
 
 export default{
-    signUp: async (userName, email, password) => {
-        return await postData('http://localhost:3001/users', { firstName: userName, lastName: '1', email: email, password: password, type: 'consumer'});
-
-        // .then(data => {
-        //   console.log(data); // JSON data parsed by `data.json()` call
-        //   return data;
-        // });
+    signUp: async (fullName, email, password) => {
+        return await postData('http://localhost:3001/users', { fullName: fullName, email: email, password: password, type: 'consumer'});
     }    
 }
