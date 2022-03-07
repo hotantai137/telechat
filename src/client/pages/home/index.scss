@@ -1108,6 +1108,56 @@ html.no-touch .chat:not(.no-forwards) .bubbles:not(.is-selecting) .bubble-conten
 .bubble .bubble-tail {
     display: none;
 }
+.bubble:not(.forwarded).hide-name .name {
+    display: none;
+}
+.bubble .name {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.bubble .peer-title {
+    cursor: pointer;
+}
+.bubble .name {
+    padding: 5px 9px 0 9px;
+    font-weight: 500 !important;
+    color: #3390ec;
+    color: var(--primary-color);
+    font-size: .9rem;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.bubble:not(.webpage).photo .bubble-content>.name,.bubble:not(.webpage).video .bubble-content>.name {
+    padding-bottom: 6px;
+}
+.bubble:not(.webpage).photo:not(.is-message-empty) .message,.bubble:not(.webpage).video:not(.is-message-empty) .message {
+    padding-top: 6px;
+}
+.bubble:not(.webpage):not(.is-album):not(.sticker):not(.round):not(.emoji-big) .attachment {
+    background-color: #000;
+}
+.bubble.hide-name:not(.is-reply):not(.is-message-empty) .message {
+    padding-top: 6px;
+}
+.bubble:not(.sticker):not(.emoji-big).hide-name .reply,.bubble:not(.sticker):not(.emoji-big):not(.is-group-first) .reply {
+    margin-top: 6px;
+}
+.bubble .bubble-tail {
+    display: none;
+}
+.bubble.can-have-tail.is-group-last .bubble-tail {
+    position: absolute;
+    width: 11px;
+    height: 20px;
+    z-index: -2;
+    display: block;
+    fill: #fff;
+    fill: var(--message-background-color);
+    transform: translateY(1px);
+}
 .chat-input {
     --translateY: 0;
     --padding-bottom: 0.5rem;

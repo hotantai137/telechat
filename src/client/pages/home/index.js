@@ -1,4 +1,4 @@
-import {React, Component, useEffect, useRef } from 'react';
+import {React, useEffect, useRef, useState } from 'react';
 import {useNavigate} from 'react-router-dom';
 import { Cookies } from 'react-cookie';
 import './index.scss';
@@ -9,12 +9,68 @@ import ChatInput from '../../components/chat/chat-input';
 import Login from '../login';
 import auth from '../../../api/auth';
 import socketIOClient from "socket.io-client";
- 
+// import { Button } from 'semantic-ui-react';
+
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+// const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
+
 function Home(){
     const navigate = useNavigate();
     const cookies = new Cookies();
     const socketRef = useRef();
-    const host = "http://localhost:3001";
+    const [dataBubbles, setDataBubbles] = useState([
+        {
+            userName: 'Tấn Tài',
+            message: 'Hi',
+            sendTime: '03:11 PM',
+            isOut: true,
+            isGroupFirst: true,
+            isGroupLast: true,
+            isHideName: false
+        },
+        {
+            userName: 'Tấn Tài',
+            message: "What's up men?",
+            sendTime: '08:29 PM',
+            isOut: false,
+            isGroupFirst: true,
+            isGroupLast: false,
+            isHideName: false
+        },
+        {
+            userName: 'Tấn Tài',
+            message: "Do you want fuck me?",
+            sendTime: '08:29 PM',
+            isOut: false,
+            isGroupFirst: true,
+            isGroupLast: false,
+            isHideName: false
+        }
+        ,
+        {
+            userName: 'Tấn Tài',
+            message: "Of course! Let's Do it.",
+            sendTime: '10:27 PM',
+            isOut: true,
+            isGroupFirst: true,
+            isGroupLast: true,
+            isHideName: false
+        }
+    ]);
+    const pushMessage = (messageText) => {
+        let bubble = {
+            userName: 'Tấn Tài',
+            message: messageText,
+            sendTime: '03:11 PM',
+            isOut: true,
+            isGroupFirst: true,
+            isGroupLast: true,
+            isHideName: false
+        }
+        let newDataBubbles = dataBubbles;
+        newDataBubbles.push(bubble);
+        setDataBubbles(newDataBubbles);
+    }
 
     useEffect(() => {
         let userInfo = JSON.parse(localStorage.getItem('userInfo'));
@@ -37,7 +93,52 @@ function Home(){
             )           
         }
 
-        socketRef.current = socketIOClient.connect(host);
+        const bubbles = [
+            {
+                userName: 'Tấn Tài',
+                message: 'Hi',
+                sendTime: '03:11 PM',
+                isOut: true,
+                isGroupFirst: true,
+                isGroupLast: true,
+                isHideName: false
+            },
+            {
+                userName: 'Tấn Tài',
+                message: "What's up men?",
+                sendTime: '08:29 PM',
+                isOut: false,
+                isGroupFirst: true,
+                isGroupLast: false,
+                isHideName: false
+            },
+            {
+                userName: 'Tấn Tài',
+                message: "Do you want fuck me?",
+                sendTime: '08:29 PM',
+                isOut: false,
+                isGroupFirst: true,
+                isGroupLast: false,
+                isHideName: false
+            }
+            ,
+            {
+                userName: 'Tấn Tài',
+                message: "Of course! Let's Do it.",
+                sendTime: '10:27 PM',
+                isOut: true,
+                isGroupFirst: true,
+                isGroupLast: true,
+                isHideName: false
+            }
+        ];
+
+        // setDataBubbles(bubbles);
+
+        socketRef.current = socketIOClient.connect(SERVER_URL);
+        // socketRef.current.on('pushMessage', data => {
+        //     setMess(oldMsgs => [...oldMsgs, data.data])
+        //   })
     }, []);
  return(
     <div className='whole page-chats' id='page-chats'>
@@ -133,8 +234,8 @@ function Home(){
                             <div className='chat-background-item is-visible' data-type='image'></div>
                         </div>
                         <SideBarHeaderMain/>
-                        <Bubbles/>
-                        <ChatInput/>
+                        <Bubbles dataBubbles={dataBubbles}/>
+                        <ChatInput pushMessage={pushMessage}/>
                     </div>
                 </div>
             </div>

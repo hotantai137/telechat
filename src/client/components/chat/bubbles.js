@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import BubblesDateGroup from "./bubbles-date-group";
 
-function Bubbles(){
+function Bubbles(props){
+    // useEffect(() => {
+    // }, []);
     return <div className="bubbles scrolled-down">
         <div className="scrollable scrollable-y">
             <div className="bubbles-inner has-rights is-chat is-channel">
-                <BubblesDateGroup/>
+                <BubblesDateGroup dataBubblesDateGroup={props.dataBubbles}/>
             </div>
         </div>
     </div>

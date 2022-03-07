@@ -1,12 +1,13 @@
 import React, {useState, setState} from "react";
 
-function ChatInput(){
+function ChatInput(props){
     const [chatContent, setChatContent] = useState('Tài nè');
 
     function onChatPush(event){
         if(event.key === 'Enter' && !event.shiftKey){
+            props.pushMessage(event.target.innerText);
             console.log('user chat: ' + event.target.innerText);
-            event.target.textContent  = '';
+            event.target.textContent  = '';            
             event.preventDefault();
         }
     }
