@@ -1,13 +1,26 @@
 import React, {useEffect, useState} from "react";
 import Bubble from "./bubble";
 
-function BubblesDateGroup({dataBubblesDateGroup}){
+function BubblesDateGroup(props){
     const [dataDateGroup, setdataDateGroup] = useState('');
 
 
     useEffect(() => {
-        setdataDateGroup(dataBubblesDateGroup);
+        setdataDateGroup(props.dataBubblesDateGroup);
     }, []);
+
+    useEffect(() => {
+        setdataDateGroup(props.dataBubblesDateGroup);
+    }, [props.refreshing]);
+
+    function Buble(data) {
+        if(data){
+            return (
+                <Bubble dataBubble={data}/>
+              );
+        }        
+      }
+
     return <><section className="bubbles-date-group">
         <div className="bubble service is-date">
             <div className="bubble-content">
@@ -16,7 +29,11 @@ function BubblesDateGroup({dataBubblesDateGroup}){
                 </div>
             </div>
         </div>
-        <Bubble dataBubble={dataDateGroup[0]}/>
+        {
+            dataDateGroup && dataDateGroup.map(bubble => {
+                return <Bubble dataBubble={bubble}/>
+            })
+        }
     </section>
     <section className="bubbles-date-group">
         <div className="bubble service is-date">
@@ -29,6 +46,9 @@ function BubblesDateGroup({dataBubblesDateGroup}){
         <Bubble dataBubble={dataDateGroup[1]}/>
         <Bubble dataBubble={dataDateGroup[2]}/>
         <Bubble dataBubble={dataDateGroup[3]}/>
+        {
+            dataDateGroup[4] && <Bubble dataBubble={dataDateGroup[4]}/>
+        }
     </section>
     </>
 }

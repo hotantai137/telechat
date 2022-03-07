@@ -18,6 +18,7 @@ function Home(){
     const navigate = useNavigate();
     const cookies = new Cookies();
     const socketRef = useRef();
+    const [refreshing, setRefreshing] = useState(false);
     const [dataBubbles, setDataBubbles] = useState([
         {
             userName: 'Tấn Tài',
@@ -70,7 +71,20 @@ function Home(){
         let newDataBubbles = dataBubbles;
         newDataBubbles.push(bubble);
         setDataBubbles(newDataBubbles);
+        setRefreshing(!refreshing);
+        scrollToBottom();
     }
+
+    const scrollToBottom = () =>{ 
+        let scrollableWindow = document.getElementsByClassName('scrollable-y')[0];
+        if(!scrollableWindow) return;
+        scrollableWindow.scrollTo({ 
+          top: scrollableWindow.scrollHeight, 
+          behavior: 'auto'
+          /* you can also use 'auto' behaviour 
+             in place of 'smooth' */
+        }); 
+      }; 
 
     useEffect(() => {
         let userInfo = JSON.parse(localStorage.getItem('userInfo'));
@@ -92,48 +106,6 @@ function Home(){
                 }
             )           
         }
-
-        const bubbles = [
-            {
-                userName: 'Tấn Tài',
-                message: 'Hi',
-                sendTime: '03:11 PM',
-                isOut: true,
-                isGroupFirst: true,
-                isGroupLast: true,
-                isHideName: false
-            },
-            {
-                userName: 'Tấn Tài',
-                message: "What's up men?",
-                sendTime: '08:29 PM',
-                isOut: false,
-                isGroupFirst: true,
-                isGroupLast: false,
-                isHideName: false
-            },
-            {
-                userName: 'Tấn Tài',
-                message: "Do you want fuck me?",
-                sendTime: '08:29 PM',
-                isOut: false,
-                isGroupFirst: true,
-                isGroupLast: false,
-                isHideName: false
-            }
-            ,
-            {
-                userName: 'Tấn Tài',
-                message: "Of course! Let's Do it.",
-                sendTime: '10:27 PM',
-                isOut: true,
-                isGroupFirst: true,
-                isGroupLast: true,
-                isHideName: false
-            }
-        ];
-
-        // setDataBubbles(bubbles);
 
         socketRef.current = socketIOClient.connect(SERVER_URL);
         // socketRef.current.on('pushMessage', data => {
@@ -234,7 +206,7 @@ function Home(){
                             <div className='chat-background-item is-visible' data-type='image'></div>
                         </div>
                         <SideBarHeaderMain/>
-                        <Bubbles dataBubbles={dataBubbles}/>
+                        <Bubbles dataBubbles={dataBubbles} refreshing={refreshing}/>
                         <ChatInput pushMessage={pushMessage}/>
                     </div>
                 </div>
