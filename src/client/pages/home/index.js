@@ -21,6 +21,7 @@ function Home(){
     const [refreshing, setRefreshing] = useState(false);
     const [dataBubbles, setDataBubbles] = useState([
         {
+            date: 'November 4, 2020',
             userName: 'Tấn Tài',
             message: 'Hi',
             sendTime: '03:11 PM',
@@ -30,6 +31,7 @@ function Home(){
             isHideName: false
         },
         {
+            date: 'November 4, 2020',
             userName: 'Tấn Tài',
             message: "What's up men?",
             sendTime: '08:29 PM',
@@ -39,6 +41,7 @@ function Home(){
             isHideName: false
         },
         {
+            date: 'November 4, 2020',
             userName: 'Tấn Tài',
             message: "Do you want fuck me?",
             sendTime: '08:29 PM',
@@ -49,6 +52,7 @@ function Home(){
         }
         ,
         {
+            date: 'November 5, 2020',
             userName: 'Tấn Tài',
             message: "Of course! Let's Do it.",
             sendTime: '10:27 PM',
@@ -58,8 +62,10 @@ function Home(){
             isHideName: false
         }
     ]);
+    const [messagePushed, setMessagePushed] = useState(null);
     const pushMessage = (messageText) => {
         let bubble = {
+            date: 'November 5, 2020',
             userName: 'Tấn Tài',
             message: messageText,
             sendTime: '03:11 PM',
@@ -68,24 +74,30 @@ function Home(){
             isGroupLast: true,
             isHideName: false
         }
-        let newDataBubbles = dataBubbles;
+        let newDataBubbles = new Array(...dataBubbles);
         newDataBubbles.push(bubble);
         setDataBubbles(newDataBubbles);
         setRefreshing(!refreshing);
-        scrollToBottom();
+        setMessagePushed(bubble);
     }
 
-    const scrollToBottom = () =>{ 
-        let scrollableWindow = document.getElementsByClassName('scrollable-y')[0];
-        if(!scrollableWindow) return;
-        scrollableWindow.scrollTo({ 
-          top: scrollableWindow.scrollHeight, 
-          behavior: 'auto'
-          /* you can also use 'auto' behaviour 
-             in place of 'smooth' */
-        }); 
-      }; 
-
+    const receivedMessage = (bubble) => {
+        let newBubble = {
+            date: bubble.date,
+            userName: bubble.userName,
+            message: bubble.message,
+            sendTime: bubble.sendTime,
+            isOut: bubble.isOut,
+            isGroupFirst: bubble.isGroupFirst,
+            isGroupLast: bubble.isGroupLast,
+            isHideName: bubble.isHideName
+        }
+        let newDataBubbles = new Array(...dataBubbles);
+        newDataBubbles.push(newBubble);
+        setDataBubbles(newDataBubbles);
+        setRefreshing(!refreshing);
+    }
+    
     useEffect(() => {
         let userInfo = JSON.parse(localStorage.getItem('userInfo'));
         let userToken = cookies.get('user-token');
@@ -108,10 +120,14 @@ function Home(){
         }
 
         socketRef.current = socketIOClient.connect(SERVER_URL);
-        // socketRef.current.on('pushMessage', data => {
-        //     setMess(oldMsgs => [...oldMsgs, data.data])
-        //   })
+        socketRef.current.on('receivedMessage', data => {
+            receivedMessage(data);
+          })
     }, []);
+
+    useEffect(() => {
+        socketRef.current.emit('pushMessageToServer', messagePushed);
+    },[dataBubbles]);
  return(
     <div className='whole page-chats' id='page-chats'>
         <div id='main-columns' className='tabs-container'>

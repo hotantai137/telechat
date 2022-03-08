@@ -1,27 +1,41 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import Bubble from "./bubble";
 
 function BubblesDateGroup(props){
     const [dataDateGroup, setdataDateGroup] = useState('');
-
+    const [dateGroupName, setDateGroupName] = useState('');
 
     useEffect(() => {
-        setdataDateGroup(props.dataBubblesDateGroup);
+        setdataDateGroup(props.dataBubblesDateGroup.bubbles);
+        setDateGroupName(props.dataBubblesDateGroup.date);
     }, []);
 
     useEffect(() => {
-        setdataDateGroup(props.dataBubblesDateGroup);
-    }, [props.refreshing]);
+        setdataDateGroup(props.dataBubblesDateGroup.bubbles);
+        setDateGroupName(props.dataBubblesDateGroup.date);    
+    }, [props.dataBubblesDateGroup]);
 
-    function Buble(data) {
-        if(data){
-            return (
-                <Bubble dataBubble={data}/>
-              );
-        }        
-      }
+    useEffect(() => {        
+        // setData(groupDataBubbles(props.dataBubbles));
+        if(props.isLastGroup) props.messagesEndRef.current.scrollIntoView({ behavior: "smooth" });    
+    }, [dataDateGroup]);
 
-    return <><section className="bubbles-date-group">
+    return (<>
+        <section className="bubbles-date-group">
+           <div className="bubble service is-date">
+               <div className="bubble-content">
+                   <div className="service-msg">
+                       <span className="i18n">{dateGroupName}</span>
+                   </div>
+               </div>
+           </div>
+           {
+               dataDateGroup && dataDateGroup.map(bubble => {
+                   return <Bubble dataBubble={bubble}/>
+               })
+           }
+        </section>
+    {/* <section className="bubbles-date-group">
         <div className="bubble service is-date">
             <div className="bubble-content">
                 <div className="service-msg">
@@ -49,8 +63,8 @@ function BubblesDateGroup(props){
         {
             dataDateGroup[4] && <Bubble dataBubble={dataDateGroup[4]}/>
         }
-    </section>
-    </>
+    </section> */}
+    </>)
 }
 
 export default BubblesDateGroup;
