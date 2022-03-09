@@ -122,6 +122,11 @@
     --chat-input-size: 2.875rem;
     --chat-input-padding: 0.5rem;
     --chat-input-inner-padding: 0.25rem}
+    .page-chats .main-column {
+        width: 100%;
+        display: flex !important;
+        z-index: 1;
+    }
 }
 @media only screen and (min-width: 601px) {
     :root {
@@ -1414,5 +1419,188 @@ input, [contenteditable=true] {
     }
     .chat-input {
         --padding-bottom: 1.25rem;
+    }
+}
+.chat-input:not(.is-recording) .float.show:not(.hide) {
+    display: flex !important;
+}
+.chat-input .btn-send-container {
+    position: absolute;
+    right: var(--padding-horizontal);
+    bottom: 0;
+    padding-bottom: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.chat-input .btn-send-container .btn-menu-overlay {
+    z-index: 3;
+}
+.chat-input .btn-icon {
+    transition: .2s color,background-color .2s,.2s opacity}
+body.animation-level-0 .chat-input .btn-icon {
+    transition: none;
+}
+.chat-input .btn-send {
+    color: #707579;
+    color: var(--secondary-text-color);
+    z-index: 3;
+}
+.chat-input .btn-send .tgico-send {
+    color: #3390ec !important;
+    color: var(--primary-color) !important}
+.chat-input .btn-send .tgico-check {
+    color: #3390ec !important;
+    color: var(--primary-color) !important;
+    height: 32px !important;
+    font-size: 2rem;
+}
+.chat-input .btn-send .tgico-check:before {
+    font-weight: bold;
+}
+.chat-input .btn-send .tgico-schedule {
+    background-color: #3390ec;
+    background-color: var(--primary-color);
+    color: #fff;
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.chat-input .btn-send.send .tgico-send,.chat-input .btn-send.record .tgico-microphone,.chat-input .btn-send.edit .tgico-check,.chat-input .btn-send.schedule .tgico-schedule {
+    visibility: visible !important
+}
+.chat-input .btn-send:not(.record) .c-ripple__circle {
+    background-color: rgba(51, 144, 236, 0.08);
+    background-color: var(--light-primary-color);
+}
+body.animation-level-2 .chat-input .btn-send.send .tgico-send,body.animation-level-2 .chat-input .btn-send.record .tgico-microphone,body.animation-level-2 .chat-input .btn-send.edit .tgico-check,body.animation-level-2 .chat-input .btn-send.schedule .tgico-schedule {
+    -webkit-animation: grow-icon .4s forwards ease-in-out !important;
+    animation: grow-icon .4s forwards ease-in-out !important;
+}
+.chat-input .btn-record-cancel,.chat-input .btn-send {
+    font-size: 1.5rem;
+    line-height: 1.5rem;
+    background-color: #fff !important;
+    background-color: var(--surface-color) !important;
+}
+.chat-input .record-time {
+    height: 44px;
+    line-height: 44px;
+    display: none;
+}
+.chat-input .record-time:after {
+    content: " ";
+    width: 10px;
+    height: 10px;
+    background-color: #df3f40;
+    background-color: var(--danger-color);
+    border-radius: 50%;
+    margin: 0 9px;
+    display: inline-block;
+}
+body.animation-level-2 .chat-input .record-time:after {
+    -webkit-animation: recordBlink 1.25s infinite;
+    animation: recordBlink 1.25s infinite;
+}
+.chat-input .record-ripple {
+    border-radius: 50%;
+    background-color: rgba(0,0,0,.2);
+    width: 300px;
+    height: 300px;
+    transform: scale(0);
+    position: absolute;
+    visibility: hidden;
+}
+@media only screen and (max-width: 600px) {
+    .chat-input .record-ripple {
+        width: 240px;
+        height: 240px;
+    }
+}
+.chat-input.is-locked {
+    pointer-events: none;
+}
+.chat-input.is-locked .btn-icon,.chat-input.is-locked:not(.is-recording) .btn-send {
+    color: #c6cbce;
+}
+.chat-input.is-recording:not(.backwards) .btn-record-cancel {
+    opacity: 1;
+    visibility: visible;
+}
+.chat-input.is-recording:not(.backwards) .btn-send,.chat-input.is-recording:not(.backwards) .btn-record-cancel {
+    pointer-events: all;
+}
+.chat-input.is-recording:not(.backwards) .record-ripple {
+    visibility: visible;
+}
+.chat-input.is-recording:not(.backwards) .rows-wrapper {
+    width: calc(100% - (var(--chat-input-size) * 2 + 1rem));
+}
+.chat-input.is-recording:not(.backwards) .attach-file {
+    display: none;
+}
+.chat-input.is-recording:not(.backwards) .record-time {
+    display: block;
+}
+.chat-input.is-recording.animating .btn-record-cancel {
+    transition: visibility 0s 0.1s,opacity 0.1s 0s;
+}
+.chat-input.is-recording.animating .record-ripple {
+    transition: transform .03s ease-in-out,visibility 0.1s;
+}
+.chat-input.is-recording.animating .rows-wrapper {
+    transition: width .2s;
+}
+.chat-input.is-recording.animating:not(.backwards) .btn-record-cancel {
+    transition: visibility 0s 0.1s,opacity 0.1s 0.1s;
+}
+.chat-input.is-recording.animating:not(.backwards) .record-ripple {
+    transition: transform .03s,visibility 0s;
+}
+.chat-input:not(.is-recording) .btn-record-cancel {
+    margin-right: 0;
+    width: 0px;
+}
+.chat-input .new-message-wrapper {
+    opacity: 1;
+}
+.bubbles.is-selecting:not(.backwards)~.chat-input .selection-wrapper {
+    opacity: 1;
+}
+.bubbles.is-selecting.animating~.chat-input .new-message-wrapper {
+    transition: opacity 0.1s 0s;
+}
+.bubbles.is-selecting.animating~.chat-input .selection-container-left,.bubbles.is-selecting.animating~.chat-input .selection-container-right {
+    transition: transform .2s;
+}
+.bubbles.is-selecting.animating.backwards~.chat-input .new-message-wrapper {
+    transition: opacity 0.1s 0.1s;
+}
+.bubbles.is-selecting.animating.backwards~.chat-input .selection-wrapper {
+    transition: opacity 0.1s 0s;
+}
+@-webkit-keyframes recordBlink {
+    0% {
+    opacity: 1;
+    }
+    50% {
+        opacity: .2;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@keyframes recordBlink {
+    0% {
+    opacity: 1;
+    }
+    50% {
+        opacity: .2;
+    }
+    100% {
+        opacity: 1;
     }
 }

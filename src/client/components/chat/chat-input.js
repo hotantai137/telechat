@@ -69,6 +69,31 @@ function ChatInput(props){
                     </div>
                 </div>
             </div>
+            <div className="btn-send-container">
+                <div className="record-ripple"></div>
+                <button className="btn-icon tgico-none btn-circle z-depth-1 btn-send animated-button-icon rp record">
+                    <span className="tgico tgico-send"></span>
+                    <span className="tgico tgico-schedule"></span>
+                    <span className="tgico tgico-check"></span>
+                    {/* <span className="tgico tgico-microphone"></span> */}
+                    <i className="tgico tgico-microphone fal fa-microphone"></i>
+                    
+                    <div className="c-ripple"></div>
+                </button>
+                {/* <div className="btn-menu menu-send top-left">
+                    <div className="btn-menu-item rp-overflow tgico-mute rp">
+                        <div className="c-ripple"></div>
+                        <span className="i18n btn-menu-item-text">Send Without Sound</span></div>
+                        <div className="btn-menu-item rp-overflow tgico-schedule rp">
+                            <div className="c-ripple"></div>
+                            <span className="i18n btn-menu-item-text">Schedule Message</span>
+                        </div>
+                        <div className="btn-menu-item rp-overflow tgico-schedule rp">
+                        <div className="c-ripple"></div>
+                        <span className="i18n btn-menu-item-text">Set a Reminder</span>
+                    </div>
+                </div> */}
+            </div>
         </div>
         {/* <div className="emoji-dropdown" id="emoji-dropdown">
         </div> */}
