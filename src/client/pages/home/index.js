@@ -15,88 +15,24 @@ const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 // const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
 
 function Home(){
+    const [socket, setSocket] = useState(null);
     const navigate = useNavigate();
     const cookies = new Cookies();
-    const socketRef = useRef();
-    const [refreshing, setRefreshing] = useState(false);
-    const [dataBubbles, setDataBubbles] = useState([
-        {
-            date: 'November 4, 2020',
-            userName: 'Tấn Tài',
-            message: 'Hi',
-            sendTime: '03:11 PM',
-            isOut: true,
-            isGroupFirst: true,
-            isGroupLast: true,
-            isHideName: false
-        },
-        {
-            date: 'November 4, 2020',
-            userName: 'Tấn Tài',
-            message: "What's up men?",
-            sendTime: '08:29 PM',
-            isOut: false,
-            isGroupFirst: true,
-            isGroupLast: false,
-            isHideName: false
-        },
-        {
-            date: 'November 4, 2020',
-            userName: 'Tấn Tài',
-            message: "Do you want fuck me?",
-            sendTime: '08:29 PM',
-            isOut: false,
-            isGroupFirst: true,
-            isGroupLast: false,
-            isHideName: false
-        }
-        ,
-        {
-            date: 'November 5, 2020',
-            userName: 'Tấn Tài',
-            message: "Of course! Let's Do it.",
-            sendTime: '10:27 PM',
-            isOut: true,
-            isGroupFirst: true,
-            isGroupLast: true,
-            isHideName: false
-        }
-    ]);
-    const [messagePushed, setMessagePushed] = useState(null);
-    const pushMessage = (messageText) => {
-        let bubble = {
-            date: 'November 5, 2020',
-            userName: 'Tấn Tài',
-            message: messageText,
-            sendTime: '03:11 PM',
-            isOut: true,
-            isGroupFirst: true,
-            isGroupLast: true,
-            isHideName: false
-        }
-        let newDataBubbles = new Array(...dataBubbles);
-        newDataBubbles.push(bubble);
-        setDataBubbles(newDataBubbles);
-        setRefreshing(!refreshing);
-        setMessagePushed(bubble);
-    }
+    // const socketRef = useRef();
+    // socketRef.current = socketIOClient.connect(SERVER_URL, );
+    // socketRef.current.on('receivedMessage', data => {
+    //     if(!data) return;
+    //     if(socketRef.current.id != data.socketId){
+    //         console.log(socketRef.current);
+    //         receivedMessage(data.messageBubble);
+    //     }
+    //   })
 
-    const receivedMessage = (bubble) => {
-        let newBubble = {
-            date: bubble.date,
-            userName: bubble.userName,
-            message: bubble.message,
-            sendTime: bubble.sendTime,
-            isOut: bubble.isOut,
-            isGroupFirst: bubble.isGroupFirst,
-            isGroupLast: bubble.isGroupLast,
-            isHideName: bubble.isHideName
-        }
-        let newDataBubbles = new Array(...dataBubbles);
-        newDataBubbles.push(newBubble);
-        setDataBubbles(newDataBubbles);
-        setRefreshing(!refreshing);
-    }
+    useEffect(() => {
+        const newSocket = socketIOClient(SERVER_URL);
+        setSocket(newSocket);
+        return () => newSocket.close();
+      }, [setSocket]);
     
     useEffect(() => {
         let userInfo = JSON.parse(localStorage.getItem('userInfo'));
@@ -118,16 +54,8 @@ function Home(){
                 }
             )           
         }
-
-        socketRef.current = socketIOClient.connect(SERVER_URL);
-        socketRef.current.on('receivedMessage', data => {
-            receivedMessage(data);
-          })
     }, []);
 
-    useEffect(() => {
-        socketRef.current.emit('pushMessageToServer', messagePushed);
-    },[dataBubbles]);
  return(
     <div className='whole page-chats' id='page-chats'>
         <div id='main-columns' className='tabs-container'>
@@ -222,8 +150,8 @@ function Home(){
                             <div className='chat-background-item is-visible' data-type='image'></div>
                         </div>
                         <SideBarHeaderMain/>
-                        <Bubbles dataBubbles={dataBubbles} refreshing={refreshing}/>
-                        <ChatInput pushMessage={pushMessage}/>
+                        <Bubbles socket={socket}/>
+                        <ChatInput socket={socket}/>
                     </div>
                 </div>
             </div>

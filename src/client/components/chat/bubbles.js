@@ -3,8 +3,50 @@ import BubblesDateGroup from "./bubbles-date-group";
 import _ from 'lodash';
 
 function Bubbles(props){
+    const [dataBubbles, setDataBubbles] = useState([
+        {
+            date: 'November 4, 2020',
+            userName: 'Tấn Tài',
+            message: 'Hi',
+            sendTime: '03:11 PM',
+            isOut: true,
+            isGroupFirst: true,
+            isGroupLast: true,
+            isHideName: false
+        },
+        {
+            date: 'November 4, 2020',
+            userName: 'Tấn Tài',
+            message: "What's up men?",
+            sendTime: '08:29 PM',
+            isOut: false,
+            isGroupFirst: true,
+            isGroupLast: false,
+            isHideName: false
+        },
+        {
+            date: 'November 4, 2020',
+            userName: 'Tấn Tài',
+            message: "Do you want fuck me?",
+            sendTime: '08:29 PM',
+            isOut: false,
+            isGroupFirst: true,
+            isGroupLast: false,
+            isHideName: false
+        }
+        ,
+        {
+            date: 'November 5, 2020',
+            userName: 'Tấn Tài',
+            message: "Of course! Let's Do it.",
+            sendTime: '10:27 PM',
+            isOut: true,
+            isGroupFirst: true,
+            isGroupLast: true,
+            isHideName: false
+        }
+    ]);
     const [data, setData] = useState([]);
-    const [refreshing, setRefreshing] = useState(false);
     const messagesEndRef = useRef(null);
 
     const scrollToBottom = () => {
@@ -21,15 +63,34 @@ function Bubbles(props){
     }
 
     useEffect(() => {        
-        setData(groupDataBubbles(props.dataBubbles));
-        // scrollToBottom();
+        setData(groupDataBubbles(dataBubbles));
     }, []);
 
     useEffect(() => {
-        setData(groupDataBubbles(props.dataBubbles));
-        setRefreshing(!refreshing);
-        // scrollToBottom();
-    }, [props.dataBubbles]);
+        const messageListener = (message) => {
+          message.messageBubble.isOut = message.socketId === props.socket.id ? true : false;
+          let newData = dataBubbles;
+          newData.push(message.messageBubble);
+          setData(groupDataBubbles(dataBubbles));
+        };
+      
+        // const deleteMessageListener = (messageID) => {
+        //   setMessages((prevMessages) => {
+        //     const newMessages = {...prevMessages};
+        //     delete newMessages[messageID];
+        //     return newMessages;
+        //   });
+        // };
+      
+        if(props.socket) props.socket.on('receivedMessage', messageListener);
+        // socket.on('deleteMessage', deleteMessageListener);
+        // socket.emit('getMessages');
+    
+        return () => {
+            if(props.socket) props.socket.off('receivedMessage', messageListener);
+            // props.socket.off('deleteMessage', deleteMessageListener);
+        };
+      }, [props.socket]);
 
     return <div className="bubbles scrolled-down">
         <div className="scrollable scrollable-y">
@@ -37,9 +98,9 @@ function Bubbles(props){
                 {
                     data && data.map((dateGroup, index) => {
                         if(index === (data.length - 1)){
-                            return <BubblesDateGroup isLastGroup={true} messagesEndRef={messagesEndRef} dataBubblesDateGroup={dateGroup} refreshing={refreshing}/>
+                            return <BubblesDateGroup key={index} isLastGroup={true} messagesEndRef={messagesEndRef} dataBubblesDateGroup={dateGroup}/>
                         }else{
-                            return <BubblesDateGroup isLastGroup={false} messagesEndRef={messagesEndRef} dataBubblesDateGroup={dateGroup} refreshing={refreshing}/>
+                            return <BubblesDateGroup key={index} isLastGroup={false} messagesEndRef={messagesEndRef} dataBubblesDateGroup={dateGroup}/>
                         }
                         
                     })

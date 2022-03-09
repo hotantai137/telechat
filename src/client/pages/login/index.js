@@ -1,8 +1,6 @@
 import React, {useState} from 'react';
 import './index.css';
 import {Route, useNavigate} from 'react-router-dom';
-import Home from '../home';
-import avatar from '../../assets/image/taiht.jpg';
 import authService from '../../../api/auth';
 import { useCookies, Cookies } from 'react-cookie';
 
@@ -13,19 +11,24 @@ function Login() {
     const [password, setPassword] = useState('');
 
     async function onLogin(){
-        const res = await authService.login(email, password);
-        console.log(res);
-        if(!res.success) return;
+        try{
+            const res = await authService.login(email, password);
+            alert(res.success);
+            console.log(res);
+            if(!res.success) return;
   
-        var today = new Date();   
-        var tomorrow = new Date();
-        tomorrow.setDate(today.getDate()+1);
-        setCookieUser('user-token', res.token, {
-          expires: tomorrow,
-          // maxAge: 3600 // Will expire after 1hr (value is in number of sec.)
-        });
-        // this.props.history.push('/');
-        navigate("/");
+            var today = new Date();   
+            var tomorrow = new Date();
+            tomorrow.setDate(today.getDate()+1);
+            setCookieUser('user-token', res.token, {
+            expires: tomorrow,
+            // maxAge: 3600 // Will expire after 1hr (value is in number of sec.)
+            });
+            // this.props.history.push('/');
+            navigate("/");
+        }catch(error){
+            alert(error);
+        }
       }
 
     return( 

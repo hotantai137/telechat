@@ -5,7 +5,23 @@ function ChatInput(props){
 
     function onChatPush(event){
         if(event.key === 'Enter' && !event.shiftKey){
-            props.pushMessage(event.target.innerText);
+            // props.pushMessage(event.target.innerText);
+
+            let bubble = {
+                date: 'November 5, 2020',
+                userName: 'Tấn Tài',
+                message: event.target.innerText,
+                sendTime: '03:11 PM',
+                isOut: true,
+                isGroupFirst: true,
+                isGroupLast: true,
+                isHideName: false
+            }
+            let data = {
+                messageBubble: bubble,
+                socketId: props.socket.id
+            }
+            props.socket.emit('pushMessageToServer', data);
             console.log('user chat: ' + event.target.innerText);
             event.target.textContent  = '';            
             event.preventDefault();

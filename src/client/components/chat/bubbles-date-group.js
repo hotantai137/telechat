@@ -30,8 +30,8 @@ function BubblesDateGroup(props){
                </div>
            </div>
            {
-               dataDateGroup && dataDateGroup.map(bubble => {
-                   return <Bubble dataBubble={bubble}/>
+               dataDateGroup && dataDateGroup.map((bubble, index) => {
+                   return <Bubble key={dateGroupName + index} dataBubble={bubble}/>
                })
            }
         </section>

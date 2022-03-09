@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import './index.css';
 import {Route, useNavigate } from 'react-router-dom';
-import Home from '../home';
-import avatar from '../../assets/image/taiht.jpg';
 import { useCookies, Cookies } from 'react-cookie';
 import userService from '../../../api/services/user.js';
 

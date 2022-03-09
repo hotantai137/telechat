@@ -1,4 +1,3 @@
-
 // Example POST method implementation:
 async function postData(url = '', data = {}) {
     // Default options are marked with *
@@ -18,11 +17,16 @@ async function postData(url = '', data = {}) {
     return response.json(); // parses JSON response into native JavaScript objects
 }
 
-export default{
+const SERVER_HOSTNAME = window.location.hostname;
+const SERVER_PORT = 3000;
+const SERVER_URL = `http://${SERVER_HOSTNAME}:${SERVER_PORT}`
+
+export default{    
     checkToken: async (token) => {
-        return await postData('http://localhost:3001/users/token', { token: token});
+      console.log(window.location.hostname);
+        return await postData(SERVER_URL + '/users/token', { token: token});
     },
     login: async (email, password) => {
-      return await postData('http://localhost:3001/users/login', { email: email, password: password});
+      return await postData(SERVER_URL + '/users/login', { email: email, password: password});
   }
 }
