@@ -1415,4 +1415,16 @@ input, [contenteditable=true] {
     .chat-input {
         --padding-bottom: 1.25rem;
     }
+    .chatlist-chat.active{
+        --background: var(--primary-color) !important;
+    }
+    .chatlist-chat.active .user-caption, .chatlist-chat.active .tgico-chatspinned:before, .chatlist-chat.active .user-title, .chatlist-chat.active .message-status, .chatlist-chat.active .text-highlight {
+        color: #fff;
+    }
+    .chatlist-chat.active b {
+        color: #fff !important;
+    }
+}
+html.no-touch .chatlist-chat:hover, html.no-touch .chatlist-chat:active {
+    --background: var(--light-secondary-text-color);
 }

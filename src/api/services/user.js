@@ -5,7 +5,7 @@ function callAPI() {
         .then(res => this.setState({ apiResponse: res }));
 }
 // Example POST method implementation:
-async function postData(url = '', data = {}) {
+async function postData(url = '', data = {}, method = 'POST') {
     // Default options are marked with *
     const response = await fetch(url, {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -25,6 +25,12 @@ async function postData(url = '', data = {}) {
 
 export default{
     signUp: async (fullName, email, password) => {
-        return await postData('http://localhost:3001/users', { fullName: fullName, email: email, password: password, type: 'consumer'});
-    }    
+        return await postData('http://localhost:3000/users', { fullName: fullName, email: email, password: password, type: 'consumer'});
+    },
+    getUserList: async () => {
+      const res = await fetch("http://localhost:3000/users");
+      let data = await res.json();
+      
+      return data;
+  }
 }
