@@ -11,30 +11,21 @@ import auth from '../../../api/auth';
 import socketIOClient from "socket.io-client";
 // import { Button } from 'semantic-ui-react';
 
-const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+// const SERVER_URL = process.env.HOST;
 // const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
 
 function Home(){
     const [socket, setSocket] = useState(null);
     const navigate = useNavigate();
     const cookies = new Cookies();
-    // const socketRef = useRef();
-    // socketRef.current = socketIOClient.connect(SERVER_URL, );
-    // socketRef.current.on('receivedMessage', data => {
-    //     if(!data) return;
-    //     if(socketRef.current.id != data.socketId){
-    //         console.log(socketRef.current);
-    //         receivedMessage(data.messageBubble);
-    //     }
-    //   })
 
     useEffect(() => {
-        const newSocket = socketIOClient(SERVER_URL);
+        const newSocket = socketIOClient();
         setSocket(newSocket);
         return () => newSocket.close();
       }, [setSocket]);
     
-    useEffect(() => {
+    useEffect(async () => {
         let userInfo = JSON.parse(localStorage.getItem('userInfo'));
         let userToken = cookies.get('user-token');
         if(!userToken){
