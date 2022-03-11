@@ -6,21 +6,46 @@ function ChatList(props){
     const [chatList, setChatList] = useState([]);
     const [selectedId, setSelectedId] = useState('');
     const fetchData = () => {
-        userService.getUserList()
-        .then(res => {
-            return res.users;
-        })
-        .then(data => {
-            setChatList(data);
-        })
+        let userInfo = JSON.parse(localStorage.getItem('contactList'));
+        setChatList(userInfo);
+        // userService.getUserList()
+        // .then(res => {
+        //     return res.users;
+        // })
+        // .then(data => {
+        //     setChatList(data);
+        // })
       }
 
     useEffect(() => {
-        fetchData();
+        // fetchData();
+        let userInfo = JSON.parse(localStorage.getItem('contactList'));
+        setChatList(userInfo);
     }, []);
+
+    // useEffect(() => {
+    //     const messageListener = (message) => {
+    //       message.messageBubble.isOut = message.socketId === props.socket.id ? true : false;
+    //       let newData = dataBubbles;
+    //       newData.push(message.messageBubble);
+    //       setData(groupDataBubbles(dataBubbles));
+    //     };
+      
+    //     if(props.socket) props.socket.on('receivedMessage', messageListener);
+    //     // socket.on('deleteMessage', deleteMessageListener);
+    //     // socket.emit('getMessages');
+    
+    //     return () => {
+    //         if(props.socket) props.socket.off('receivedMessage', messageListener);
+    //     };
+    //   }, [props.socket]);
 
     const selectChatItem = (id) => {
         setSelectedId(id);
+        props.selectChatItem(id);
+        // if(socket){
+        //     socket.emit('join')
+        // }
     }
 
  return <div className='chatlist-top'>
