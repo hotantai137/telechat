@@ -18,12 +18,6 @@ function Home(){
     const navigate = useNavigate();
     const cookies = new Cookies();
 
-    useEffect(() => {
-        const newSocket = socketIOClient();
-        setSocket(newSocket);
-        return () => newSocket.close();
-      }, [setSocket]);
-    
     useEffect(async () => {
         let userInfo = JSON.parse(localStorage.getItem('userInfo'));
         let userToken = cookies.get('user-token');
@@ -34,7 +28,8 @@ function Home(){
                 {
                     if(data.user){
                         localStorage.setItem('userInfo', JSON.stringify(data.user));
-                        localStorage.setItem('contactList', JSON.stringify(data.contactList));
+                        localStorage.setItem('contactList', JSON.stringify(data.contacts));
+                        localStorage.setItem('chatrooms', JSON.stringify(data.chatrooms));
                     }else{
                         redirectLoginPage();
                     }     
@@ -42,6 +37,14 @@ function Home(){
             )           
         }
     }, []);
+    
+    useEffect(() => {
+        const newSocket = socketIOClient();
+        setSocket(newSocket);
+        return () => newSocket.close();
+      }, [setSocket]);
+    
+    
 
     const redirectLoginPage = () => {
         navigate("/login");

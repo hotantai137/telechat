@@ -10,7 +10,7 @@ function ChatListItem(props){
             <div className="user-caption">
                 <p className="dialog-title">
                     <span className="user-title tgico">
-                        <span className="peer-title" dir="auto" data-peer-id="-1583302793" data-from-name="0" data-dialog="1" data-only-first-name="0" data-plain-text="0">{props.chatItem.fullName}</span>
+                        <span className="peer-title" dir="auto" data-peer-id="-1583302793" data-from-name="0" data-dialog="1" data-only-first-name="0" data-plain-text="0">{props.chatItem.contactName}</span>
                     </span>
                     <span className="dialog-title-details">
                         <span className="message-status sending-status"></span>
