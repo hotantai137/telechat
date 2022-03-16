@@ -1,6 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
  
 function ChatListItem(props){
+    const [lastMessage, setLastMessage] = useState('Chat sẽ gầy đi nào các bạn.');
+
+    useEffect(() => {
+        const messageListener = (message) => {
+            if(props.chatItem.roomId === message.roomId) setLastMessage(message.messageBubble.message);            
+          };
+        
+          if(props.socket) props.socket.on('receivedMessage', messageListener);
+    
+        return () => {
+            // if(props.socket) props.socket.off('receivedMessage', messageListener);
+        };
+      }, [props.socket]);
 
  return <li className={`chatlist-chat rp is-muted ${props.isSelected ? "active" : ""}`} data-peer-id="-1583302793">
             <div className="c-ripple" onClick={() => {props.selectChatItem(props.chatItem._id)}}></div>
@@ -10,7 +23,7 @@ function ChatListItem(props){
             <div className="user-caption">
                 <p className="dialog-title">
                     <span className="user-title tgico">
-                        <span className="peer-title" dir="auto" data-peer-id="-1583302793" data-from-name="0" data-dialog="1" data-only-first-name="0" data-plain-text="0">{props.chatItem.fullName}</span>
+                        <span className="peer-title" dir="auto" data-peer-id="-1583302793" data-from-name="0" data-dialog="1" data-only-first-name="0" data-plain-text="0">{props.chatItem.contactName}</span>
                     </span>
                     <span className="dialog-title-details">
                         <span className="message-status sending-status"></span>
@@ -24,7 +37,7 @@ function ChatListItem(props){
                         <b>
                             <span className="peer-title" dir="auto" data-peer-id="1610799485" data-only-first-name="1">Mon</span>: 
                         </b>
-                        Chat sẽ gầy đi nào các bạn.
+                        {lastMessage}
                     </span>
                     <div className="dialog-subtitle-badge badge badge-24 is-visible unread">1451</div>
                 </div>

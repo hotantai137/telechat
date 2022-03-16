@@ -13,8 +13,6 @@ function Login() {
     async function onLogin(){
         try{
             const res = await authService.login(email, password);
-            alert(res.success);
-            console.log(res);
             if(!res.success) return;
   
             var today = new Date();   

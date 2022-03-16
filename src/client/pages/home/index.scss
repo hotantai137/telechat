@@ -144,6 +144,74 @@
     :root {
     --right-column-width: 25vw}
 }
+@media only screen and (max-width: 600px) {
+    body.is-left-column-shown #column-center {
+        transform: translate3d(100vw, 0, 0);
+    }
+    body.is-right-column-shown #column-center {
+        transform: translate3d(-25vw, 0, 0);
+        filter: brightness(80%);
+    }
+}
+@media only screen and (min-width: 601px)and (max-width: 925px) {
+    #column-center {
+    position: fixed !important;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    transform: translateZ(0)}
+    body.animation-level-2 #column-center {
+        transition: transform .2s cubic-bezier(.4, .0, .2, 1);
+        transition: transform var(--layer-transition);
+    }
+    body.is-left-column-shown #column-center {
+        transform: translate3d(26.5625rem, 0, 0);
+    }
+    body.is-left-column-shown #column-center .sidebar-close-button {
+        transform: rotate(180deg);
+    }
+}
+@media only screen and (min-width: 926px){
+    .chat:first-child .topbar .sidebar-close-button {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    #column-left {
+        width: 100%;
+        max-width: 100%;
+    }
+    body:not(.is-left-column-shown) #column-left {
+        transform: translate3d(-25vw, 0, 0);
+        filter: brightness(80%);
+    }
+}
+@media only screen and (min-width: 601px)and (max-width: 925px) {
+    #column-left {
+        display: flex;
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 26.5rem;
+        transform: translate3d(-5rem, 0, 0);
+        transition: transform .2s cubic-bezier(.4, .0, .2, 1);
+        transition: transform var(--layer-transition);
+        max-width: unset;
+    }
+    body.animation-level-0 #column-left {
+        transition: none;
+    }
+    body.is-left-column-shown #column-left {
+        transform: translateZ(0);
+    }
+}
+body.is-right-column-shown:not(.is-left-column-shown) #column-right {
+    transition: transform .3s cubic-bezier(.4, .0, .2, 1);
+    transition: transform var(--transition-standard-in);
+    transform: translate3d(0, 0, 0)
+}
 .whole {
     min-height: 100%;
     width: 100%;
@@ -162,6 +230,10 @@
     min-height: 100%;
     height: 100%;
     max-height: 100%;
+}
+body.animation-level-2 .page-chats .main-column {
+    transition: .25s ease-in-out;
+    transition: var(--tabs-transition);
 }
 #column-center {
     width: 100%;
@@ -1615,4 +1687,251 @@ body.animation-level-2 .chat-input .record-time:after {
 }
 html.no-touch .chatlist-chat:hover, html.no-touch .chatlist-chat:active {
     --background: var(--light-secondary-text-color);
+}
+
+.btn-circle {
+    --size: 54px;
+    border-radius: 50%;
+    height: var(--size);
+    width: var(--size);
+    line-height: var(--size);
+}
+@media only screen and (max-width: 600px) {
+    .btn-circle {
+        --size: 46px;
+    }
+}
+.btn-circle path {
+    fill: #fff;
+}
+body:not(.animation-level-0) .animated-button-icon>.tgico {
+    -webkit-animation: hide-icon .4s forwards ease-in-out;
+    animation: hide-icon .4s forwards ease-in-out;
+}
+#column-center .chat-input .btn-send.send .tgico-send, #column-center .chat-input .btn-send.record .tgico-microphone, #column-center .chat-input .btn-send.edit .tgico-check, #column-center .chat-input .btn-send.schedule .tgico-schedule {
+    -webkit-animation: grow-icon .4s forwards ease-in-out !important;
+    animation: grow-icon .4s forwards ease-in-out !important;
+}
+.animated-button-icon>.tgico {
+    position: absolute;
+    height: 24px;
+    line-height: 24px;
+}
+
+.peer-typing {
+    margin-right: 4px}
+.peer-typing-container {
+    --color: var(--primary-color);
+    color: var(--color)}
+.peer-typing-flex {
+    display: flex;
+    align-items: center}
+.peer-typing:not(.peer-typing-text):not(.peer-typing-choosing-sticker) {
+    display: inline-block;
+    vertical-align: middle;
+    transform: translateY(-1px)}
+.peer-typing-text-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--color);
+    margin: 0 .5px;
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-animation-duration: .6s;
+    animation-duration: .6s;
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+    animation-timing-function: linear;
+    -webkit-animation-name: dotMiddle;
+    animation-name: dotMiddle}
+.peer-typing-text-dot:first-child {
+    -webkit-animation-name: dotFirst;
+    animation-name: dotFirst}
+.peer-typing-text-dot:last-child {
+    -webkit-animation-name: dotLast;
+    animation-name: dotLast}
+.peer-typing-upload {
+    width: 13px;
+    height: 5px;
+    overflow: hidden;
+    position: relative;
+    border-radius: 2px;
+    margin-right: .375rem}
+.peer-typing-upload:before,.peer-typing-upload:after {
+    display: block;
+    content: " ";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: var(--color);
+    border-radius: inherit}
+.peer-typing-upload:before {
+    opacity: .3}
+.peer-typing-upload:after {
+    -webkit-animation: upload 1s ease-in-out infinite;
+    animation: upload 1s ease-in-out infinite}
+.peer-typing-record {
+    margin-right: .375rem}
+.peer-typing-record:before {
+    content: " ";
+    display: block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--color);
+    -webkit-animation: recordBlink 1.25s infinite;
+    animation: recordBlink 1.25s infinite}
+.peer-typing-choosing-sticker {
+    margin-right: .375rem;
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    height: 16px}
+.peer-typing-choosing-sticker-eye {
+    width: 8px;
+    height: 14px;
+    border-radius: 50%;
+    display: inline-block;
+    vertical-align: middle;
+    border: 1px solid var(--color);
+    margin: 0 .0625rem;
+    position: relative;
+    -webkit-animation: eye 1.8s ease-in-out infinite;
+    animation: eye 1.8s ease-in-out infinite}
+.peer-typing-choosing-sticker-eye:before {
+    content: " ";
+    display: block;
+    width: .25rem;
+    height: .25rem;
+    background-color: var(--color);
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    -webkit-animation: eye-move 1.8s ease-in-out infinite;
+    animation: eye-move 1.8s ease-in-out infinite;
+    transform: translate(-1px, -50%)}
+
+
+
+@keyframes hide-icon {
+    from {
+    transform: scale(1);
+    opacity: .4}
+to {
+    transform: scale(0.5);
+    opacity: 0}
+}
+@-webkit-keyframes grow-icon {
+    0% {
+    transform: scale(0.5);
+    opacity: .8}
+50% {
+    transform: scale(1.1);
+    opacity: 1}
+100% {
+    transform: scale(1)}
+}
+@keyframes grow-icon {
+    0% {
+    transform: scale(0.5);
+    opacity: .8}
+50% {
+    transform: scale(1.1);
+    opacity: 1}
+100% {
+    transform: scale(1)}
+}
+@-webkit-keyframes dotFirst {
+    0% {
+    transform: scale(0.6666666667);
+    opacity: .8}
+50% {
+    transform: scale(0.6666666667);
+    opacity: .8}
+75% {
+    transform: scale(1);
+    opacity: 1}
+100% {
+    transform: scale(0.6666666667);
+    opacity: .8}
+}
+@keyframes dotFirst {
+    0% {
+    transform: scale(0.6666666667);
+    opacity: .8}
+50% {
+    transform: scale(0.6666666667);
+    opacity: .8}
+75% {
+    transform: scale(1);
+    opacity: 1}
+100% {
+    transform: scale(0.6666666667);
+    opacity: .8}
+}
+@-webkit-keyframes dotMiddle {
+    0% {
+    transform: scale(0.8333333333);
+    opacity: .9}
+12.5% {
+    transform: scale(0.6666666667);
+    opacity: .8}
+62.5% {
+    transform: scale(0.6666666667);
+    opacity: .8}
+87.5% {
+    transform: scale(1);
+    opacity: 1}
+100% {
+    transform: scale(0.8333333333);
+    opacity: .9}
+}
+@keyframes dotMiddle {
+    0% {
+    transform: scale(0.8333333333);
+    opacity: .9}
+12.5% {
+    transform: scale(0.6666666667);
+    opacity: .8}
+62.5% {
+    transform: scale(0.6666666667);
+    opacity: .8}
+87.5% {
+    transform: scale(1);
+    opacity: 1}
+100% {
+    transform: scale(0.8333333333);
+    opacity: .9}
+}
+@-webkit-keyframes dotLast {
+    0% {
+    transform: scale(1);
+    opacity: 1}
+25% {
+    transform: scale(0.6666666667);
+    opacity: .8}
+75% {
+    transform: scale(0.6666666667);
+    opacity: .8}
+100% {
+    transform: scale(1);
+    opacity: 1}
+}
+@keyframes dotLast {
+    0% {
+    transform: scale(1);
+    opacity: 1}
+25% {
+    transform: scale(0.6666666667);
+    opacity: .8}
+75% {
+    transform: scale(0.6666666667);
+    opacity: .8}
+100% {
+    transform: scale(1);
+    opacity: 1}
 }
