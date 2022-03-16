@@ -24,8 +24,9 @@ function ChatList(props){
 
     useEffect(() => {
         if(props.socket){
-            let chatRooms = JSON.parse(localStorage.getItem('chatrooms'));
-            props.socket.emit('subscribeRooms', chatRooms);
+            let contactList = JSON.parse(localStorage.getItem('contactList'));
+            let roomIds = contactList.map(contact => {return contact.roomId});
+            props.socket.emit('subscribeRooms', roomIds);
         }
         
         // const subscribeRoomSocket = () => {
@@ -64,12 +65,13 @@ function ChatList(props){
  return <div className='chatlist-top'>
             <ul className='chatlist' data-autonomous="0">
                 {
-                    chatList.length > 0 && chatList.map(item => {
+                    chatList && chatList.length > 0 && chatList.map(item => {
                         return <ChatListItem 
                         key={item._id} 
                         chatItem={item} 
                         isSelected={selectedId === item._id ? true : false}
                         selectChatItem={selectChatItem}
+                        socket={props.socket}
                         />
                     })
                 }                

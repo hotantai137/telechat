@@ -21,9 +21,14 @@ function ColumnCenter(props){
                 {
                     props.selectedChatId && (
                         <>
-                        <SideBarHeaderMain/>
+                        <SideBarHeaderMain 
+                        removeSelectedChat={props.removeSelectedChat}
+                        selectedChatId={props.selectedChatId}
+                        socket={props.socket}
+                        />
                         <Bubbles socket={props.socket}/>
-                        <ChatInput socket={props.socket}/>
+                        <ChatInput socket={props.socket}
+                        selectedChatId={props.selectedChatId}/>
                         </>
                     )
                 }

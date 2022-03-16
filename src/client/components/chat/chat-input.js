@@ -6,6 +6,15 @@ function ChatInput(props){
     const [userInfo, setUserInfo] = useState(null);
     const [chatContent, setChatContent] = useState('');
     const [isTyping, setIsTyping] = useState(false);
+    const [contact, setContact] = useState('');
+
+    useEffect(()=>{
+        let contactList = JSON.parse(localStorage.getItem('contactList'));
+        let currentContact = contactList.find(x => x._id === props.selectedChatId);
+        setContact(currentContact);
+
+    }, [props.selectedChatId]);
+
     useEffect(() => {
         let user = JSON.parse(localStorage.getItem('userInfo'));
         setUserInfo(user);
@@ -26,17 +35,30 @@ function ChatInput(props){
             }
             let data = {
                 messageBubble: bubble,
-                socketId: props.socket.id
+                socketId: props.socket.id,
+                roomId: contact.roomId
             }
-            props.socket.emit('pushMessageToServer', data);
-            event.target.textContent  = '';  
-            setIsTyping(false);          
+
+            if(event.target.innerText){
+                props.socket.emit('pushMessageToServer', data);
+                event.target.textContent  = '';  
+                setIsTyping(false);          
+            }
+            
             event.preventDefault();
         }
     }
 
     function onInput(event){
         setIsTyping(event.target.innerHTML ? true : false);
+        if(isTyping){
+            let data = {
+                userName: userInfo.fullName,
+                socketId: props.socket.id,
+                roomId: contact.roomId
+            }
+            props.socket.emit('typing', data);
+        }        
     }
 
     function onKeyUp(event){
@@ -50,6 +72,31 @@ function ChatInput(props){
         //     let newValue = value.slice(0, startOffset) + value.slice(endOffset);
         //     console.log(newValue);
         // }
+    }
+
+    function onSend(){
+        let input = document.getElementById('input-message');
+        
+        let bubble = {
+            date: 'November 5, 2020',
+            userName: userInfo.fullName,
+            message: input.innerText,
+            sendTime: moment().format('LT'),
+            isOut: true,
+            isGroupFirst: true,
+            isGroupLast: true,
+            isHideName: false
+        }
+        let data = {
+            messageBubble: bubble,
+            socketId: props.socket.id
+        }
+        if(input.innerText){
+            props.socket.emit('pushMessageToServer', data);
+            input.textContent  = '';  
+            setIsTyping(false);
+            input.focus();
+        }        
     }
 
     return <div className="chat-input">
@@ -97,7 +144,8 @@ function ChatInput(props){
             </div>
             <div className="btn-send-container">
                 <div className="record-ripple"></div>
-                <button className={`btn-icon tgico-none btn-circle z-depth-1 btn-send animated-button-icon rp ${isTyping ? "send" : "record"}`}>
+                <button className={`btn-icon tgico-none btn-circle z-depth-1 btn-send animated-button-icon rp ${isTyping ? "send" : "record"}`}
+                onClick={onSend}>
                     <span className="tgico tgico-send"><img src={sentIcon} style={{with: "24px", height: "24px", marginLeft: "5px"}}></img></span>
                     <span className="tgico tgico-schedule"></span>
                     <span className="tgico tgico-check"></span>

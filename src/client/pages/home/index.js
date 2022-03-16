@@ -29,7 +29,6 @@ function Home(){
                     if(data.user){
                         localStorage.setItem('userInfo', JSON.stringify(data.user));
                         localStorage.setItem('contactList', JSON.stringify(data.contacts));
-                        localStorage.setItem('chatrooms', JSON.stringify(data.chatrooms));
                     }else{
                         redirectLoginPage();
                     }     
@@ -53,13 +52,19 @@ function Home(){
 
     const selectChatItem = (id) => {
         setSelectedChatId(id);
+        // document.body.classList.remove('is-left-column-shown');
+    }
+
+    const removeSelectedChat = () => {
+        setSelectedChatId('');
+        // document.body.classList.add('is-left-column-shown');
     }
 
  return(
     <div className='whole page-chats' id='page-chats'>
         <div id='main-columns' className='tabs-container'>
             <ColumnLeft socket={socket} selectChatItem={selectChatItem}/>
-            <ColumnCenter socket={socket} selectedChatId={selectedChatId}/>
+            <ColumnCenter socket={socket} selectedChatId={selectedChatId} removeSelectedChat={removeSelectedChat}/>
             {/* <div id='column-right' className='tabs-tab sidebar sidebar-right main-column'></div> */}
         </div>
     </div>
