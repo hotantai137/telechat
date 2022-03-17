@@ -18,8 +18,15 @@ function SideBarHeaderMain(props){
             setIsTyping(true);
             setTypingName(data.userName);
           };
+
+        const isStopTypingListener = (data) => {
+          // if(contact.roomId === message.roomId) setIsTyping(true);
+          setIsTyping(false);
+          setTypingName('');
+        };
         
           if(props.socket) props.socket.on('isTyping', isTypingListener);
+          if(props.socket) props.socket.on('stopTyping', isStopTypingListener);
     
         return () => {
             // if(props.socket) props.socket.off('receivedMessage', messageListener);

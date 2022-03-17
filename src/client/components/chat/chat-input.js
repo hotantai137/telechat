@@ -42,7 +42,13 @@ function ChatInput(props){
             if(event.target.innerText){
                 props.socket.emit('pushMessageToServer', data);
                 event.target.textContent  = '';  
-                setIsTyping(false);          
+                setIsTyping(false);
+                let dataTyping = {
+                    userName: userInfo.fullName,
+                    socketId: props.socket.id,
+                    roomId: contact.roomId
+                }
+                props.socket.emit('stopTyping', dataTyping);
             }
             
             event.preventDefault();
@@ -51,14 +57,16 @@ function ChatInput(props){
 
     function onInput(event){
         setIsTyping(event.target.innerHTML ? true : false);
-        if(isTyping){
-            let data = {
-                userName: userInfo.fullName,
-                socketId: props.socket.id,
-                roomId: contact.roomId
-            }
+        let data = {
+            userName: userInfo.fullName,
+            socketId: props.socket.id,
+            roomId: contact.roomId
+        }
+        if(event.target.innerHTML.length > 0){
             props.socket.emit('typing', data);
-        }        
+        }else{
+            props.socket.emit('stopTyping', data);
+        }
     }
 
     function onKeyUp(event){
@@ -96,7 +104,14 @@ function ChatInput(props){
             input.textContent  = '';  
             setIsTyping(false);
             input.focus();
-        }        
+
+            let dataTyping = {
+                userName: userInfo.fullName,
+                socketId: props.socket.id,
+                roomId: contact.roomId
+            }
+            props.socket.emit('stopTyping', dataTyping);
+        }
     }
 
     return <div className="chat-input">
