@@ -17,8 +17,10 @@ function App() {
 
       var canvasColor = document.getElementById('color-canvas');
       // var canvasParent = document.getElementById('parent-canvas');
-      var ctxCanvasColor = canvasColor.getContext("2d");
-      ctxCanvasColor.drawImage(imgColor, 0, 0);
+      if(canvasColor){
+        var ctxCanvasColor = canvasColor.getContext("2d");
+        ctxCanvasColor.drawImage(imgColor, 0, 0);
+      }      
       // var ctxCanvasParent = canvasParent.getContext("2d");
       // ctxCanvasParent.drawImage(imgAnimal, 0, 0);
     }

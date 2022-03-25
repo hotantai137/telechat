@@ -48,6 +48,7 @@ function Bubbles(props){
     ]);
     const [data, setData] = useState([]);
     const messagesEndRef = useRef(null);
+    const [contact, setContact] = useState(null);
 
     const scrollToBottom = () => {
         messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
@@ -62,16 +63,35 @@ function Bubbles(props){
                 .value();
     }
 
+    const getContact = () => {
+        return contact;
+    }
+
+    const getCurrentContact = () => {
+        if(!props.selectedChatId) return null;
+        let contactList = JSON.parse(localStorage.getItem('contactList'));
+        let currentContact = contactList.find(x => x._id === props.selectedChatId);
+        return currentContact;
+    }
+
+    useEffect(()=>{
+        setContact(getCurrentContact());
+
+    }, [props.selectedChatId]);
+
     useEffect(() => {        
         setData(groupDataBubbles(dataBubbles));
     }, []);
 
     useEffect(() => {
         const messageListener = (message) => {
-          message.messageBubble.isOut = message.socketId === props.socket.id ? true : false;
-          let newData = dataBubbles;
-          newData.push(message.messageBubble);
-          setData(groupDataBubbles(dataBubbles));
+            let currentContact = getContact();
+            if(currentContact && currentContact.roomId === message.roomId){
+                message.messageBubble.isOut = message.socketId === props.socket.id ? true : false;
+                let newData = dataBubbles;
+                newData.push(message.messageBubble);
+                setData(groupDataBubbles(dataBubbles));
+            }            
         };
       
         // const deleteMessageListener = (messageID) => {
@@ -90,7 +110,7 @@ function Bubbles(props){
             if(props.socket) props.socket.off('receivedMessage', messageListener);
             // props.socket.off('deleteMessage', deleteMessageListener);
         };
-      }, [props.socket]);
+      }, [props.socket, contact]);
 
     return <div className="bubbles scrolled-down">
         <div className="scrollable scrollable-y">
@@ -101,14 +121,12 @@ function Bubbles(props){
                             return <BubblesDateGroup key={index} isLastGroup={true} messagesEndRef={messagesEndRef} dataBubblesDateGroup={dateGroup}/>
                         }else{
                             return <BubblesDateGroup key={index} isLastGroup={false} messagesEndRef={messagesEndRef} dataBubblesDateGroup={dateGroup}/>
-                        }
-                        
+                        }                        
                     })
                 }                
             </div>
             <div ref={messagesEndRef} />
-        </div>
-        
+        </div>        
     </div>
 }
 

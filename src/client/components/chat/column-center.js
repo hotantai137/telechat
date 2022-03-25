@@ -40,7 +40,8 @@ function ColumnCenter(props){
                         selectedChatId={props.selectedChatId}
                         socket={props.socket}
                         />
-                        <Bubbles socket={props.socket}/>
+                        <Bubbles socket={props.socket}
+                        selectedChatId={props.selectedChatId}/>
                         <ChatInput socket={props.socket}
                         selectedChatId={props.selectedChatId}/>
                         </>

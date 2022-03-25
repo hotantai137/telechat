@@ -24,9 +24,12 @@ function ChatList(props){
 
     useEffect(() => {
         if(props.socket){
+            getContacts();
             let contactList = JSON.parse(localStorage.getItem('contactList'));
-            let roomIds = contactList.map(contact => {return contact.roomId});
-            props.socket.emit('subscribeRooms', roomIds);
+            if(contactList){
+                let roomIds = contactList.map(contact => {return contact.roomId});
+                props.socket.emit('subscribeRooms', roomIds);
+            }            
         }
         
         // const subscribeRoomSocket = () => {
