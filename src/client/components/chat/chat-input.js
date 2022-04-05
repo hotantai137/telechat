@@ -36,7 +36,8 @@ function ChatInput(props){
             let data = {
                 messageBubble: bubble,
                 socketId: props.socket.id,
-                roomId: contact.roomId
+                roomId: contact.roomId,
+                userId: userInfo._id
             }
 
             if(event.target.innerText){
@@ -97,7 +98,9 @@ function ChatInput(props){
         }
         let data = {
             messageBubble: bubble,
-            socketId: props.socket.id
+            socketId: props.socket.id,
+            roomId: contact.roomId,
+            userId: userInfo._id
         }
         if(input.innerText){
             props.socket.emit('pushMessageToServer', data);

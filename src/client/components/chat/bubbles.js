@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import BubblesDateGroup from "./bubbles-date-group";
 import _ from 'lodash';
+import chatRoomService from '../../../api/services/chat-room.js';
 
 function Bubbles(props){
     const [dataBubbles, setDataBubbles] = useState([
@@ -49,6 +50,7 @@ function Bubbles(props){
     const [data, setData] = useState([]);
     const messagesEndRef = useRef(null);
     const [contact, setContact] = useState(null);
+    const [userInfo, setUserInfo] = useState(null);
 
     const scrollToBottom = () => {
         messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
@@ -74,25 +76,70 @@ function Bubbles(props){
         return currentContact;
     }
 
-    useEffect(()=>{
-        setContact(getCurrentContact());
+    const getConversationByRoom = (roomId) => {
+        chatRoomService.getConversationByRoomId(roomId)
+        .then(res => {
+            return res.conversation;
+        })
+        .then(data => {
+            generateMessageBubbles(data);
+        })
+    }
 
+    const generateMessageBubbles = (data) => {
+        let user = userInfo;
+        if(!user){
+            user = JSON.parse(localStorage.getItem('userInfo'));
+        }
+        let bubbles = data.map(item => {
+            let date = 'November 4, 2020';
+            let userName = item.postedByUser.fullName;
+            let messageText = item.message.messageText;
+            let sendTime = '03:11 PM';
+            let isOut = item.postedByUser._id === user._id ? true : false;
+            
+            let bubble = {
+                date: date,
+                userName: userName,
+                message: messageText,
+                sendTime: sendTime,
+                isOut: isOut,
+                isGroupFirst: true,
+                isGroupLast: true,
+                isHideName: false
+            };
+
+            return bubble;
+        });
+
+        setDataBubbles(bubbles);
+        setData(groupDataBubbles(bubbles));
+        console.log(bubbles);
+    }
+
+    const messageListener = (message) => {
+        let currentContact = getContact();
+        if(currentContact && currentContact.roomId === message.roomId){
+            message.messageBubble.isOut = message.socketId === props.socket.id ? true : false;
+            let newData = dataBubbles;
+            newData.push(message.messageBubble);
+            setData(groupDataBubbles(dataBubbles));
+        }            
+    };
+
+    useEffect(async ()=>{
+        let currentContact = await getCurrentContact();
+        setContact(currentContact);
+        await getConversationByRoom(currentContact.roomId);
     }, [props.selectedChatId]);
 
-    useEffect(() => {        
+    useEffect(() => {
+        let user = JSON.parse(localStorage.getItem('userInfo'));
+        setUserInfo(user);
         setData(groupDataBubbles(dataBubbles));
     }, []);
 
     useEffect(() => {
-        const messageListener = (message) => {
-            let currentContact = getContact();
-            if(currentContact && currentContact.roomId === message.roomId){
-                message.messageBubble.isOut = message.socketId === props.socket.id ? true : false;
-                let newData = dataBubbles;
-                newData.push(message.messageBubble);
-                setData(groupDataBubbles(dataBubbles));
-            }            
-        };
       
         // const deleteMessageListener = (messageID) => {
         //   setMessages((prevMessages) => {
@@ -110,7 +157,7 @@ function Bubbles(props){
             if(props.socket) props.socket.off('receivedMessage', messageListener);
             // props.socket.off('deleteMessage', deleteMessageListener);
         };
-      }, [props.socket, contact]);
+      }, [props.socket, contact, dataBubbles]);
 
     return <div className="bubbles scrolled-down">
         <div className="scrollable scrollable-y">
