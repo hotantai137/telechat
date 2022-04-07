@@ -117,6 +117,13 @@ function ChatInput(props){
         }
     }
 
+    function onShowEmoji(){
+        let emojiDropdown = document.getElementById('emoji-dropdown');
+        // emojiDropdown.classList.remove("emoji-dropdown");
+        emojiDropdown.classList.add("active");
+        // emojiDropdown.addClass
+    }
+
     return <div className="chat-input">
         <div className="chat-input-container">
             <div className="rows-wrapper-wrapper">
@@ -127,7 +134,8 @@ function ChatInput(props){
                         </use>
                     </svg>
                     <div className="new-message-wrapper">
-                        <button className="btn-icon tgico-none toggle-emoticons">
+                        <button className="btn-icon tgico-none toggle-emoticons"
+                        onClick={onShowEmoji}>
                             <i className="far fa-smile"></i>
                         </button>
                         <div className="input-message-container">
@@ -142,18 +150,18 @@ function ChatInput(props){
                         </div>
                         <div className="btn-icon btn-menu-toggle attach-file tgico-attach">
                             <i className="far fa-paperclip"></i>
-                            {/* <div class="btn-menu top-left">
-                                <div class="btn-menu-item rp-overflow tgico-image rp">
-                                    <div class="c-ripple"></div>
-                                        <span class="i18n btn-menu-item-text">Photo or Video</span>
+                            {/* <div className="btn-menu top-left">
+                                <div className="btn-menu-item rp-overflow tgico-image rp">
+                                    <div className="c-ripple"></div>
+                                        <span className="i18n btn-menu-item-text">Photo or Video</span>
                                 </div>
-                                <div class="btn-menu-item rp-overflow tgico-document rp">
-                                    <div class="c-ripple"></div>
-                                    <span class="i18n btn-menu-item-text">Document</span>
+                                <div className="btn-menu-item rp-overflow tgico-document rp">
+                                    <div className="c-ripple"></div>
+                                    <span className="i18n btn-menu-item-text">Document</span>
                                 </div>
-                                <div class="btn-menu-item rp-overflow tgico-poll rp hide">
-                                    <div class="c-ripple"></div>
-                                    <span class="i18n btn-menu-item-text">Poll</span>
+                                <div className="btn-menu-item rp-overflow tgico-poll rp hide">
+                                    <div className="c-ripple"></div>
+                                    <span className="i18n btn-menu-item-text">Poll</span>
                                 </div>
                             </div> */}
                     </div>
@@ -185,8 +193,26 @@ function ChatInput(props){
                 </div> */}
             </div>
         </div>
-        {/* <div className="emoji-dropdown" id="emoji-dropdown">
-        </div> */}
+        <div className="emoji-dropdown" id="emoji-dropdown">
+            <div className="emoji-container"></div>
+            <div className="emoji-tabs menu-horizontal-div no-stripe">
+                <button className="menu-horizontal-div-item emoji-tabs-search justify-self-start btn-icon tgico-search rp hide" data-tab="-1">
+                    <div className="c-ripple"><i className="far fa-smile"></i></div>
+                </button>
+                <button className="menu-horizontal-div-item emoji-tabs-emoji btn-icon tgico-smile rp active" data-tab="0">
+                    <div className="c-ripple"><i className="far fa-smile"></i></div>
+                </button>
+                <button className="menu-horizontal-div-item emoji-tabs-stickers btn-icon tgico-stickers rp" data-tab="1">
+                    <div className="c-ripple"><i className="far fa-smile"></i></div>
+                </button>
+                <button className="menu-horizontal-div-item emoji-tabs-gifs btn-icon tgico-gifs rp" data-tab="2">
+                    <div className="c-ripple"><i class="fa-light fa-gif"></i></div>
+                </button>
+                <button className="menu-horizontal-div-item emoji-tabs-delete justify-self-end btn-icon tgico-deleteleft rp" data-tab="-1">
+                    <div className="c-ripple"><i className="far fa-smile"></i></div>
+                </button>
+            </div>
+        </div>        
     </div>
 }
 
