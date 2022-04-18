@@ -124,6 +124,11 @@ function ChatInput(props){
         // emojiDropdown.addClass
     }
 
+    function onCloseEmoji(){
+        let emojiDropdown = document.getElementById('emoji-dropdown');
+        emojiDropdown.classList.remove("active");
+    }
+
     return <div className="chat-input">
         <div className="chat-input-container">
             <div className="rows-wrapper-wrapper">
@@ -193,7 +198,8 @@ function ChatInput(props){
                 </div> */}
             </div>
         </div>
-        <div className="emoji-dropdown" id="emoji-dropdown">
+        <div className="emoji-dropdown" id="emoji-dropdown"
+        onMouseLeave={onCloseEmoji}>
             <div className="emoji-container"></div>
             <div className="emoji-tabs menu-horizontal-div no-stripe">
                 <button className="menu-horizontal-div-item emoji-tabs-search justify-self-start btn-icon tgico-search rp hide" data-tab="-1">
@@ -206,7 +212,7 @@ function ChatInput(props){
                     <div className="c-ripple"><i className="far fa-smile"></i></div>
                 </button>
                 <button className="menu-horizontal-div-item emoji-tabs-gifs btn-icon tgico-gifs rp" data-tab="2">
-                    <div className="c-ripple"><i class="fa-light fa-gif"></i></div>
+                    <div className="c-ripple"><i className="fa-light fa-gif"></i></div>
                 </button>
                 <button className="menu-horizontal-div-item emoji-tabs-delete justify-self-end btn-icon tgico-deleteleft rp" data-tab="-1">
                     <div className="c-ripple"><i className="far fa-smile"></i></div>

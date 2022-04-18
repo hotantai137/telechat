@@ -14,6 +14,33 @@ function ColumnCenter(props){
     //     setSelectedChatId(props.selectedChatId);
     // }, [props.selectedChatId]);
 
+    const renderBackground = () => {
+        var imgColor = document.getElementById('bg-image');
+        var imgAnimal = document.getElementById('bg-parent-image');
+  
+        var canvasColor = document.getElementById('color-canvas');
+        // var canvasParent = document.getElementById('parent-canvas');
+        if(canvasColor){
+          var ctxCanvasColor = canvasColor.getContext("2d");
+          ctxCanvasColor.drawImage(imgColor, 0, 0);
+        }      
+        // var ctxCanvasParent = canvasParent.getContext("2d");
+        // ctxCanvasParent.drawImage(imgAnimal, 0, 0);
+      }
+
+    useEffect(() => {
+        renderBackground();
+    
+        // function handleResize() {
+        //   renderBackground();
+        //   console.log('resized to: ', window.innerWidth, 'x', window.innerHeight)
+        // }
+    
+        // handleResize();
+        window.addEventListener('load', renderBackground);
+        window.addEventListener('resize', renderBackground);
+      }, []);
+
  return(
     <div id='column-center' className='tabs-tab main-column'>
         <div className='chats-container tabs-container' data-animation="navigation">

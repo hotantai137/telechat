@@ -2288,3 +2288,142 @@ html.no-touch .menu-horizontal-div-item.active:hover,html.no-touch .menu-horizon
 .menu-horizontal-div i.animate {
     transition: transform .25s ease-in-out;
     transition: transform var(--tabs-transition)}
+
+    .bubble .attachment .download~.video-play,.bubble .attachment .preloader-container~.video-play {
+        display: none}
+    .bubble .preloader-container {
+        z-index: 2}
+    .bubble.is-out .audio-toggle,.bubble.is-out .audio-download,.bubble.is-out .audio.corner-download .preloader-container {
+        background-color: #4fae4e;
+        background-color: var(--message-out-primary-color)}
+    .bubble.is-out .audio .preloader-container {
+        --color: var(--message-background-color)}
+    .preloader-container {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        width: 54px;
+        height: 54px;
+        display: flex;
+        cursor: pointer;
+        overflow: hidden;
+        opacity: 0;
+        transform: scale(0)}
+    body:not(.animation-level-0) .preloader-container {
+        transition: opacity .2s ease-in-out,transform .2s ease-in-out}
+    .preloader-container.is-visible:not(.backwards) {
+        opacity: 1;
+        transform: scale(1)}
+    .preloader-container {
+        --color: #fff}
+    .preloader-container .you-spin-me-round {
+        width: 100%;
+        height: 100%}
+    .preloader-container .preloader-circular {
+        -webkit-animation: none;
+        animation: none;
+        background-color: rgba(0,0,0,.3);
+        border-radius: 50%;
+        width: 100%;
+        height: 100%}
+    .preloader-container .preloader-path-new {
+        stroke-dasharray: 5,149.82;
+        stroke-dashoffset: 0;
+        stroke-linecap: round;
+        stroke: var(--color);
+        stroke-width: 2}
+    body.animation-level-2 .preloader-container.is-visible:not(.manual) .you-spin-me-round,body.animation-level-2 .preloader-container.is-visible.animating .you-spin-me-round {
+        -webkit-animation: rotate 2s linear infinite;
+        animation: rotate 2s linear infinite}
+    body.animation-level-2 .preloader-container.is-visible:not(.manual) .preloader-path-new,body.animation-level-2 .preloader-container.is-visible.animating .preloader-path-new {
+        transition: stroke-dasharray .2s ease-in-out,stroke-width .2s ease-in-out}
+    .preloader-container.preloader-swing {
+        cursor: default}
+    .preloader-container.preloader-swing .you-spin-me-round {
+        -webkit-animation: rotate 1s linear infinite !important;
+        animation: rotate 1s linear infinite !important}
+    .preloader-container.preloader-swing .preloader-path-new {
+        stroke-dasharray: 112.36,149.82}
+    .preloader-container.preloader-swing.preloader-streamable .preloader-path-new {
+        stroke-dasharray: 88.95,118.61}
+    .preloader-container .preloader-close,.preloader-container .preloader-download {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        margin: auto;
+        color: var(--color);
+        width: 56%;
+        height: 56%;
+        opacity: 1}
+    body.animation-level-2 .preloader-container .preloader-close,body.animation-level-2 .preloader-container .preloader-download {
+        transition: opacity .2s ease-in-out}
+    .preloader-container .preloader-close path,.preloader-container .preloader-download path {
+        fill: var(--color)}
+    html.no-touch .preloader-container .preloader-close:hover,html.no-touch .preloader-container .preloader-close:active,html.no-touch .preloader-container .preloader-download:hover,html.no-touch .preloader-container .preloader-download:active {
+        background: none}
+    .preloader-container:not(.manual) .preloader-download,.preloader-container.manual .preloader-close {
+        opacity: 0}
+    .preloader-container.manual .preloader-path-new {
+        stroke-width: 0}
+    .preloader-container .preloader-download {
+        width: 1.5rem;
+        height: 1.5rem}
+    .preloader-container.preloader-streamable,.preloader-container.preloader-streamable svg {
+        cursor: pointer !important}
+    .preloader-container.preloader-streamable circle {
+        stroke-width: 2.5 !important}
+    .preloader-container.preloader-streamable:after {
+        content: "";
+        position: absolute;
+        width: .8125rem;
+        height: .8125rem;
+        border-radius: .125rem;
+        background-color: var(--color);
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%)}
+    .preloader-container.preloader-transparent .preloader-circular {
+        background-color: transparent}
+    .preloader-container.preloader-bold .preloader-path-new {
+        stroke-width: 3.5}
+    .document .preloader-path-new {
+        stroke-width: 2.5}
+    .document .preloader-container {
+        width: 2.5rem;
+        height: 2.5rem}
+    @media only screen and (max-width: 600px) {
+        .document .preloader-container {
+        width: 1.625rem;
+        height: 1.625rem}
+    }
+    .document:not(.corner-download) .preloader-container:not(.preloader-streamable),.audio:not(.corner-download) .preloader-container:not(.preloader-streamable) {
+        transform: scale(1) !important}
+    .audio .preloader-container:not(.preloader-streamable) {
+        width: 100%;
+        height: 100%}
+    .audio.corner-download .preloader-container {
+        border-radius: inherit;
+        background-color: #3390ec;
+        background-color: var(--primary-color)}
+        .preloader-circular {
+            -webkit-animation: rotate 1s linear infinite;
+            animation: rotate 1s linear infinite;
+            height: 100%;
+            transform-origin: center center;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto}
+        .document.document-with-thumb .preloader-circular {
+            transition: background-color .2s}
+        .document.document-with-thumb .preloader-container:not(.manual) .preloader-circular {
+            background-color: rgba(0,0,0,.3) !important}
+        .document .preloader-circular {
+            background-color: transparent !important}

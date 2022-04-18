@@ -173,7 +173,14 @@ function Bubbles(props){
                 }                
             </div>
             <div ref={messagesEndRef} />
-        </div>        
+        </div>
+        <div className="preloader-container preloader-swing is-visible">
+            <div className="you-spin-me-round">
+                <svg xmlns="http://www.w3.org/2000/svg" className="preloader-circular" viewBox="27 27 54 54">
+                    <circle className="preloader-path-new" cx="54" cy="54" r="24" fill="none" strokeMiterlimit="10"></circle>
+                </svg>
+            </div>
+        </div>
     </div>
 }
 
