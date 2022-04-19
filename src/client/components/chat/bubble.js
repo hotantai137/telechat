@@ -16,6 +16,10 @@ function Bubble({dataBubble}){
                             </div>
                         </span>
                     </div>
+                    <div className="attachment">
+                        <img src="/emoji/1fae0.png" alt="🫠" class="emoji" />
+                    </div>
+                    <div class="attachment media-sticker-wrapper" data-doc-id="1258816259753961" style="width: 112px; height: 112px;"><canvas class="rlottie" width="112" height="112"></canvas></div>
                     <div data-peer-id="435185804" className="name" style={{color: "rgb(0, 193, 166)"}}>
                         <span className="peer-title" dir="auto" data-peer-id="435185804">{dataBubble.userName}</span>
                     </div>

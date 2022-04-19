@@ -1,5 +1,6 @@
 {
     "EMOJIS":{
+        "PATH": "../../assets/image/emoji",
         "SMILEYS_AND_PEOPLE_EMOJIS": [
         "1f600.png",
         "1f603.png",

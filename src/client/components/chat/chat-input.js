@@ -20,16 +20,16 @@ function ChatInput(props){
     useEffect(() => {
         let user = JSON.parse(localStorage.getItem('userInfo'));
         setUserInfo(user);
-        let emojiImport = importEmoji(require.context('../../assets/image/emoji', false, /\.(png|jpe?g|svg)$/));
-        setEmojis(emojiImport);        
+        // let emojiImport = importEmoji(require.context('../../assets/image/emoji', false, /\.(png|jpe?g|svg)$/));
+        // setEmojis(emojiImport);
     }, []);
 
-    function importEmoji(r) {
-        let emojis = [];
-        r.keys().forEach((key) => (emojis[key.replace('./', '')] = r(key)));
+    // function importEmoji(r) {
+    //     let emojis = [];
+    //     r.keys().forEach((key) => (emojis[key.replace('./', '')] = r(key)));
 
-        return emojis;
-    }
+    //     return emojis;
+    // }
 
     function onChatPush(event){
         if(event.key === 'Enter' && !event.shiftKey){
@@ -140,6 +140,16 @@ function ChatInput(props){
         emojiDropdown.classList.remove("active");
     }
 
+    function selectEmoji(emojiName){
+        let input = document.getElementById('input-message');
+        let imgEmoji = document.createElement('img');
+        imgEmoji.src = '/emoji/' + emojiName;
+        imgEmoji.classList.add('emoji');
+        if(input){
+            input.appendChild(imgEmoji);
+        }                
+    }
+
     return <div className="chat-input">
         <div className="chat-input-container">
             <div className="rows-wrapper-wrapper">
@@ -232,18 +242,20 @@ function ChatInput(props){
                                     </div>
                                     <div className="super-emojis">
                                         <span className="super-emoji">
-                                            <img src={emojis['1f692.png']} alt="🙄" className="emoji" loading="lazy"/>
+                                        <img src="/emoji/1f692.png" alt="🙄" className="emoji" loading="lazy"/>
+                                            {/* <img src={emojis['1f692.png']} alt="🙄" className="emoji" loading="lazy"/>
+                                            <img src={require('../../assets/image/emoji/1f692.png')} alt="🙄" className="emoji" loading="lazy"/> */}
                                             <span className="emoji-placeholder"></span>
                                         </span>
                                         <span className="super-emoji">
-                                            <img src={emojis['1f692.png']} alt="😉" className="emoji" loading="lazy"/>
+                                            <img src="/emoji/1f692.png" alt="😉" className="emoji" loading="lazy"/>
                                             <span className="emoji-placeholder"></span>
                                         </span>
                                         <span className="super-emoji">
-                                            <img src={emojis['1f692.png']} alt="😏" className="emoji"/>
+                                            <img src="/emoji/1f692.png" alt="😏" className="emoji"/>
                                         </span>
                                         <span className="super-emoji">
-                                            <img src={emojis['1f970.png']} alt="🇯🇵" className="emoji" loading="lazy"/>
+                                            <img src="/emoji/1f970.png" alt="🇯🇵" className="emoji" loading="lazy"/>
                                             <span className="emoji-placeholder"></span>
                                         </span>
                                     </div>
@@ -256,10 +268,10 @@ function ChatInput(props){
                                     <div className="super-emojis">
                                         {
                                             CONSTANTS.EMOJIS.SMILEYS_AND_PEOPLE_EMOJIS && CONSTANTS.EMOJIS.SMILEYS_AND_PEOPLE_EMOJIS.map(emojiName => {
-                                                return <span className="super-emoji">
-                                                    <img src={emojis[emojiName]} alt="🙄" className="emoji" loading="lazy"/>
+                                                return (<span className="super-emoji" onClick={()=>{selectEmoji(emojiName)}} key={emojiName}>
+                                                    <img src={"/emoji/" + emojiName } alt="🙄" className="emoji" loading="lazy"/>
                                                     <span className="emoji-placeholder"></span>
-                                                </span>
+                                                </span>)
                                             })
                                         }
                                     </div>
@@ -272,8 +284,8 @@ function ChatInput(props){
                                     <div className="super-emojis">
                                         {
                                             CONSTANTS.EMOJIS.ANIMALS_AND_NATUR_MOJIS && CONSTANTS.EMOJIS.ANIMALS_AND_NATUR_MOJIS.map(emojiName => {
-                                                return <span className="super-emoji">
-                                                    <img src={emojis[emojiName]} alt="🙄" className="emoji" loading="lazy"/>
+                                                return <span className="super-emoji" onClick={()=>{selectEmoji(emojiName)}} key={emojiName}>
+                                                    <img src={"/emoji/" + emojiName } alt="🙄" className="emoji" loading="lazy"/>
                                                     <span className="emoji-placeholder"></span>
                                                 </span>
                                             })
@@ -288,8 +300,8 @@ function ChatInput(props){
                                     <div className="super-emojis">
                                         {
                                             CONSTANTS.EMOJIS.FOOD_AND_DRINK_EMOJIS && CONSTANTS.EMOJIS.FOOD_AND_DRINK_EMOJIS.map(emojiName => {
-                                                return <span className="super-emoji">
-                                                    <img src={emojis[emojiName]} alt="🙄" className="emoji" loading="lazy"/>
+                                                return <span className="super-emoji" onClick={()=>{selectEmoji(emojiName)}} key={emojiName}>
+                                                    <img src={"/emoji/" + emojiName } alt="🙄" className="emoji" loading="lazy"/>
                                                     <span className="emoji-placeholder"></span>
                                                 </span>
                                             })
@@ -304,8 +316,8 @@ function ChatInput(props){
                                     <div className="super-emojis">
                                         {
                                             CONSTANTS.EMOJIS.TRAVEL_AND_PLACES_EMOJIS && CONSTANTS.EMOJIS.TRAVEL_AND_PLACES_EMOJIS.map(emojiName => {
-                                                return <span className="super-emoji">
-                                                    <img src={emojis[emojiName]} alt="🙄" className="emoji" loading="lazy"/>
+                                                return <span className="super-emoji" onClick={()=>{selectEmoji(emojiName)}} key={emojiName}>
+                                                    <img src={"/emoji/" + emojiName } alt="🙄" className="emoji" loading="lazy"/>
                                                     <span className="emoji-placeholder"></span>
                                                 </span>
                                             })
@@ -320,8 +332,8 @@ function ChatInput(props){
                                     <div className="super-emojis">
                                         {
                                             CONSTANTS.EMOJIS.ACTIVITY_AND_SPORT_EMOJIS && CONSTANTS.EMOJIS.ACTIVITY_AND_SPORT_EMOJIS.map(emojiName => {
-                                                return <span className="super-emoji">
-                                                    <img src={emojis[emojiName]} alt="🙄" className="emoji" loading="lazy"/>
+                                                return <span className="super-emoji" onClick={()=>{selectEmoji(emojiName)}} key={emojiName}>
+                                                    <img src={"/emoji/" + emojiName } alt="🙄" className="emoji" loading="lazy"/>
                                                     <span className="emoji-placeholder"></span>
                                                 </span>
                                             })
@@ -336,8 +348,8 @@ function ChatInput(props){
                                     <div className="super-emojis">
                                         {
                                             CONSTANTS.EMOJIS.OBJECTS_EMOJIS && CONSTANTS.EMOJIS.OBJECTS_EMOJIS.map(emojiName => {
-                                                return <span className="super-emoji">
-                                                    <img src={emojis[emojiName]} alt="🙄" className="emoji" loading="lazy"/>
+                                                return <span className="super-emoji" onClick={()=>{selectEmoji(emojiName)}} key={emojiName}>
+                                                    <img src={"/emoji/" + emojiName } alt="🙄" className="emoji" loading="lazy"/>
                                                     <span className="emoji-placeholder"></span>
                                                 </span>
                                             })
@@ -352,8 +364,8 @@ function ChatInput(props){
                                     <div className="super-emojis">
                                         {
                                             CONSTANTS.EMOJIS.FLAGS_EMOJIS && CONSTANTS.EMOJIS.FLAGS_EMOJIS.map(emojiName => {
-                                                return <span className="super-emoji">
-                                                    <img src={emojis[emojiName]} alt="🙄" className="emoji" loading="lazy"/>
+                                                return <span className="super-emoji" onClick={()=>{selectEmoji(emojiName)}} key={emojiName}>
+                                                    <img src={"/emoji/" + emojiName } alt="🙄" className="emoji" loading="lazy"/>
                                                     <span className="emoji-placeholder"></span>
                                                 </span>
                                             })
