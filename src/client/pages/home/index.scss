@@ -2343,141 +2343,258 @@ html.no-touch .menu-horizontal-div-item.active:hover,html.no-touch .menu-horizon
     transition: transform .25s ease-in-out;
     transition: transform var(--tabs-transition)}
 
-    .bubble .attachment .download~.video-play,.bubble .attachment .preloader-container~.video-play {
-        display: none}
-    .bubble .preloader-container {
-        z-index: 2}
-    .bubble.is-out .audio-toggle,.bubble.is-out .audio-download,.bubble.is-out .audio.corner-download .preloader-container {
-        background-color: #4fae4e;
-        background-color: var(--message-out-primary-color)}
-    .bubble.is-out .audio .preloader-container {
-        --color: var(--message-background-color)}
-    .preloader-container {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        margin: auto;
-        width: 54px;
-        height: 54px;
-        display: flex;
-        cursor: pointer;
-        overflow: hidden;
-        opacity: 0;
-        transform: scale(0)}
-    body:not(.animation-level-0) .preloader-container {
-        transition: opacity .2s ease-in-out,transform .2s ease-in-out}
-    .preloader-container.is-visible:not(.backwards) {
-        opacity: 1;
-        transform: scale(1)}
-    .preloader-container {
-        --color: #fff}
-    .preloader-container .you-spin-me-round {
-        width: 100%;
-        height: 100%}
-    .preloader-container .preloader-circular {
-        -webkit-animation: none;
-        animation: none;
-        background-color: rgba(0,0,0,.3);
-        border-radius: 50%;
-        width: 100%;
-        height: 100%}
-    .preloader-container .preloader-path-new {
-        stroke-dasharray: 5,149.82;
-        stroke-dashoffset: 0;
-        stroke-linecap: round;
-        stroke: var(--color);
-        stroke-width: 2}
-    body.animation-level-2 .preloader-container.is-visible:not(.manual) .you-spin-me-round,body.animation-level-2 .preloader-container.is-visible.animating .you-spin-me-round {
-        -webkit-animation: rotate 2s linear infinite;
-        animation: rotate 2s linear infinite}
-    body.animation-level-2 .preloader-container.is-visible:not(.manual) .preloader-path-new,body.animation-level-2 .preloader-container.is-visible.animating .preloader-path-new {
-        transition: stroke-dasharray .2s ease-in-out,stroke-width .2s ease-in-out}
-    .preloader-container.preloader-swing {
-        cursor: default}
-    .preloader-container.preloader-swing .you-spin-me-round {
-        -webkit-animation: rotate 1s linear infinite !important;
-        animation: rotate 1s linear infinite !important}
-    .preloader-container.preloader-swing .preloader-path-new {
-        stroke-dasharray: 112.36,149.82}
-    .preloader-container.preloader-swing.preloader-streamable .preloader-path-new {
-        stroke-dasharray: 88.95,118.61}
-    .preloader-container .preloader-close,.preloader-container .preloader-download {
-        position: absolute;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        margin: auto;
-        color: var(--color);
-        width: 56%;
-        height: 56%;
-        opacity: 1}
-    body.animation-level-2 .preloader-container .preloader-close,body.animation-level-2 .preloader-container .preloader-download {
-        transition: opacity .2s ease-in-out}
-    .preloader-container .preloader-close path,.preloader-container .preloader-download path {
-        fill: var(--color)}
-    html.no-touch .preloader-container .preloader-close:hover,html.no-touch .preloader-container .preloader-close:active,html.no-touch .preloader-container .preloader-download:hover,html.no-touch .preloader-container .preloader-download:active {
-        background: none}
-    .preloader-container:not(.manual) .preloader-download,.preloader-container.manual .preloader-close {
-        opacity: 0}
-    .preloader-container.manual .preloader-path-new {
-        stroke-width: 0}
-    .preloader-container .preloader-download {
-        width: 1.5rem;
-        height: 1.5rem}
-    .preloader-container.preloader-streamable,.preloader-container.preloader-streamable svg {
-        cursor: pointer !important}
-    .preloader-container.preloader-streamable circle {
-        stroke-width: 2.5 !important}
-    .preloader-container.preloader-streamable:after {
-        content: "";
-        position: absolute;
-        width: .8125rem;
-        height: .8125rem;
-        border-radius: .125rem;
-        background-color: var(--color);
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%)}
-    .preloader-container.preloader-transparent .preloader-circular {
-        background-color: transparent}
-    .preloader-container.preloader-bold .preloader-path-new {
-        stroke-width: 3.5}
-    .document .preloader-path-new {
-        stroke-width: 2.5}
+.bubble .attachment .download~.video-play,.bubble .attachment .preloader-container~.video-play {
+    display: none}
+.bubble .preloader-container {
+    z-index: 2}
+.bubble.is-out .audio-toggle,.bubble.is-out .audio-download,.bubble.is-out .audio.corner-download .preloader-container {
+    background-color: #4fae4e;
+    background-color: var(--message-out-primary-color)}
+.bubble.is-out .audio .preloader-container {
+    --color: var(--message-background-color)}
+.preloader-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 54px;
+    height: 54px;
+    display: flex;
+    cursor: pointer;
+    overflow: hidden;
+    opacity: 0;
+    transform: scale(0)}
+body:not(.animation-level-0) .preloader-container {
+    transition: opacity .2s ease-in-out,transform .2s ease-in-out}
+.preloader-container.is-visible:not(.backwards) {
+    opacity: 1;
+    transform: scale(1)}
+.preloader-container {
+    --color: #fff}
+.preloader-container .you-spin-me-round {
+    width: 100%;
+    height: 100%}
+.preloader-container .preloader-circular {
+    -webkit-animation: none;
+    animation: none;
+    background-color: rgba(0,0,0,.3);
+    border-radius: 50%;
+    width: 100%;
+    height: 100%}
+.preloader-container .preloader-path-new {
+    stroke-dasharray: 5,149.82;
+    stroke-dashoffset: 0;
+    stroke-linecap: round;
+    stroke: var(--color);
+    stroke-width: 2}
+body.animation-level-2 .preloader-container.is-visible:not(.manual) .you-spin-me-round,body.animation-level-2 .preloader-container.is-visible.animating .you-spin-me-round {
+    -webkit-animation: rotate 2s linear infinite;
+    animation: rotate 2s linear infinite}
+body.animation-level-2 .preloader-container.is-visible:not(.manual) .preloader-path-new,body.animation-level-2 .preloader-container.is-visible.animating .preloader-path-new {
+    transition: stroke-dasharray .2s ease-in-out,stroke-width .2s ease-in-out}
+.preloader-container.preloader-swing {
+    cursor: default}
+.preloader-container.preloader-swing .you-spin-me-round {
+    -webkit-animation: rotate 1s linear infinite !important;
+    animation: rotate 1s linear infinite !important}
+.preloader-container.preloader-swing .preloader-path-new {
+    stroke-dasharray: 112.36,149.82}
+.preloader-container.preloader-swing.preloader-streamable .preloader-path-new {
+    stroke-dasharray: 88.95,118.61}
+.preloader-container .preloader-close,.preloader-container .preloader-download {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    color: var(--color);
+    width: 56%;
+    height: 56%;
+    opacity: 1}
+body.animation-level-2 .preloader-container .preloader-close,body.animation-level-2 .preloader-container .preloader-download {
+    transition: opacity .2s ease-in-out}
+.preloader-container .preloader-close path,.preloader-container .preloader-download path {
+    fill: var(--color)}
+html.no-touch .preloader-container .preloader-close:hover,html.no-touch .preloader-container .preloader-close:active,html.no-touch .preloader-container .preloader-download:hover,html.no-touch .preloader-container .preloader-download:active {
+    background: none}
+.preloader-container:not(.manual) .preloader-download,.preloader-container.manual .preloader-close {
+    opacity: 0}
+.preloader-container.manual .preloader-path-new {
+    stroke-width: 0}
+.preloader-container .preloader-download {
+    width: 1.5rem;
+    height: 1.5rem}
+.preloader-container.preloader-streamable,.preloader-container.preloader-streamable svg {
+    cursor: pointer !important}
+.preloader-container.preloader-streamable circle {
+    stroke-width: 2.5 !important}
+.preloader-container.preloader-streamable:after {
+    content: "";
+    position: absolute;
+    width: .8125rem;
+    height: .8125rem;
+    border-radius: .125rem;
+    background-color: var(--color);
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%)}
+.preloader-container.preloader-transparent .preloader-circular {
+    background-color: transparent}
+.preloader-container.preloader-bold .preloader-path-new {
+    stroke-width: 3.5}
+.document .preloader-path-new {
+    stroke-width: 2.5}
+.document .preloader-container {
+    width: 2.5rem;
+    height: 2.5rem}
+@media only screen and (max-width: 600px) {
     .document .preloader-container {
-        width: 2.5rem;
-        height: 2.5rem}
-    @media only screen and (max-width: 600px) {
-        .document .preloader-container {
-        width: 1.625rem;
-        height: 1.625rem}
-    }
-    .document:not(.corner-download) .preloader-container:not(.preloader-streamable),.audio:not(.corner-download) .preloader-container:not(.preloader-streamable) {
-        transform: scale(1) !important}
-    .audio .preloader-container:not(.preloader-streamable) {
-        width: 100%;
-        height: 100%}
-    .audio.corner-download .preloader-container {
-        border-radius: inherit;
-        background-color: #3390ec;
-        background-color: var(--primary-color)}
-        .preloader-circular {
-            -webkit-animation: rotate 1s linear infinite;
-            animation: rotate 1s linear infinite;
-            height: 100%;
-            transform-origin: center center;
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            margin: auto}
-        .document.document-with-thumb .preloader-circular {
-            transition: background-color .2s}
-        .document.document-with-thumb .preloader-container:not(.manual) .preloader-circular {
-            background-color: rgba(0,0,0,.3) !important}
-        .document .preloader-circular {
-            background-color: transparent !important}
+    width: 1.625rem;
+    height: 1.625rem}
+}
+.document:not(.corner-download) .preloader-container:not(.preloader-streamable),.audio:not(.corner-download) .preloader-container:not(.preloader-streamable) {
+    transform: scale(1) !important}
+.audio .preloader-container:not(.preloader-streamable) {
+    width: 100%;
+    height: 100%}
+.audio.corner-download .preloader-container {
+    border-radius: inherit;
+    background-color: #3390ec;
+    background-color: var(--primary-color)}
+.preloader-circular {
+    -webkit-animation: rotate 1s linear infinite;
+    animation: rotate 1s linear infinite;
+    height: 100%;
+    transform-origin: center center;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto}
+.document.document-with-thumb .preloader-circular {
+    transition: background-color .2s}
+.document.document-with-thumb .preloader-container:not(.manual) .preloader-circular {
+    background-color: rgba(0,0,0,.3) !important}
+.document .preloader-circular {
+    background-color: transparent !important}
+.bubbles.is-selecting .bubble:not(.is-album) .audio,.bubbles.is-selecting .bubble:not(.is-album) .document,.bubbles.is-selecting .bubble:not(.is-album) .attachment,.bubbles.is-selecting .bubble:not(.is-album) poll-element {
+    pointer-events: none !important}
+.bubble.emoji-big:not(.sticker) .attachment {
+    padding-top: .5rem;
+    padding-bottom: 1.5rem;
+    max-height: -webkit-fit-content !important;
+    max-height: -moz-fit-content !important;
+    max-height: fit-content !important}
+.bubble.emoji-big:not(.sticker) .attachment span.emoji {
+    height: auto;
+    width: auto}
+.chat:not(.no-forwards) .bubble.emoji-big:not(.sticker) .attachment {
+    cursor: text;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text}
+.bubble.emoji-big:not(.sticker) .message {
+    margin-top: -1.125rem}
+.bubble.emoji-1x .attachment {
+    font-size: 96px}
+.bubble.emoji-1x .attachment img.emoji {
+    height: 64px;
+    width: 64px}
+.bubble.emoji-2x .attachment {
+    font-size: 64px}
+.bubble.emoji-2x .attachment img.emoji {
+    height: 48px;
+    width: 48px}
+.bubble.emoji-3x .attachment {
+    font-size: 52px}
+.bubble.emoji-3x .attachment img.emoji {
+    height: 32px;
+    width: 32px}
+.bubble.sticker .attachment {
+    position: absolute;
+    border-radius: 0;
+    z-index: 1}
+.bubble.round .attachment {
+    max-width: 280px !important;
+    max-width: var(--round-video-size) !important;
+    max-height: 280px !important;
+    max-height: var(--round-video-size) !important;
+    width: 280px !important;
+    width: var(--round-video-size) !important;
+    height: 280px !important;
+    height: var(--round-video-size) !important}
+.bubble.round .media-photo,.bubble.round .media-video {
+    border-radius: 50%;
+    pointer-events: none}
+.bubble:not(.is-message-empty) .attachment {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0}
+.bubble:not(.emoji-big) .attachment {
+    font-size: 0}
+.bubble .attachment {
+    max-width: 100%;
+    border-radius: inherit;
+    overflow: hidden;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    cursor: pointer}
+.bubble .attachment img,.bubble .attachment video {
+    max-width: 100%}
+.bubble .attachment .download {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center}
+.bubble .attachment .download span {
+    background-color: rgba(0, 0, 0, .35);
+    background-color: var(--message-time-background);
+    font-size: 23px;
+    color: #fff;
+    text-align: center}
+.bubble .attachment .download~.video-play,.bubble .attachment .preloader-container~.video-play {
+    display: none}
+.bubble:not(.sticker) .attachment {
+    max-width: min(420px, 100%);
+    max-height: min(340px, 100%);
+    width: -webkit-max-content;
+    width: -moz-max-content;
+    width: max-content}
+.bubble img:not(.emoji),.bubble video {
+    -o-object-fit: cover;
+    object-fit: cover;
+    width: 100%;
+    height: 100%}
+html.is-safari .bubble:not(.round) img:not(.emoji),html.is-safari .bubble:not(.round) video {
+    border-radius: inherit}
+.bubble.is-album .attachment {
+    max-width: min(451px, 100%);
+    max-height: none}
+.bubble.forwarded .attachment,.bubble.is-reply .attachment,.bubble:not(.hide-name) .attachment {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0}
+.bubble.with-replies .attachment {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0}
+.bubble:not(.webpage):not(.is-album):not(.sticker):not(.round):not(.emoji-big) .attachment {
+    background-color: #000}
+.bubble.is-message-empty.is-group-last.with-media-tail .attachment {
+    overflow: visible}
+.bubble.is-in.is-message-empty.is-group-last.with-media-tail .attachment {
+    border-bottom-left-radius: 0}
+.bubble.is-out.is-message-empty.is-group-last.with-media-tail .attachment {
+    border-bottom-right-radius: 0}
