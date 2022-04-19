@@ -77,12 +77,15 @@ function Bubbles(props){
     }
 
     const getConversationByRoom = (roomId) => {
+        let preloaderElement = document.querySelector('.preloader-container.preloader-swing');
+        preloaderElement.classList.add('is-visible');
         chatRoomService.getConversationByRoomId(roomId)
         .then(res => {
             return res.conversation;
         })
         .then(data => {
             generateMessageBubbles(data);
+            preloaderElement.classList.remove('is-visible');
         })
     }
 
@@ -130,7 +133,7 @@ function Bubbles(props){
     useEffect(async ()=>{
         let currentContact = await getCurrentContact();
         setContact(currentContact);
-        await getConversationByRoom(currentContact.roomId);
+        getConversationByRoom(currentContact.roomId);
     }, [props.selectedChatId]);
 
     useEffect(() => {
