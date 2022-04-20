@@ -5,47 +5,47 @@ import chatRoomService from '../../../api/services/chat-room.js';
 
 function Bubbles(props){
     const [dataBubbles, setDataBubbles] = useState([
-        {
-            date: 'November 4, 2020',
-            userName: 'Tấn Tài',
-            message: 'Hi',
-            sendTime: '03:11 PM',
-            isOut: true,
-            isGroupFirst: true,
-            isGroupLast: true,
-            isHideName: false
-        },
-        {
-            date: 'November 4, 2020',
-            userName: 'Tấn Tài',
-            message: "What's up men?",
-            sendTime: '08:29 PM',
-            isOut: false,
-            isGroupFirst: true,
-            isGroupLast: false,
-            isHideName: false
-        },
-        {
-            date: 'November 4, 2020',
-            userName: 'Tấn Tài',
-            message: "Do you want fuck me?",
-            sendTime: '08:29 PM',
-            isOut: false,
-            isGroupFirst: true,
-            isGroupLast: false,
-            isHideName: false
-        }
-        ,
-        {
-            date: 'November 5, 2020',
-            userName: 'Tấn Tài',
-            message: "Of course! Let's Do it.",
-            sendTime: '10:27 PM',
-            isOut: true,
-            isGroupFirst: true,
-            isGroupLast: true,
-            isHideName: false
-        }
+        // {
+        //     date: 'November 4, 2020',
+        //     userName: 'Tấn Tài',
+        //     message: 'Hi',
+        //     sendTime: '03:11 PM',
+        //     isOut: true,
+        //     isGroupFirst: true,
+        //     isGroupLast: true,
+        //     isHideName: false
+        // },
+        // {
+        //     date: 'November 4, 2020',
+        //     userName: 'Tấn Tài',
+        //     message: "What's up men?",
+        //     sendTime: '08:29 PM',
+        //     isOut: false,
+        //     isGroupFirst: true,
+        //     isGroupLast: false,
+        //     isHideName: false
+        // },
+        // {
+        //     date: 'November 4, 2020',
+        //     userName: 'Tấn Tài',
+        //     message: "Do you want fuck me?",
+        //     sendTime: '08:29 PM',
+        //     isOut: false,
+        //     isGroupFirst: true,
+        //     isGroupLast: false,
+        //     isHideName: false
+        // }
+        // ,
+        // {
+        //     date: 'November 5, 2020',
+        //     userName: 'Tấn Tài',
+        //     message: "Of course! Let's Do it.",
+        //     sendTime: '10:27 PM',
+        //     isOut: true,
+        //     isGroupFirst: true,
+        //     isGroupLast: true,
+        //     isHideName: false
+        // }
     ]);
     const [data, setData] = useState([]);
     const messagesEndRef = useRef(null);
@@ -94,17 +94,44 @@ function Bubbles(props){
         if(!user){
             user = JSON.parse(localStorage.getItem('userInfo'));
         }
+
         let bubbles = data.map(item => {
             let date = 'November 4, 2020';
             let userName = item.postedByUser.fullName;
-            let messageText = item.message.messageText;
+            let messageText = '';
             let sendTime = '03:11 PM';
-            let isOut = item.postedByUser._id === user._id ? true : false;
-            
+            let isOut = item.postedByUser._id === user._id ? true : false;            
+            let isContentImage = item.message.some(e => e.contentType === 'image') ? true : false;
+            let isContentText = item.message.some(e => e.contentType === 'text') ? true : false;
+            let messageType = '';
+            if(isContentText && isContentImage){
+                messageType = 'MESSAGE_AND_EMOJI';
+            }else if(isContentText){
+                messageType = 'MESSAGE';
+            }else if(isContentImage){
+                if(item.message.length === 1){
+                    messageType = 'EMOJI_1X';
+                }else if(item.message.length === 2){
+                    messageType = 'EMOJI_2X';
+                }
+            }
+            // let messageType = isContentText ? (isContentImage ? 'MESSAGE_AND_EMOJI' : 'MESSAGE') : isContentImage ? ;
+            if (isContentImage) {
+                item.message.map(messageItem => {
+                    if(messageItem.contentType === 'text'){
+                        messageText += messageItem.content;
+                    }else if(messageItem.contentType === 'image'){
+                        messageText += `<img src="/${messageItem.content}" alt="🙄" class="emoji" loading="lazy"/>`;
+                    }
+                });
+            }else{
+                messageText= item.message[0].content;
+            }
             let bubble = {
                 date: date,
                 userName: userName,
                 message: messageText,
+                messageType: messageType,
                 sendTime: sendTime,
                 isOut: isOut,
                 isGroupFirst: true,

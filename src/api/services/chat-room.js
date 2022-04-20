@@ -25,7 +25,6 @@ export default{
   getConversationByRoomId: async (roomId) => {
       const res = await fetch("http://localhost:3000/room/" + roomId);
       let data = await res.json();
-      
       return data;
   }
 }

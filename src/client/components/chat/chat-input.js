@@ -9,6 +9,7 @@ function ChatInput(props){
     const [isTyping, setIsTyping] = useState(false);
     const [contact, setContact] = useState('');
     const [emojis, setEmojis] = useState([]);
+    const [messageContentList, setmessageContentList] = useState([]);
 
     useEffect(()=>{
         let contactList = JSON.parse(localStorage.getItem('contactList'));
@@ -46,13 +47,15 @@ function ChatInput(props){
             }
             let data = {
                 messageBubble: bubble,
+                messageList: generateMessage(),
                 socketId: props.socket.id,
                 roomId: contact.roomId,
                 userId: userInfo._id
             }
 
-            if(event.target.innerText){
+            if(event.target.innerHTML){
                 props.socket.emit('pushMessageToServer', data);
+                setmessageContentList([]);
                 event.target.textContent  = '';  
                 setIsTyping(false);
                 let dataTyping = {
@@ -109,13 +112,15 @@ function ChatInput(props){
         }
         let data = {
             messageBubble: bubble,
+            messageList: generateMessage(),
             socketId: props.socket.id,
             roomId: contact.roomId,
             userId: userInfo._id
         }
-        if(input.innerText){
+        if(input.innerHTML){
             props.socket.emit('pushMessageToServer', data);
-            input.textContent  = '';  
+            input.textContent  = '';
+            setmessageContentList([]);
             setIsTyping(false);
             input.focus();
 
@@ -128,10 +133,52 @@ function ChatInput(props){
         }
     }
 
+    function generateMessage(){
+        let messageList = [];
+        let input = document.getElementById('input-message');
+        let inputValue = input.innerHTML
+        let emojiArr = inputValue.match(/(<.*?>|[^<]+)\s*/g);
+        for(let i = 0; i < emojiArr.length; i++){
+            if(emojiArr[i].includes('<img src')){
+                //Emoji
+                let message = {
+                    content: emojiArr[i].match(/emoji.*?png/g)[0],
+                    index: i,
+                    contentType: 'image'
+                }
+                messageList.push(message);
+            }else{
+                //Text
+                let message = {
+                    content: emojiArr[i],
+                    index: i,
+                    contentType: 'text'
+                }
+                messageList.push(message);
+            }
+        }
+
+        return messageList;
+    }
+
     function onShowEmoji(){
         let emojiDropdown = document.getElementById('emoji-dropdown');
         // emojiDropdown.classList.remove("emoji-dropdown");
         emojiDropdown.classList.add("active");
+        // let input = document.getElementById('input-message').firstChild;
+        // var range = document.createRange();
+        // range.setStart(input, 4);
+        // range.setEnd(input, 4);
+        // var selection = window.getSelection();
+        // selection.removeAllRanges();
+        // selection.addRange(range);
+        // if(document.activeElement === document.getElementById('input-message')){
+        //     document.getSelection
+        // }else{
+
+        // }
+        // document.getElementById('input-message').setSelectionRange(document.getElementById('input-message').innerText.length -1,document.getElementById('input-message').innerText.length -1);
+        // document.getElementById('input-message').focus();
         // emojiDropdown.addClass
     }
 
