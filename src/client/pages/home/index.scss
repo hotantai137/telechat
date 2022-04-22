@@ -22,7 +22,7 @@
     --message-beside-button-size: 2.375rem;
     --message-beside-button-margin: calc((var(--message-beside-button-size) + .5rem) * -1);
     --message-time-background: rgba(0, 0, 0, .35);
-    --message-highlightning-color: hsla(85.5319, 36.9171%, 40.402%, .4);
+    --message-highlightning-color: hsla(299.143, 44.1667%, 37.4706%, 0.4);
     --messages-container-width: 728px;
     --messages-text-size: 16px;
     --messages-secondary-text-size: calc(var(--messages-text-size) - 2px);
@@ -2515,6 +2515,15 @@ html.no-touch .preloader-container .preloader-close:hover,html.no-touch .preload
 .bubble.emoji-3x .attachment img.emoji {
     height: 32px;
     width: 32px}
+.bubble.just-media .bubble-content {
+    background: none !important;
+    box-shadow: none}
+.bubble.just-media img {
+    -o-object-fit: contain;
+    object-fit: contain}
+.bubble.just-media.is-message-empty .message {
+    background: hsla(85.5319, 36.9171%, 40.402%, .4);
+    background: var(--message-highlightning-color)}
 .bubble.sticker .attachment {
     position: absolute;
     border-radius: 0;
@@ -2598,3 +2607,357 @@ html.is-safari .bubble:not(.round) img:not(.emoji),html.is-safari .bubble:not(.r
     border-bottom-left-radius: 0}
 .bubble.is-out.is-message-empty.is-group-last.with-media-tail .attachment {
     border-bottom-right-radius: 0}
+.bubble.is-message-empty .message {
+    position: absolute;
+    bottom: .1875rem;
+    right: .1875rem;
+    border-radius: .75rem;
+    background-color: rgba(0, 0, 0, .35);
+    background-color: var(--message-time-background);
+    padding: 0 .3125rem;
+    z-index: 2}
+.bubble.is-message-empty .message .time {
+    margin-left: 0;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    white-space: nowrap;
+    height: 18px}
+.bubble.is-message-empty .message .time .inner {
+    right: unset;
+    bottom: unset;
+    color: #fff;
+    margin: inherit}
+.bubble.is-message-empty .message .time .inner:after {
+    color: #fff}
+.bubble.is-message-empty.with-replies:not(.sticker) .message {
+    bottom: 55px}
+.bubble.is-message-empty.sticker .message,.bubble.is-message-empty.with-replies.round .message,.bubble.is-message-empty.emoji-big .message {
+    bottom: 0}
+.tgico-reply:before,.tgico-attach:before,.tgico-saved:before,.tgico-phone:before,.tgico-admin:before,.tgico-message:before,.tgico-fontsize:before,.tgico-forward:before,.tgico-reply_filled:before,.tgico-forward_filled:before {
+    font-size: 20px !important;
+    padding: 0 2px}
+    .btn-menu {
+        visibility: hidden;
+        position: absolute;
+        background-color: #fff;
+        background-color: var(--surface-color);
+        z-index: 3;
+        top: 100%;
+        padding: .5rem 0;
+        border-radius: 10px;
+        opacity: 0;
+        transform: scale(0.8);
+        transition: opacity .2s cubic-bezier(.4, 0, .2, 1),transform .2s cubic-bezier(.4, 0, .2, 1),visibility .2s cubic-bezier(.4, 0, .2, 1);
+        transition: opacity var(--btn-menu-transition),transform var(--btn-menu-transition),visibility var(--btn-menu-transition);
+        font-size: 1rem;
+        -webkit-user-select: none;
+        -webkit-touch-callout: none}
+    .btn-menu {
+        box-shadow: 0px 2px 8px 1px rgba(0, 0, 0, .24);
+        box-shadow: var(--menu-box-shadow)}
+    body.animation-level-0 .btn-menu {
+        transition: none}
+    .btn-menu.active {
+        visibility: visible;
+        opacity: 1;
+        transform: scale3d(1, 1, 1)}
+    .btn-menu:not(.active),.btn-menu:not(.active) .btn-menu-item {
+        pointer-events: none !important}
+    .btn-menu.bottom-left {
+        right: 0;
+        top: 100%;
+        transform-origin: top right}
+    .btn-menu.bottom-right {
+        left: 0;
+        top: 100%;
+        transform-origin: top left}
+    .btn-menu.bottom-center {
+        transform-origin: top center}
+    .btn-menu.top-left {
+        top: auto;
+        top: initial;
+        right: 0;
+        bottom: 100%;
+        transform-origin: bottom right}
+    .btn-menu.top-right {
+        top: auto;
+        top: initial;
+        left: 0;
+        bottom: 100%;
+        transform-origin: bottom left}
+    .btn-menu.top-center {
+        transform-origin: bottom center}
+    .btn-menu.center-left {
+        transform-origin: center right}
+    .btn-menu.center-right {
+        transform-origin: center left}
+    .btn-menu-item {
+        --padding-left: 1rem;
+        --padding-right: 2.5rem;
+        --icon-margin: 1.5rem;
+        --icon-size: 1.5rem;
+        display: flex;
+        position: relative;
+        padding: 0 var(--padding-right) 0 var(--padding-left);
+        height: 3rem;
+        cursor: pointer !important;
+        pointer-events: all !important;
+        color: #000;
+        color: var(--primary-text-color);
+        text-transform: none;
+        white-space: nowrap;
+        align-items: center;
+        text-align: left;
+        line-height: 1.3125;
+        line-height: var(--line-height)}
+    html.no-touch .btn-menu-item:hover,html.no-touch .btn-menu-item:active {
+        background-color: rgba(112, 117, 121, 0.08);
+        background-color: var(--light-secondary-text-color)}
+    html.no-touch .btn-menu-item.danger:hover,html.no-touch .btn-menu-item.danger:active {
+        background-color: rgba(223, 63, 64, 0.08);
+        background-color: var(--light-danger-color)}
+    .btn-menu-item:before {
+        color: #707579;
+        color: var(--secondary-text-color);
+        font-size: var(--icon-size);
+        margin-right: var(--icon-margin);
+        position: relative}
+    @media only screen and (max-width: 600px) {
+        .btn-menu-item {
+        --padding-right: 1.875rem}
+    }
+    .btn-menu-item-text {
+        position: relative;
+        flex: 1 1 auto}
+    .btn-menu-item-text,.btn-menu-item-text-fake {
+        pointer-events: none}
+    .btn-menu-item-text-fake {
+        --margin-left: calc(var(--icon-size) + var(--icon-margin));
+        position: absolute;
+        margin-left: var(--margin-left);
+        max-width: calc(100% - var(--margin-left) - var(--padding-left) - var(--padding-right));
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden}
+    .btn-menu-item .stacked-avatars {
+        --margin-right: -.6875rem;
+        flex: 0 0 auto;
+        right: 1rem;
+        position: absolute;
+        pointer-events: none}
+    .btn-menu-overlay {
+        position: fixed !important;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 3;
+        cursor: default;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none}
+    .btn-menu-overlay {
+        left: -100vw;
+        right: -100vw;
+        top: -100vh;
+        bottom: -100vh;
+        width: auto !important;
+        max-width: none !important}
+    .btn-menu.has-footer {
+        padding-bottom: 0}
+    .btn-menu-footer {
+        height: 2.5rem;
+        background: #f4f4f5;
+        background: var(--background-color-true);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-bottom-left-radius: inherit;
+        border-bottom-right-radius: inherit;
+        font-size: .875rem;
+        color: currentColor}
+    .btn-menu hr {
+        padding: 0;
+        margin: .5rem 0;
+        display: block !important}
+    .btn-menu-reactions {
+        --inner-shadow-degree: 90deg;
+        max-width: 100%;
+        max-height: 100%;
+        height: inherit;
+        border-radius: var(--height);
+        background-color: #fff;
+        background-color: var(--surface-color);
+        position: absolute;
+        opacity: 0;
+        transform: scale(0.8)}
+    .btn-menu-reactions-container {
+        --height: 2.625rem;
+        --bubble-side-offset: -2.25rem;
+        --other-side-offset: -1.5rem;
+        --width: calc(100% + (var(--bubble-side-offset) + var(--other-side-offset)) * -1);
+        position: absolute;
+        top: calc((var(--height) + .5rem) * -1);
+        width: var(--width);
+        max-width: var(--width);
+        left: var(--other-side-offset);
+        display: flex;
+        justify-content: flex-end;
+        height: var(--height)}
+    .btn-menu-reactions-container-vertical {
+        top: var(--other-side-offset);
+        left: calc((var(--height) + .5rem) * -1);
+        width: var(--height);
+        height: var(--width);
+        max-width: var(--height);
+        max-height: var(--width);
+        flex-direction: column}
+    .btn-menu-reactions-container-vertical .btn-menu-reactions {
+        --inner-shadow-degree: 180deg;
+        width: inherit;
+        height: auto;
+        display: flex;
+        flex-direction: column}
+    .btn-menu-reactions-container-vertical .btn-menu-reactions-reaction {
+        --padding-vertical: var(--padding-base);
+        --padding-horizontal: 0rem}
+    .btn-menu-reactions-container-vertical .btn-menu-reactions-bubble-big {
+        right: calc(var(--size) / -2);
+        bottom: var(--offset)}
+    body.animation-level-2 .btn-menu-reactions {
+        transition: opacity .3s cubic-bezier(.4, .0, .2, 1),transform .3s cubic-bezier(.4, .0, .2, 1);
+        transition: opacity var(--transition-standard-in),transform var(--transition-standard-in)}
+    .btn-menu-reactions.is-visible {
+        opacity: 1;
+        transform: scale(1)}
+    .btn-menu-reactions-bubble {
+        position: absolute;
+        background-color: inherit;
+        border-radius: 50%;
+        z-index: -1}
+    .btn-menu-reactions-bubble-big {
+        --size: 1rem;
+        --offset: calc(var(--height) / 2);
+        width: var(--size);
+        height: var(--size);
+        right: var(--offset);
+        bottom: calc(var(--size) / -2)}
+    .btn-menu-reactions:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        content: " ";
+        pointer-events: none;
+        border-radius: inherit;
+        background: linear-gradient(var(--inner-shadow-degree), #fff 0%, rgba(255, 255, 255, 0) 1rem, rgba(255, 255, 255, 0) calc(100% - 1rem), #fff 100%);
+        background: linear-gradient(var(--inner-shadow-degree), var(--surface-color) 0%, rgba(var(--surface-color-rgb), 0) 1rem, rgba(var(--surface-color-rgb), 0) calc(100% - 1rem), var(--surface-color) 100%)}
+    .btn-menu-reactions .scrollable {
+        position: relative;
+        display: flex;
+        border-radius: inherit}
+    .btn-menu-reactions .scrollable-x {
+        align-items: center;
+        padding: 0 0.25rem}
+    .btn-menu-reactions .scrollable-y {
+        align-items: center;
+        padding: 0.25rem 0;
+        flex-direction: column}
+    .btn-menu-reactions-reaction {
+        --size: 1.75rem;
+        --padding-base: .25rem;
+        --padding-vertical: 0rem;
+        --padding-horizontal: var(--padding-base);
+        width: calc(var(--size) + var(--padding-horizontal) * 2);
+        height: calc(var(--size) + var(--padding-vertical) * 2);
+        flex: 0 0 auto;
+        padding: var(--padding-vertical) var(--padding-horizontal);
+        cursor: pointer}
+    .btn-menu-reactions-reaction-scale {
+        width: 100%;
+        height: 100%}
+    html:not(.is-safari) .btn-menu-reactions-reaction-scale {
+        transform: scale(1)}
+    html:not(.is-safari) body.animation-level-2 .btn-menu-reactions-reaction-scale {
+        transition: transform .1s linear}
+    html.no-touch:not(.is-safari) .btn-menu-reactions-reaction-select {
+        transform: scale(1)}
+    html.no-touch:not(.is-safari) .btn-menu-reactions-reaction-select:hover,html.no-touch:not(.is-safari) .btn-menu-reactions-reaction-select:active {
+        transform: scale(1.25)}
+    html.no-touch:not(.is-safari) body.animation-level-2 .btn-menu-reactions-reaction-select {
+        transition: transform .3s cubic-bezier(.4, .0, .2, 1);
+        transition: transform var(--transition-standard-in)}
+    .btn-menu-reactions-reaction .media-sticker-wrapper {
+        position: relative;
+        width: 100%;
+        height: 100%}
+    .chat-input .btn-send-container .btn-menu-overlay {
+        z-index: 3}
+        .rows-wrapper .attach-file.menu-open {
+            color: #3390ec;
+            color: var(--primary-color);
+            background-color: rgba(51, 144, 236, 0.08) !important;
+            background-color: var(--light-primary-color) !important}
+        .rows-wrapper .attach-file .btn-menu {
+            right: calc(var(--padding-horizontal) * -1 - .125rem);
+            bottom: calc(100% + 1.125rem)}
+        @media only screen and (max-height: 569px),only screen and (max-width: 600px) {
+            .rows-wrapper .attach-file .btn-menu {
+            bottom: calc(100% + .875rem)}
+        }
+        .rows-wrapper .attach-file .btn-menu-item {
+            padding: 0 38px 0 16px}
+        .rows-wrapper .attach-file.btn-disabled {
+            opacity: .3;
+            opacity: var(--disabled-opacity)}
+        .rows-wrapper>div {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            position: relative;
+            background-color: #fff;
+            background-color: var(--surface-color);
+            border-radius: .75rem;
+            padding: var(--padding)}
+        .rows-wrapper .reply-wrapper {
+            justify-content: flex-start;
+            height: 0;
+            width: calc(100% - var(--padding-horizontal) * 2);
+            padding: 0;
+            margin-top: .5625rem;
+            margin-bottom: -0.5625rem;
+            align-items: center;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            z-index: 2;
+            opacity: 0;
+            pointer-events: none}
+            .rows-wrapper .reply-wrapper .btn-menu {
+                top: auto;
+                bottom: calc(100% + 1.0625rem);
+                left: 3.125rem;
+                transform: scale(1) !important}
+            .rows-wrapper .reply-wrapper .btn-menu-item {
+                padding-right: 1.5rem}
+            .rows-wrapper .reply-wrapper .btn-menu-item-text {
+                order: 1}
+            .rows-wrapper .reply-wrapper .btn-menu-item .checkbox-field {
+                --size: 1.5rem;
+                order: 0;
+                margin: 0 var(--icon-margin) 0 0}
+            .rows-wrapper .reply-wrapper .btn-menu-item .checkbox-box-border,.rows-wrapper .reply-wrapper .btn-menu-item .checkbox-box-background {
+                display: none}
+            .rows-wrapper .reply-wrapper .btn-menu-item .checkbox-box-check use {
+                stroke: #3390ec;
+                stroke: var(--primary-color)}
+            @media only screen and (max-width: 600px) {
+                .rows-wrapper .reply-wrapper .btn-menu {
+                left: calc(var(--padding-horizontal) * -1)}
+            }

@@ -1,7 +1,8 @@
-import React, {useState, setState, useEffect} from "react";
+import React, {useState, setState, useEffect, lazy, Suspense} from "react";
 import sentIcon from '../../assets/image/sent-icon.png';
-import CONSTANTS from '../../../common/constants.json';
 import moment from 'moment';
+
+const EmojiContainer = lazy(() => import("./emoji-container"));
 
 function ChatInput(props){
     const [userInfo, setUserInfo] = useState(null);
@@ -10,6 +11,7 @@ function ChatInput(props){
     const [contact, setContact] = useState('');
     const [emojis, setEmojis] = useState([]);
     const [messageContentList, setmessageContentList] = useState([]);
+    const [isShowMenuAttachment, setIsShowMenuAttachment] = useState(false);
 
     useEffect(()=>{
         let contactList = JSON.parse(localStorage.getItem('contactList'));
@@ -34,38 +36,7 @@ function ChatInput(props){
 
     function onChatPush(event){
         if(event.key === 'Enter' && !event.shiftKey){
-            // props.pushMessage(event.target.innerText);
-            let bubble = {
-                date: 'November 5, 2020',
-                userName: userInfo.fullName,
-                message: event.target.innerText,
-                sendTime: moment().format('LT'),
-                isOut: true,
-                isGroupFirst: true,
-                isGroupLast: true,
-                isHideName: false
-            }
-            let data = {
-                messageBubble: bubble,
-                messageList: generateMessage(),
-                socketId: props.socket.id,
-                roomId: contact.roomId,
-                userId: userInfo._id
-            }
-
-            if(event.target.innerHTML){
-                props.socket.emit('pushMessageToServer', data);
-                setmessageContentList([]);
-                event.target.textContent  = '';  
-                setIsTyping(false);
-                let dataTyping = {
-                    userName: userInfo.fullName,
-                    socketId: props.socket.id,
-                    roomId: contact.roomId
-                }
-                props.socket.emit('stopTyping', dataTyping);
-            }
-            
+            onSend(event.target);            
             event.preventDefault();
         }
     }
@@ -97,13 +68,11 @@ function ChatInput(props){
         // }
     }
 
-    function onSend(){
-        let input = document.getElementById('input-message');
-        
+    function onSend(input){        
         let bubble = {
-            date: 'November 5, 2020',
+            date: moment().format('LL'),
             userName: userInfo.fullName,
-            message: input.innerText,
+            message: input.innerHTML,
             sendTime: moment().format('LT'),
             isOut: true,
             isGroupFirst: true,
@@ -112,7 +81,7 @@ function ChatInput(props){
         }
         let data = {
             messageBubble: bubble,
-            messageList: generateMessage(),
+            messageList: splitMessage(),
             socketId: props.socket.id,
             roomId: contact.roomId,
             userId: userInfo._id
@@ -133,12 +102,14 @@ function ChatInput(props){
         }
     }
 
-    function generateMessage(){
+    function splitMessage(){
         let messageList = [];
         let input = document.getElementById('input-message');
-        let inputValue = input.innerHTML
-        let emojiArr = inputValue.match(/(<.*?>|[^<]+)\s*/g);
+        let inputValue = input.innerHTML;
+        // let emojiArr = inputValue.match(/(<.*?>|[^<]+)\s*/g);
+        let emojiArr = inputValue.match(/(<.*?>)|([^<.?*^>])*/g);
         for(let i = 0; i < emojiArr.length; i++){
+            if(emojiArr[i].length === 0) continue;
             if(emojiArr[i].includes('<img src')){
                 //Emoji
                 let message = {
@@ -187,14 +158,32 @@ function ChatInput(props){
         emojiDropdown.classList.remove("active");
     }
 
-    function selectEmoji(emojiName){
-        let input = document.getElementById('input-message');
-        let imgEmoji = document.createElement('img');
-        imgEmoji.src = '/emoji/' + emojiName;
-        imgEmoji.classList.add('emoji');
-        if(input){
-            input.appendChild(imgEmoji);
-        }                
+    function onToggleMenuAttachMent(){
+        setIsShowMenuAttachment(!isShowMenuAttachment);
+    }
+
+    function attachImage(){
+        var inputImage = document.createElement("input");   
+        inputImage.type = "file";
+        inputImage.accept = 'image/*';
+        inputImage.addEventListener("change", ()=>{showImage(inputImage.files)});   
+        inputImage.click();
+        
+    }
+
+    function showImage(files){
+        getBase64(files[0]).then(
+            data => console.log(data)
+        );
+    }
+
+    function getBase64(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = error => reject(error);
+        });
     }
 
     return <div className="chat-input">
@@ -221,23 +210,30 @@ function ChatInput(props){
                                 >
                             </div>
                         </div>
-                        <div className="btn-icon btn-menu-toggle attach-file tgico-attach">
+                        <div className={`btn-icon btn-menu-toggle attach-file tgico-attach ${isShowMenuAttachment ? "menu-open" : ""}`}
+                        onClick={onToggleMenuAttachMent}>
                             <i className="far fa-paperclip"></i>
-                            {/* <div className="btn-menu top-left">
-                                <div className="btn-menu-item rp-overflow tgico-image rp">
+                            {
+                                isShowMenuAttachment && (<div className="btn-menu-overlay"></div>)
+                            }
+                            
+                            <div className={`btn-menu top-left ${isShowMenuAttachment ? "active" : ""}`}>
+                                <div className="btn-menu-item rp-overflow tgico-image rp" onClick={attachImage}>
+                                    <i class="fas fa-image"></i>
                                     <div className="c-ripple"></div>
-                                        <span className="i18n btn-menu-item-text">Photo or Video</span>
+                                    <span className="i18n btn-menu-item-text">Photo or Video</span>
                                 </div>
                                 <div className="btn-menu-item rp-overflow tgico-document rp">
+                                    <i class="fas fa-file"></i>
                                     <div className="c-ripple"></div>
                                     <span className="i18n btn-menu-item-text">Document</span>
                                 </div>
-                                <div className="btn-menu-item rp-overflow tgico-poll rp hide">
+                                {/* <div className="btn-menu-item rp-overflow tgico-poll rp hide">
                                     <div className="c-ripple"></div>
                                     <span className="i18n btn-menu-item-text">Poll</span>
-                                </div>
-                            </div> */}
-                    </div>
+                                </div> */}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -268,180 +264,10 @@ function ChatInput(props){
         </div>
         <div className="emoji-dropdown" id="emoji-dropdown"
         onMouseLeave={onCloseEmoji}>
-            <div className="emoji-container">
-                <div className="tabs-container" data-animation="tabs">
-                    <div className="tabs-tab emoji-padding active">
-                        <nav className="menu-horizontal-div no-stripe">
-                            <button className="menu-horizontal-div-item btn-icon tgico-recent rp active"><i className="far fa-smile"></i></button>
-                            <button className="menu-horizontal-div-item btn-icon tgico-smile rp"><i className="far fa-smile"></i></button>
-                            <button className="menu-horizontal-div-item btn-icon tgico-animals rp"><i className="far fa-smile"></i></button>
-                            <button className="menu-horizontal-div-item btn-icon tgico-eats rp"><i className="far fa-smile"></i></button>
-                            <button className="menu-horizontal-div-item btn-icon tgico-car rp"><i className="far fa-smile"></i></button>
-                            <button className="menu-horizontal-div-item btn-icon tgico-sport rp"><i className="far fa-smile"></i></button>
-                            <button className="menu-horizontal-div-item btn-icon tgico-lamp rp"><i className="far fa-smile"></i></button>
-                            <button className="menu-horizontal-div-item btn-icon tgico-flag rp"><i className="far fa-smile"></i></button>
-                        </nav>
-                        <div className="emoticons-content" id="content-emoji">
-                            <div className="scrollable scrollable-y">
-                                <div className="emoji-category">
-                                    <div className="category-title">
-                                        <span className="i18n">Frequently Used</span>
-                                    </div>
-                                    <div className="super-emojis">
-                                        <span className="super-emoji">
-                                        <img src="/emoji/1f692.png" alt="🙄" className="emoji" loading="lazy"/>
-                                            {/* <img src={emojis['1f692.png']} alt="🙄" className="emoji" loading="lazy"/>
-                                            <img src={require('../../assets/image/emoji/1f692.png')} alt="🙄" className="emoji" loading="lazy"/> */}
-                                            <span className="emoji-placeholder"></span>
-                                        </span>
-                                        <span className="super-emoji">
-                                            <img src="/emoji/1f692.png" alt="😉" className="emoji" loading="lazy"/>
-                                            <span className="emoji-placeholder"></span>
-                                        </span>
-                                        <span className="super-emoji">
-                                            <img src="/emoji/1f692.png" alt="😏" className="emoji"/>
-                                        </span>
-                                        <span className="super-emoji">
-                                            <img src="/emoji/1f970.png" alt="🇯🇵" className="emoji" loading="lazy"/>
-                                            <span className="emoji-placeholder"></span>
-                                        </span>
-                                    </div>
-                                    <div className="sticky_sentinel sticky_sentinel--top"></div>
-                                </div>
-                                <div className="emoji-category">
-                                    <div className="category-title">
-                                        <span className="i18n">Smileys & People</span>
-                                    </div>
-                                    <div className="super-emojis">
-                                        {
-                                            CONSTANTS.EMOJIS.SMILEYS_AND_PEOPLE_EMOJIS && CONSTANTS.EMOJIS.SMILEYS_AND_PEOPLE_EMOJIS.map(emojiName => {
-                                                return (<span className="super-emoji" onClick={()=>{selectEmoji(emojiName)}} key={emojiName}>
-                                                    <img src={"/emoji/" + emojiName } alt="🙄" className="emoji" loading="lazy"/>
-                                                    <span className="emoji-placeholder"></span>
-                                                </span>)
-                                            })
-                                        }
-                                    </div>
-                                    <div className="sticky_sentinel sticky_sentinel--top"></div>
-                                </div>                                
-                                <div className="emoji-category">
-                                    <div className="category-title">
-                                        <span className="i18n">Animals & Nature</span>
-                                    </div>
-                                    <div className="super-emojis">
-                                        {
-                                            CONSTANTS.EMOJIS.ANIMALS_AND_NATUR_MOJIS && CONSTANTS.EMOJIS.ANIMALS_AND_NATUR_MOJIS.map(emojiName => {
-                                                return <span className="super-emoji" onClick={()=>{selectEmoji(emojiName)}} key={emojiName}>
-                                                    <img src={"/emoji/" + emojiName } alt="🙄" className="emoji" loading="lazy"/>
-                                                    <span className="emoji-placeholder"></span>
-                                                </span>
-                                            })
-                                        }
-                                    </div>
-                                    <div className="sticky_sentinel sticky_sentinel--top"></div>
-                                </div>
-                                <div className="emoji-category">
-                                    <div className="category-title">
-                                        <span className="i18n">Food & Drink</span>
-                                    </div>
-                                    <div className="super-emojis">
-                                        {
-                                            CONSTANTS.EMOJIS.FOOD_AND_DRINK_EMOJIS && CONSTANTS.EMOJIS.FOOD_AND_DRINK_EMOJIS.map(emojiName => {
-                                                return <span className="super-emoji" onClick={()=>{selectEmoji(emojiName)}} key={emojiName}>
-                                                    <img src={"/emoji/" + emojiName } alt="🙄" className="emoji" loading="lazy"/>
-                                                    <span className="emoji-placeholder"></span>
-                                                </span>
-                                            })
-                                        }
-                                    </div>
-                                    <div className="sticky_sentinel sticky_sentinel--top"></div>
-                                </div>
-                                <div className="emoji-category">
-                                    <div className="category-title">
-                                        <span className="i18n">Travel & Places</span>
-                                    </div>
-                                    <div className="super-emojis">
-                                        {
-                                            CONSTANTS.EMOJIS.TRAVEL_AND_PLACES_EMOJIS && CONSTANTS.EMOJIS.TRAVEL_AND_PLACES_EMOJIS.map(emojiName => {
-                                                return <span className="super-emoji" onClick={()=>{selectEmoji(emojiName)}} key={emojiName}>
-                                                    <img src={"/emoji/" + emojiName } alt="🙄" className="emoji" loading="lazy"/>
-                                                    <span className="emoji-placeholder"></span>
-                                                </span>
-                                            })
-                                        }
-                                    </div>
-                                    <div className="sticky_sentinel sticky_sentinel--top"></div>
-                                </div>
-                                <div className="emoji-category">
-                                    <div className="category-title">
-                                        <span className="i18n">Activity & Sport</span>
-                                    </div>
-                                    <div className="super-emojis">
-                                        {
-                                            CONSTANTS.EMOJIS.ACTIVITY_AND_SPORT_EMOJIS && CONSTANTS.EMOJIS.ACTIVITY_AND_SPORT_EMOJIS.map(emojiName => {
-                                                return <span className="super-emoji" onClick={()=>{selectEmoji(emojiName)}} key={emojiName}>
-                                                    <img src={"/emoji/" + emojiName } alt="🙄" className="emoji" loading="lazy"/>
-                                                    <span className="emoji-placeholder"></span>
-                                                </span>
-                                            })
-                                        }
-                                    </div>
-                                    <div className="sticky_sentinel sticky_sentinel--top"></div>
-                                </div>
-                                <div className="emoji-category">
-                                    <div className="category-title">
-                                        <span className="i18n">Objects</span>
-                                    </div>
-                                    <div className="super-emojis">
-                                        {
-                                            CONSTANTS.EMOJIS.OBJECTS_EMOJIS && CONSTANTS.EMOJIS.OBJECTS_EMOJIS.map(emojiName => {
-                                                return <span className="super-emoji" onClick={()=>{selectEmoji(emojiName)}} key={emojiName}>
-                                                    <img src={"/emoji/" + emojiName } alt="🙄" className="emoji" loading="lazy"/>
-                                                    <span className="emoji-placeholder"></span>
-                                                </span>
-                                            })
-                                        }
-                                    </div>
-                                    <div className="sticky_sentinel sticky_sentinel--top"></div>
-                                </div>
-                                <div className="emoji-category">
-                                    <div className="category-title">
-                                        <span className="i18n">Flags</span>
-                                    </div>
-                                    <div className="super-emojis">
-                                        {
-                                            CONSTANTS.EMOJIS.FLAGS_EMOJIS && CONSTANTS.EMOJIS.FLAGS_EMOJIS.map(emojiName => {
-                                                return <span className="super-emoji" onClick={()=>{selectEmoji(emojiName)}} key={emojiName}>
-                                                    <img src={"/emoji/" + emojiName } alt="🙄" className="emoji" loading="lazy"/>
-                                                    <span className="emoji-placeholder"></span>
-                                                </span>
-                                            })
-                                        }
-                                    </div>
-                                    <div className="sticky_sentinel sticky_sentinel--top"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className="emoji-tabs menu-horizontal-div no-stripe">
-                <button className="menu-horizontal-div-item emoji-tabs-search justify-self-start btn-icon tgico-search rp hide" data-tab="-1">
-                    <div className="c-ripple"><i className="far fa-smile"></i></div>
-                </button>
-                <button className="menu-horizontal-div-item emoji-tabs-emoji btn-icon tgico-smile rp active" data-tab="0">
-                    <div className="c-ripple"><i className="far fa-smile"></i></div>
-                </button>
-                <button className="menu-horizontal-div-item emoji-tabs-stickers btn-icon tgico-stickers rp" data-tab="1">
-                    <div className="c-ripple"><i className="far fa-smile"></i></div>
-                </button>
-                <button className="menu-horizontal-div-item emoji-tabs-gifs btn-icon tgico-gifs rp" data-tab="2">
-                    <div className="c-ripple"><i className="fa-light fa-gif"></i></div>
-                </button>
-                <button className="menu-horizontal-div-item emoji-tabs-delete justify-self-end btn-icon tgico-deleteleft rp" data-tab="-1">
-                    <div className="c-ripple"><i className="far fa-smile"></i></div>
-                </button>
-            </div>
+            {/* <EmojiContainer /> */}
+            <Suspense fallback={<div>Loading Emoji...</div>}>
+                <EmojiContainer />
+            </Suspense>
         </div>        
     </div>
 }

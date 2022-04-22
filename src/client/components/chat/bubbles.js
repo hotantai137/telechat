@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import BubblesDateGroup from "./bubbles-date-group";
 import _ from 'lodash';
 import chatRoomService from '../../../api/services/chat-room.js';
+import moment from "moment";
 
 function Bubbles(props){
     const [dataBubbles, setDataBubbles] = useState([
@@ -96,10 +97,10 @@ function Bubbles(props){
         }
 
         let bubbles = data.map(item => {
-            let date = 'November 4, 2020';
+            let date = moment(item.createdAt).format('LL');
             let userName = item.postedByUser.fullName;
             let messageText = '';
-            let sendTime = '03:11 PM';
+            let sendTime = moment(item.createdAt).format('LT');
             let isOut = item.postedByUser._id === user._id ? true : false;            
             let isContentImage = item.message.some(e => e.contentType === 'image') ? true : false;
             let isContentText = item.message.some(e => e.contentType === 'text') ? true : false;
@@ -142,9 +143,67 @@ function Bubbles(props){
             return bubble;
         });
 
+        let bubble = Object.assign({}, bubbles[0]);
+        bubble.messageType = 'MEDIA_IMAGE';
+        bubble.message = '<img class="media-photo" src="https://iili.io/VODrG4.jpg">';
+
+        bubbles.push(bubble);
+
         setDataBubbles(bubbles);
         setData(groupDataBubbles(bubbles));
         console.log(bubbles);
+    }
+
+    const generateMessageReceived = (data) => {
+        let user = userInfo;
+        if(!user){
+            user = JSON.parse(localStorage.getItem('userInfo'));
+        }
+
+        let isOut = data.userId === user._id ? true : false;
+        let isContentImage = data.messageList.some(e => e.contentType === 'image') ? true : false;
+        let isContentText = data.messageList.some(e => e.contentType === 'text') ? true : false;
+        let messageText = '';
+        let messageType = '';
+        if(isContentText && isContentImage){
+            messageType = 'MESSAGE_AND_EMOJI';
+        }else if(isContentText){
+            messageType = 'MESSAGE';
+        }else if(isContentImage){
+            if(data.messageList.length === 1){
+                messageType = 'EMOJI_1X';
+            }else if(data.messageList.length === 2){
+                messageType = 'EMOJI_2X';
+            }else if(data.messageList.length === 3){
+                messageType = 'EMOJI_3X';
+            }
+        }
+
+        if(messageType === 'MESSAGE'){
+            messageText = data.messageList[0].content;
+        }else{
+            data.messageList.map(messageItem => {
+                if(messageItem.contentType === 'text'){
+                    messageText += messageItem.content;
+                }else if(messageItem.contentType === 'image'){
+                    messageText += `<img src="/${messageItem.content}" alt="🙄" class="emoji" loading="lazy"/>`;
+                }
+            });
+        }
+
+        let bubble = {
+            date: data.messageBubble.date,
+            userName: data.messageBubble.userName,
+            message: messageText,
+            messageType: messageType,
+            sendTime: data.messageBubble.sendTime,
+            isOut: isOut,
+            isGroupFirst: true,
+            isGroupLast: true,
+            isHideName: false
+        };
+
+        return bubble;
     }
 
     const messageListener = (message) => {
@@ -152,7 +211,8 @@ function Bubbles(props){
         if(currentContact && currentContact.roomId === message.roomId){
             message.messageBubble.isOut = message.socketId === props.socket.id ? true : false;
             let newData = dataBubbles;
-            newData.push(message.messageBubble);
+            // newData.push(message.messageBubble);
+            newData.push(generateMessageReceived(message));
             setData(groupDataBubbles(dataBubbles));
         }            
     };
