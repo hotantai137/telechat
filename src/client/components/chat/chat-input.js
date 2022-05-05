@@ -1,6 +1,7 @@
 import React, {useState, setState, useEffect, lazy, Suspense} from "react";
 import sentIcon from '../../assets/image/sent-icon.png';
 import moment from 'moment';
+import imageService from '../../../api/services/image.js';
 
 const EmojiContainer = lazy(() => import("./emoji-container"));
 
@@ -166,14 +167,31 @@ function ChatInput(props){
         var inputImage = document.createElement("input");   
         inputImage.type = "file";
         inputImage.accept = 'image/*';
-        inputImage.addEventListener("change", ()=>{showImage(inputImage.files)});   
+        inputImage.addEventListener("change", ()=>{showImage(inputImage.files);console.log(inputImage.value);});   
         inputImage.click();
         
     }
 
-    function showImage(files){
+    async function showImage(files){
+        var tmppath = URL.createObjectURL(files[0]);
+        
+        // console.log(res.error);
+        // if(res.status_code)
+        // console.log(res);
+        // if(!res.success) return;
+        // console.log(tmppath);
+        // console.log(JSON.stringify(files[0].lastModified));
+        // console.log(JSON.stringify(files[0].lastModifiedDate));
+        // console.log(JSON.stringify(files[0].name));
+        // console.log(JSON.stringify(files[0].size));
+        // console.log(JSON.stringify(files[0].type));
+        // console.log(JSON.stringify(files[0].webkitRelativePath));
         getBase64(files[0]).then(
-            data => console.log(data)
+             async data =>{
+                var strImage = data.replace(/^data:image\/[a-z]+;base64,/, "");
+                const res = await imageService.uploadImage(strImage);
+                console.log(res.status_code);
+            }
         );
     }
 
@@ -219,12 +237,12 @@ function ChatInput(props){
                             
                             <div className={`btn-menu top-left ${isShowMenuAttachment ? "active" : ""}`}>
                                 <div className="btn-menu-item rp-overflow tgico-image rp" onClick={attachImage}>
-                                    <i class="fas fa-image"></i>
+                                    <i className="fas fa-image"></i>
                                     <div className="c-ripple"></div>
                                     <span className="i18n btn-menu-item-text">Photo or Video</span>
                                 </div>
                                 <div className="btn-menu-item rp-overflow tgico-document rp">
-                                    <i class="fas fa-file"></i>
+                                    <i className="fas fa-file"></i>
                                     <div className="c-ripple"></div>
                                     <span className="i18n btn-menu-item-text">Document</span>
                                 </div>
