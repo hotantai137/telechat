@@ -1,6 +1,6 @@
 
 function callAPI() {
-    fetch("http://localhost:3001/user")
+    fetch("http://10.106.1.67:3001/user")
         .then(res => res.text())
         .then(res => this.setState({ apiResponse: res }));
 }
@@ -23,12 +23,16 @@ async function postData(url = '', data = {}, method = 'POST') {
     return response.json(); // parses JSON response into native JavaScript objects
 }
 
+const SERVER_HOSTNAME = window.location.hostname;
+const SERVER_PORT = 3000;
+const SERVER_URL = `http://${SERVER_HOSTNAME}:${SERVER_PORT}`
+
 export default{
     signUp: async (fullName, email, password) => {
-        return await postData('http://localhost:3000/users', { fullName: fullName, email: email, password: password, type: 'consumer'});
+        return await postData(`${SERVER_URL}/users`, { fullName: fullName, email: email, password: password, type: 'consumer'});
     },
     getUserList: async () => {
-      const res = await fetch("http://localhost:3000/users");
+      const res = await fetch(`${SERVER_URL}/users`);
       let data = await res.json();
       
       return data;

@@ -2,6 +2,7 @@ import React, {useState, setState, useEffect, lazy, Suspense} from "react";
 import sentIcon from '../../assets/image/sent-icon.png';
 import moment from 'moment';
 import imageService from '../../../api/services/image.js';
+import s3Service from '../../../api/services/s3.js';
 
 const EmojiContainer = lazy(() => import("./emoji-container"));
 
@@ -83,6 +84,7 @@ function ChatInput(props){
         let data = {
             messageBubble: bubble,
             messageList: splitMessage(),
+            type: 'text',
             socketId: props.socket.id,
             roomId: contact.roomId,
             userId: userInfo._id
@@ -101,6 +103,35 @@ function ChatInput(props){
             }
             props.socket.emit('stopTyping', dataTyping);
         }
+    }
+
+    function sendFile(filePath, type){        
+        let bubble = {
+            date: moment().format('LL'),
+            userName: userInfo.fullName,
+            message: '',
+            sendTime: moment().format('LT'),
+            isOut: true,
+            isGroupFirst: true,
+            isGroupLast: true,
+            isHideName: false
+        }
+        let messageList = [
+            {
+                content: filePath,
+                index: 0,
+                contentType: type
+            }
+        ]
+        let data = {
+            messageBubble: bubble,
+            messageList: messageList,
+            type: 'image',
+            socketId: props.socket.id,
+            roomId: contact.roomId,
+            userId: userInfo._id
+        }
+        props.socket.emit('pushMessageToServer', data);
     }
 
     function splitMessage(){
@@ -169,30 +200,22 @@ function ChatInput(props){
         inputImage.accept = 'image/*';
         inputImage.addEventListener("change", ()=>{showImage(inputImage.files);console.log(inputImage.value);});   
         inputImage.click();
-        
     }
 
     async function showImage(files){
-        var tmppath = URL.createObjectURL(files[0]);
-        
-        // console.log(res.error);
-        // if(res.status_code)
-        // console.log(res);
-        // if(!res.success) return;
-        // console.log(tmppath);
-        // console.log(JSON.stringify(files[0].lastModified));
-        // console.log(JSON.stringify(files[0].lastModifiedDate));
-        // console.log(JSON.stringify(files[0].name));
-        // console.log(JSON.stringify(files[0].size));
-        // console.log(JSON.stringify(files[0].type));
-        // console.log(JSON.stringify(files[0].webkitRelativePath));
-        getBase64(files[0]).then(
-             async data =>{
-                var strImage = data.replace(/^data:image\/[a-z]+;base64,/, "");
-                const res = await imageService.uploadImage(strImage);
-                console.log(res.status_code);
-            }
-        );
+        let fileName = files[0].name;
+        let res = await s3Service.uploadImage(fileName, files[0]);
+        let filePath = res ? res.Location : '';
+        sendFile(filePath, 'image');
+        // getBase64(files[0]).then(
+        //      async data =>{
+        //         var strImage = data.replace(/^data:image\/[a-z]+;base64,/, "");
+        //         // const res = await imageService.uploadImage(strImage);
+        //         let blob = new Blob(await file.arrayBuffer());
+        //         s3Service.uploadImage(files[0].name, files[0]);
+        //         // console.log(res.status_code);
+        //     }
+        // );
     }
 
     function getBase64(file) {

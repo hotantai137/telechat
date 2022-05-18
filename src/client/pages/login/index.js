@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './index.css';
 import {Route, useNavigate} from 'react-router-dom';
 import authService from '../../../api/auth';
@@ -9,6 +9,12 @@ function Login() {
     const [cookieUser, setCookieUser, removeCookieUser] = useCookies('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    function submitForm(e){
+        if (e.charCode === 13) {
+            onLogin();
+        }
+    }    
 
     async function onLogin(){
         try{
@@ -37,7 +43,8 @@ function Login() {
                     <span className="login-social-text">Login with Google</span>
                 </button>
                 <div className="login-or"><span>Or</span></div>
-                <form className="login-form" autoComplete="off" 
+                <form id="login-form" className="login-form" autoComplete="off"
+                onKeyPress={event => submitForm(event)}
                 // action="../../login/0d3a91ad8bc34c02a7c1b1661bdb853b" method="post"
                 >
                     <label htmlFor="email" className="login-label">Email</label>

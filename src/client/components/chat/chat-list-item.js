@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
  
 function ChatListItem(props){
-    const [lastMessage, setLastMessage] = useState('Chat sẽ gầy đi nào các bạn.');
+    const [lastMessage, setLastMessage] = useState(null);
 
     useEffect(() => {
         const messageListener = (message) => {
-            if(props.chatItem.roomId === message.roomId) setLastMessage(message.messageBubble.message);            
+            if(props.chatItem.roomId === message.roomId) setLastMessage(message);            
           };
         
           if(props.socket) props.socket.on('receivedMessage', messageListener);
@@ -14,6 +14,27 @@ function ChatListItem(props){
             // if(props.socket) props.socket.off('receivedMessage', messageListener);
         };
       }, [props.socket]);
+    const renderLastMessage = () =>{
+        if(!lastMessage) return;
+        switch(lastMessage.type){
+            case 'text': 
+            return (<>
+                <b>
+                    <span className="peer-title" dir="auto" data-peer-id="1610799485" data-only-first-name="1">Mon</span>: 
+                </b>
+                <span dangerouslySetInnerHTML={{__html: lastMessage.messageBubble.message}}></span>
+            </>)
+            break;
+            case 'image': 
+            return(<>
+                <div className="dialog-subtitle-media media-container">
+                    <img className="media-photo" src="blob:https://web.telegram.org/87e3af36-a1bf-40a4-a573-a6b42af00ed1"/>
+                </div>
+                <i><span className="i18n">Photo</span></i>
+            </>)
+            break;
+        }
+    }
 
  return <li className={`chatlist-chat rp is-muted ${props.isSelected ? "active" : ""}`} data-peer-id="-1583302793">
             <div className="c-ripple" onClick={() => {props.selectChatItem(props.chatItem._id)}}></div>
@@ -33,12 +54,7 @@ function ChatListItem(props){
                     </span>
                 </p>
                 <div className="dialog-subtitle">
-                    <span className="user-last-message" dir="auto">
-                        <b>
-                            <span className="peer-title" dir="auto" data-peer-id="1610799485" data-only-first-name="1">Mon</span>: 
-                        </b>
-                        {lastMessage}
-                    </span>
+                    {renderLastMessage()}
                     <div className="dialog-subtitle-badge badge badge-24 is-visible unread">1451</div>
                 </div>
             </div>

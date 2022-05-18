@@ -5,49 +5,7 @@ import chatRoomService from '../../../api/services/chat-room.js';
 import moment from "moment";
 
 function Bubbles(props){
-    const [dataBubbles, setDataBubbles] = useState([
-        // {
-        //     date: 'November 4, 2020',
-        //     userName: 'Tấn Tài',
-        //     message: 'Hi',
-        //     sendTime: '03:11 PM',
-        //     isOut: true,
-        //     isGroupFirst: true,
-        //     isGroupLast: true,
-        //     isHideName: false
-        // },
-        // {
-        //     date: 'November 4, 2020',
-        //     userName: 'Tấn Tài',
-        //     message: "What's up men?",
-        //     sendTime: '08:29 PM',
-        //     isOut: false,
-        //     isGroupFirst: true,
-        //     isGroupLast: false,
-        //     isHideName: false
-        // },
-        // {
-        //     date: 'November 4, 2020',
-        //     userName: 'Tấn Tài',
-        //     message: "Do you want fuck me?",
-        //     sendTime: '08:29 PM',
-        //     isOut: false,
-        //     isGroupFirst: true,
-        //     isGroupLast: false,
-        //     isHideName: false
-        // }
-        // ,
-        // {
-        //     date: 'November 5, 2020',
-        //     userName: 'Tấn Tài',
-        //     message: "Of course! Let's Do it.",
-        //     sendTime: '10:27 PM',
-        //     isOut: true,
-        //     isGroupFirst: true,
-        //     isGroupLast: true,
-        //     isHideName: false
-        // }
-    ]);
+    const [dataBubbles, setDataBubbles] = useState([]);
     const [data, setData] = useState([]);
     const messagesEndRef = useRef(null);
     const [contact, setContact] = useState(null);
@@ -102,9 +60,9 @@ function Bubbles(props){
             let messageText = '';
             let sendTime = moment(item.createdAt).format('LT');
             let isOut = item.postedByUser._id === user._id ? true : false;            
-            let isContentImage = item.message.some(e => e.contentType === 'image') ? true : false;
-            let isContentText = item.message.some(e => e.contentType === 'text') ? true : false;
-            let messageType = '';
+            let isContentImage = item.type === 'text' && item.message.some(e => e.contentType === 'image') ? true : false;
+            let isContentText = item.type === 'text' && item.message.some(e => e.contentType === 'text') ? true : false;
+            let messageType = item.type === 'image' ? 'MEDIA_IMAGE' : '';
             if(isContentText && isContentImage){
                 messageType = 'MESSAGE_AND_EMOJI';
             }else if(isContentText){
@@ -114,6 +72,10 @@ function Bubbles(props){
                     messageType = 'EMOJI_1X';
                 }else if(item.message.length === 2){
                     messageType = 'EMOJI_2X';
+                }else if(item.message.length === 3){
+                    messageType = 'EMOJI_3X';
+                }else{
+                    messageType = 'MESSAGE_AND_EMOJI';
                 }
             }
             // let messageType = isContentText ? (isContentImage ? 'MESSAGE_AND_EMOJI' : 'MESSAGE') : isContentImage ? ;
@@ -125,6 +87,8 @@ function Bubbles(props){
                         messageText += `<img src="/${messageItem.content}" alt="🙄" class="emoji" loading="lazy"/>`;
                     }
                 });
+            }else if(messageType === 'MEDIA_IMAGE'){
+                messageText = `<img class="media-photo" src="${item.message[0].content}">`;
             }else{
                 messageText= item.message[0].content;
             }
@@ -143,15 +107,15 @@ function Bubbles(props){
             return bubble;
         });
 
-        let bubble = Object.assign({}, bubbles[0]);
-        bubble.messageType = 'MEDIA_IMAGE';
-        bubble.message = '<img class="media-photo" src="https://iili.io/VODrG4.jpg">';
+        // let bubble = Object.assign({}, bubbles[0]);
+        // bubble.messageType = 'MEDIA_IMAGE';
+        // bubble.message = '<img class="media-photo" src="https://iili.io/VODrG4.jpg">';
 
-        bubbles.push(bubble);
+        // bubbles.push(bubble);
 
         setDataBubbles(bubbles);
         setData(groupDataBubbles(bubbles));
-        console.log(bubbles);
+        // console.log(bubbles);
     }
 
     const generateMessageReceived = (data) => {
@@ -161,10 +125,10 @@ function Bubbles(props){
         }
 
         let isOut = data.userId === user._id ? true : false;
-        let isContentImage = data.messageList.some(e => e.contentType === 'image') ? true : false;
-        let isContentText = data.messageList.some(e => e.contentType === 'text') ? true : false;
+        let isContentImage = data.type === 'text' && data.messageList.some(e => e.contentType === 'image') ? true : false;
+        let isContentText = data.type === 'text' && data.messageList.some(e => e.contentType === 'text') ? true : false;
         let messageText = '';
-        let messageType = '';
+        let messageType = data.type === 'image' ? 'MEDIA_IMAGE' : '';
         if(isContentText && isContentImage){
             messageType = 'MESSAGE_AND_EMOJI';
         }else if(isContentText){
@@ -176,11 +140,15 @@ function Bubbles(props){
                 messageType = 'EMOJI_2X';
             }else if(data.messageList.length === 3){
                 messageType = 'EMOJI_3X';
+            }else{
+                messageType = 'MESSAGE_AND_EMOJI';
             }
         }
 
         if(messageType === 'MESSAGE'){
             messageText = data.messageList[0].content;
+        }else if(messageType === 'MEDIA_IMAGE'){
+            messageText = `<img class="media-photo" src="${data.messageList[0].content}">`;
         }else{
             data.messageList.map(messageItem => {
                 if(messageItem.contentType === 'text'){

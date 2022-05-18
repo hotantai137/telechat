@@ -18,12 +18,15 @@ async function postData(url = '', data = {}, method = 'POST') {
     return response.json(); // parses JSON response into native JavaScript objects
 }
 
+const SERVER_HOSTNAME = window.location.hostname;
+const SERVER_PORT = 3000;
+const SERVER_URL = `http://${SERVER_HOSTNAME}:${SERVER_PORT}`
 export default{
   // getConversationByRoomId: async (roomId) => {
   //       return await postData(`http://localhost:3000/room/${roomId}`, { messageText: message, userId: userId});
   //   },
   getConversationByRoomId: async (roomId) => {
-      const res = await fetch("http://localhost:3000/room/" + roomId);
+      const res = await fetch(`${SERVER_URL}/room/` + roomId);
       let data = await res.json();
       return data;
   }
