@@ -748,6 +748,14 @@ img.emoji {
 .sending-status:empty {
     display: none;
 }
+.chatlist .user-last-message img.emoji {
+    width: 20px;
+    height: 20px;
+    margin-top: -3px}
+.chatlist .user-title,.chatlist .user-last-message {
+    flex-grow: 1}
+.chatlist .user-title i,.chatlist .user-last-message i {
+    font-style: normal}
 .chatlist .message-status {
     margin-right: 0.125rem;
     display: inline-block;
@@ -790,6 +798,31 @@ img.emoji {
     margin-left: 0.5rem;
     flex: 0 0 auto;
 }
+.chatlist .dialog-subtitle-media {
+    width: 1.25rem;
+    height: 1.25rem;
+    position: relative;
+    flex: 0 0 auto;
+    border-radius: .1875rem;
+    margin-top: -0.1875rem;
+    margin-right: .375rem;
+    display: inline-block;
+    vertical-align: middle}
+.chatlist .dialog-subtitle-media .tgico-play {
+    position: absolute;
+    z-index: 1;
+    color: #fff;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    line-height: 1;
+    font-size: .625rem}
+.chatlist .dialog-subtitle-media .media-photo {
+    width: inherit;
+    height: inherit;
+    -o-object-fit: cover;
+    object-fit: cover;
+    border-radius: inherit}
 .badge-24 {
     height: 1.5rem;
     min-width: 1.5rem;

@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
  
 function ChatListItem(props){
-    const [lastMessage, setLastMessage] = useState(null);
+    const [lastMessage, setLastMessage] = useState({
+        type: 'text',
+        messageBubble: {
+            message: props.chatItem.contactName + ' joined TeleChat'
+        }
+    });
 
     useEffect(() => {
         const messageListener = (message) => {
@@ -19,18 +24,20 @@ function ChatListItem(props){
         switch(lastMessage.type){
             case 'text': 
             return (<>
-                <b>
+                {/* <b>
                     <span className="peer-title" dir="auto" data-peer-id="1610799485" data-only-first-name="1">Mon</span>: 
-                </b>
+                </b> */}
                 <span dangerouslySetInnerHTML={{__html: lastMessage.messageBubble.message}}></span>
             </>)
             break;
             case 'image': 
             return(<>
-                <div className="dialog-subtitle-media media-container">
-                    <img className="media-photo" src="blob:https://web.telegram.org/87e3af36-a1bf-40a4-a573-a6b42af00ed1"/>
-                </div>
-                <i><span className="i18n">Photo</span></i>
+                <span class="user-last-message" dir="auto">
+                    <div class="dialog-subtitle-media media-container">
+                        <img class="media-photo" src={lastMessage.messageList[0].content}/>
+                    </div>
+                    <i><span class="i18n">Photo</span></i>
+                </span>
             </>)
             break;
         }
