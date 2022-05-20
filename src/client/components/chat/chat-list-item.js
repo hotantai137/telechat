@@ -32,11 +32,11 @@ function ChatListItem(props){
             break;
             case 'image': 
             return(<>
-                <span class="user-last-message" dir="auto">
-                    <div class="dialog-subtitle-media media-container">
-                        <img class="media-photo" src={lastMessage.messageList[0].content}/>
+                <span className="user-last-message" dir="auto">
+                    <div className="dialog-subtitle-media media-container">
+                        <img className="media-photo" src={lastMessage.messageList[0].content}/>
                     </div>
-                    <i><span class="i18n">Photo</span></i>
+                    <i><span className="i18n">Photo</span></i>
                 </span>
             </>)
             break;

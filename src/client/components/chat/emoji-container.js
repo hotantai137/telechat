@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import CONSTANTS from '../../../common/constants.json';
+import stickerIcon from '../../assets/image/sticker-icon.png';
+import { ReactComponent as StickerIcon } from '../../assets/svg/sticker-icon.svg';
 
 function EmojiContainer(){
     function selectEmoji(emojiName){
@@ -10,6 +12,15 @@ function EmojiContainer(){
         if(input){
             input.appendChild(imgEmoji);
         }                
+    }
+
+    function selectEmojiMenu(className){
+        document.querySelectorAll('.emoji-container .tabs-container .tabs-tab').forEach(e => {
+            e.classList.remove('acrive');
+          });
+
+        let menu = document.getElementsByClassName(className)[0];
+        if(menu) menu.classList.add('active');
     }
 
     return <>
@@ -168,17 +179,66 @@ function EmojiContainer(){
                             </div>
                         </div>
                     </div>
+                    <div className="tabs-tab stickers-padding">
+                        <div className="menu-wrapper">
+                            <div className="scrollable scrollable-x">
+                                <nav className="menu-horizontal-div no-stripe justify-start">
+                                    <button className="menu-horizontal-div-item btn-icon tgico-recent"></button>
+                                    <button className="btn-icon menu-horizontal-div-item media-sticker-wrapper active" data-doc-id="5987542576536750131">
+                                        <img src="/stickers/duckduck2_png/29.png" className="media-sticker"/>
+                                    </button>
+                                    <button className="btn-icon menu-horizontal-div-item media-sticker-wrapper" data-doc-id="1592756632805186039">
+                                        <img className="media-sticker" src="/stickers/mochimochicats_png/67.png" />
+                                    </button>
+                                </nav>
+                            </div>
+                        </div>
+                        <div className="emoticons-content" id="content-stickers">
+                            <div className="scrollable scrollable-y">
+                                <div className="stickers-categories">
+                                    <div className="sticker-category">
+                                        <div className="category-title">Mochi Cats @Angelsofdevils</div>
+                                        <div className="category-items super-stickers">
+                                            {
+                                                [...Array(119).keys()].map(emojiName => {
+                                                    return (
+                                                        <div className="grid-item super-sticker media-sticker-wrapper">
+                                                            <img src={"/stickers/mochimochicats_png/" + emojiName + ".png" } className="media-sticker"/>
+                                                        </div>
+                                                        )
+                                                })
+                                            }
+                                        </div>
+                                    </div>
+                                    <div className="sticker-category">
+                                        <div className="category-title">Duck Duck by @susuimut</div>
+                                        <div className="category-items super-stickers">
+                                            {
+                                                [...Array(68).keys()].map(emojiName => {
+                                                    return (
+                                                        <div className="grid-item super-sticker media-sticker-wrapper">
+                                                            <img src={"/stickers/duckduck2_png/" + emojiName + ".png" } className="media-sticker"/>
+                                                        </div>
+                                                        )
+                                                })
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div className="emoji-tabs menu-horizontal-div no-stripe">
                 <button className="menu-horizontal-div-item emoji-tabs-search justify-self-start btn-icon tgico-search rp hide" data-tab="-1">
                     <div className="c-ripple"><i className="far fa-smile"></i></div>
                 </button>
-                <button className="menu-horizontal-div-item emoji-tabs-emoji btn-icon tgico-smile rp active" data-tab="0">
+                <button className="menu-horizontal-div-item emoji-tabs-emoji btn-icon tgico-smile rp active" data-tab="0" onClick={selectEmojiMenu('emoji-padding')}>
                     <div className="c-ripple"><i className="far fa-smile"></i></div>
                 </button>
-                <button className="menu-horizontal-div-item emoji-tabs-stickers btn-icon tgico-stickers rp" data-tab="1">
-                    <div className="c-ripple"><i className="far fa-smile"></i></div>
+                <button className="menu-horizontal-div-item emoji-tabs-stickers btn-icon tgico-stickers rp" data-tab="1" onClick={selectEmojiMenu('stickers-padding')}>
+                    <div className="c-ripple" onClick={selectEmojiMenu('stickers-padding')}><img src={stickerIcon}/></div>
                 </button>
                 <button className="menu-horizontal-div-item emoji-tabs-gifs btn-icon tgico-gifs rp" data-tab="2">
                     <div className="c-ripple"><i className="fa-light fa-gif"></i></div>
