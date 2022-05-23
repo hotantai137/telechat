@@ -124,7 +124,7 @@ function Bubbles(props){
             user = JSON.parse(localStorage.getItem('userInfo'));
         }
 
-        let isOut = data.userId === user._id ? true : false;
+        let isOut = data.postedByUser._id === user._id ? true : false;
         let isContentImage = data.type === 'text' && data.messageList.some(e => e.contentType === 'image') ? true : false;
         let isContentText = data.type === 'text' && data.messageList.some(e => e.contentType === 'text') ? true : false;
         let messageText = '';
@@ -160,11 +160,11 @@ function Bubbles(props){
         }
 
         let bubble = {
-            date: data.messageBubble.date,
-            userName: data.messageBubble.userName,
+            date: data.date,
+            userName: data.userName,
             message: messageText,
             messageType: messageType,
-            sendTime: data.messageBubble.sendTime,
+            sendTime: data.sendTime,
             isOut: isOut,
             isGroupFirst: true,
             isGroupLast: true,
@@ -177,13 +177,17 @@ function Bubbles(props){
     const messageListener = (message) => {
         let currentContact = getContact();
         if(currentContact && currentContact.roomId === message.roomId){
-            message.messageBubble.isOut = message.socketId === props.socket.id ? true : false;
+            // message.messageBubble.isOut = message.socketId === props.socket.id ? true : false;
             let newData = dataBubbles;
             // newData.push(message.messageBubble);
             newData.push(generateMessageReceived(message));
             setData(groupDataBubbles(dataBubbles));
         }            
     };
+
+    const createMessageBubble = (data) => {
+
+    }
 
     useEffect(async ()=>{
         let currentContact = await getCurrentContact();

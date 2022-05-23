@@ -70,26 +70,37 @@ function ChatInput(props){
         // }
     }
 
-    function onSend(input){        
-        let bubble = {
-            date: moment().format('LL'),
-            userName: userInfo.fullName,
-            message: input.innerHTML,
-            sendTime: moment().format('LT'),
-            isOut: true,
-            isGroupFirst: true,
-            isGroupLast: true,
-            isHideName: false
-        }
-        let data = {
-            messageBubble: bubble,
-            messageList: splitMessage(),
-            type: 'text',
-            socketId: props.socket.id,
-            roomId: contact.roomId,
-            userId: userInfo._id
-        }
+    function onSend(input){
+        // let bubble = {
+        //     date: moment().format('LL'),
+        //     userName: userInfo.fullName,
+        //     message: input.innerHTML,
+        //     sendTime: moment().format('LT'),
+        //     isOut: true,
+        //     isGroupFirst: true,
+        //     isGroupLast: true,
+        //     isHideName: false
+        // }
+        // let data = {
+        //     messageBubble: bubble,
+        //     messageList: splitMessage(),
+        //     type: 'text',
+        //     socketId: props.socket.id,
+        //     roomId: contact.roomId,
+        //     userId: userInfo._id
+        // }
         if(input.innerHTML){
+            let data = {
+                messageList: splitMessage(),
+                type: 'text',
+                socketId: props.socket.id,
+                roomId: contact.roomId,
+                userId: userInfo._id,
+                userName: userInfo.fullName,
+                date: moment().format('LL'),
+                sendTime: moment().format('LT'),
+            }
+
             props.socket.emit('pushMessageToServer', data);
             input.textContent  = '';
             setmessageContentList([]);
