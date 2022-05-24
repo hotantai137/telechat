@@ -4,6 +4,8 @@ import {Route, useNavigate} from 'react-router-dom';
 import authService from '../../../api/auth';
 import { useCookies, Cookies } from 'react-cookie';
 
+// const salt = bcrypt.genSaltSync(10);
+
 function Login() {
     const navigate = useNavigate();
     const [cookieUser, setCookieUser, removeCookieUser] = useCookies('');
@@ -18,7 +20,10 @@ function Login() {
 
     async function onLogin(){
         try{
-            const res = await authService.login(email, password);
+            console.log(password);
+            const hashedPassword = window.btoa(password);
+           
+            const res = await authService.login(email, hashedPassword);
             if(!res.success) return;
   
             var today = new Date();   

@@ -202,7 +202,7 @@ function EmojiContainer(){
                                             {
                                                 [...Array(119).keys()].map(emojiName => {
                                                     return (
-                                                        <div className="grid-item super-sticker media-sticker-wrapper">
+                                                        <div className="grid-item super-sticker media-sticker-wrapper" key={emojiName}>
                                                             <img src={"/stickers/mochimochicats_png/" + emojiName + ".png" } className="media-sticker"/>
                                                         </div>
                                                         )

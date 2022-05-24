@@ -316,7 +316,6 @@ function ChatInput(props){
         </div>
         <div className="emoji-dropdown" id="emoji-dropdown"
         onMouseLeave={onCloseEmoji}>
-            {/* <EmojiContainer /> */}
             <Suspense fallback={<div>Loading Emoji...</div>}>
                 <EmojiContainer />
             </Suspense>
