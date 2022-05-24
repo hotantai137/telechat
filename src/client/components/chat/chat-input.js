@@ -91,14 +91,13 @@ function ChatInput(props){
         // }
         if(input.innerHTML){
             let data = {
-                messageList: splitMessage(),
+                message: splitMessage(),
                 type: 'text',
                 socketId: props.socket.id,
                 roomId: contact.roomId,
                 userId: userInfo._id,
                 userName: userInfo.fullName,
-                date: moment().format('LL'),
-                sendTime: moment().format('LT'),
+                sendTime: new Date(),
             }
 
             props.socket.emit('pushMessageToServer', data);
@@ -118,10 +117,10 @@ function ChatInput(props){
 
     function sendFile(filePath, type){        
         let bubble = {
-            date: moment().format('LL'),
+            // date: moment().format('LL'),
             userName: userInfo.fullName,
             message: '',
-            sendTime: moment().format('LT'),
+            sendTime: new Date(),
             isOut: true,
             isGroupFirst: true,
             isGroupLast: true,
@@ -136,7 +135,7 @@ function ChatInput(props){
         ]
         let data = {
             messageBubble: bubble,
-            messageList: messageList,
+            message: messageList,
             type: 'image',
             socketId: props.socket.id,
             roomId: contact.roomId,

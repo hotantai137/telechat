@@ -17,7 +17,7 @@ function BubblesDateGroup(props){
 
     useEffect(() => {        
         // setData(groupDataBubbles(props.dataBubbles));
-        if(props.isLastGroup) props.messagesEndRef.current.scrollIntoView({ behavior: "smooth" });    
+        if(props.isLastGroup) props.messagesEndRef.current.scrollIntoView();    
     }, [dataDateGroup]);
 
     return (<>

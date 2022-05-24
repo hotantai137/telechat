@@ -43,7 +43,15 @@ function Bubbles(props){
             return res.conversation;
         })
         .then(data => {
-            generateMessageBubbles(data);
+            let newDataBubbles = generateMessageBubbles(data);
+            setDataBubbles(newDataBubbles);
+            setData(groupDataBubbles(newDataBubbles));
+            let dataLastMessage = {
+                messageBubble: newDataBubbles[newDataBubbles.length - 1],
+                socketId: props.socket.id,
+                roomId: roomId
+            }
+            props.socket.emit('lastMessageReceived', dataLastMessage);
             preloaderElement.classList.remove('is-visible');
         })
     }
@@ -55,56 +63,7 @@ function Bubbles(props){
         }
 
         let bubbles = data.map(item => {
-            let date = moment(item.createdAt).format('LL');
-            let userName = item.postedByUser.fullName;
-            let messageText = '';
-            let sendTime = moment(item.createdAt).format('LT');
-            let isOut = item.postedByUser._id === user._id ? true : false;            
-            let isContentImage = item.type === 'text' && item.message.some(e => e.contentType === 'image') ? true : false;
-            let isContentText = item.type === 'text' && item.message.some(e => e.contentType === 'text') ? true : false;
-            let messageType = item.type === 'image' ? 'MEDIA_IMAGE' : '';
-            if(isContentText && isContentImage){
-                messageType = 'MESSAGE_AND_EMOJI';
-            }else if(isContentText){
-                messageType = 'MESSAGE';
-            }else if(isContentImage){
-                if(item.message.length === 1){
-                    messageType = 'EMOJI_1X';
-                }else if(item.message.length === 2){
-                    messageType = 'EMOJI_2X';
-                }else if(item.message.length === 3){
-                    messageType = 'EMOJI_3X';
-                }else{
-                    messageType = 'MESSAGE_AND_EMOJI';
-                }
-            }
-            // let messageType = isContentText ? (isContentImage ? 'MESSAGE_AND_EMOJI' : 'MESSAGE') : isContentImage ? ;
-            if (isContentImage) {
-                item.message.map(messageItem => {
-                    if(messageItem.contentType === 'text'){
-                        messageText += messageItem.content;
-                    }else if(messageItem.contentType === 'image'){
-                        messageText += `<img src="/${messageItem.content}" alt="🙄" class="emoji" loading="lazy"/>`;
-                    }
-                });
-            }else if(messageType === 'MEDIA_IMAGE'){
-                messageText = `<img class="media-photo" src="${item.message[0].content}">`;
-            }else{
-                messageText= item.message[0].content;
-            }
-            let bubble = {
-                date: date,
-                userName: userName,
-                message: messageText,
-                messageType: messageType,
-                sendTime: sendTime,
-                isOut: isOut,
-                isGroupFirst: true,
-                isGroupLast: true,
-                isHideName: false
-            };
-
-            return bubble;
+            return generateMessageReceived(item);
         });
 
         // let bubble = Object.assign({}, bubbles[0]);
@@ -112,10 +71,7 @@ function Bubbles(props){
         // bubble.message = '<img class="media-photo" src="https://iili.io/VODrG4.jpg">';
 
         // bubbles.push(bubble);
-
-        setDataBubbles(bubbles);
-        setData(groupDataBubbles(bubbles));
-        // console.log(bubbles);
+        return bubbles;
     }
 
     const generateMessageReceived = (data) => {
@@ -124,9 +80,10 @@ function Bubbles(props){
             user = JSON.parse(localStorage.getItem('userInfo'));
         }
 
-        let isOut = data.postedByUser._id === user._id ? true : false;
-        let isContentImage = data.type === 'text' && data.messageList.some(e => e.contentType === 'image') ? true : false;
-        let isContentText = data.type === 'text' && data.messageList.some(e => e.contentType === 'text') ? true : false;
+        let sendTime = moment(data.sendTime).format('LT');
+        let isOut = data.userId === user._id ? true : false;
+        let isContentImage = data.type === 'text' && data.message.some(e => e.contentType === 'image') ? true : false;
+        let isContentText = data.type === 'text' && data.message.some(e => e.contentType === 'text') ? true : false;
         let messageText = '';
         let messageType = data.type === 'image' ? 'MEDIA_IMAGE' : '';
         if(isContentText && isContentImage){
@@ -134,11 +91,11 @@ function Bubbles(props){
         }else if(isContentText){
             messageType = 'MESSAGE';
         }else if(isContentImage){
-            if(data.messageList.length === 1){
+            if(data.message.length === 1){
                 messageType = 'EMOJI_1X';
-            }else if(data.messageList.length === 2){
+            }else if(data.message.length === 2){
                 messageType = 'EMOJI_2X';
-            }else if(data.messageList.length === 3){
+            }else if(data.message.length === 3){
                 messageType = 'EMOJI_3X';
             }else{
                 messageType = 'MESSAGE_AND_EMOJI';
@@ -146,11 +103,11 @@ function Bubbles(props){
         }
 
         if(messageType === 'MESSAGE'){
-            messageText = data.messageList[0].content;
+            messageText = data.message[0].content;
         }else if(messageType === 'MEDIA_IMAGE'){
-            messageText = `<img class="media-photo" src="${data.messageList[0].content}">`;
+            messageText = `<img class="media-photo" src="${data.message[0].content}">`;
         }else{
-            data.messageList.map(messageItem => {
+            data.message.map(messageItem => {
                 if(messageItem.contentType === 'text'){
                     messageText += messageItem.content;
                 }else if(messageItem.contentType === 'image'){
@@ -160,11 +117,11 @@ function Bubbles(props){
         }
 
         let bubble = {
-            date: data.date,
+            date: moment(data.sendTime).format('LL'),
             userName: data.userName,
             message: messageText,
             messageType: messageType,
-            sendTime: data.sendTime,
+            sendTime: moment(data.sendTime).format('LT'),
             isOut: isOut,
             isGroupFirst: true,
             isGroupLast: true,
@@ -177,17 +134,18 @@ function Bubbles(props){
     const messageListener = (message) => {
         let currentContact = getContact();
         if(currentContact && currentContact.roomId === message.roomId){
-            // message.messageBubble.isOut = message.socketId === props.socket.id ? true : false;
             let newData = dataBubbles;
-            // newData.push(message.messageBubble);
-            newData.push(generateMessageReceived(message));
+            let messageBubble = generateMessageReceived(message);
+            newData.push(messageBubble);
             setData(groupDataBubbles(dataBubbles));
+            let dataLastMessage = {
+                messageBubble: messageBubble,
+                socketId: props.socket.id,
+                roomId: contact.roomId
+            }
+            props.socket.emit('lastMessageReceived', dataLastMessage);
         }            
     };
-
-    const createMessageBubble = (data) => {
-
-    }
 
     useEffect(async ()=>{
         let currentContact = await getCurrentContact();

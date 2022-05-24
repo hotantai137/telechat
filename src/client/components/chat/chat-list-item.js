@@ -9,37 +9,35 @@ function ChatListItem(props){
     });
 
     useEffect(() => {
-        const messageListener = (message) => {
-            if(props.chatItem.roomId === message.roomId) setLastMessage(message);            
-          };
+        const lastMessageListner = (data) => {
+            if(props.chatItem.roomId === data.roomId) setLastMessage(data.messageBubble);
+        }
         
-          if(props.socket) props.socket.on('receivedMessage', messageListener);
+        if(props.socket) props.socket.on('lastMessageReceived', lastMessageListner);
     
         return () => {
-            // if(props.socket) props.socket.off('receivedMessage', messageListener);
+            if(props.socket) props.socket.off('lastMessageReceived', lastMessageListner);
         };
       }, [props.socket]);
     const renderLastMessage = () =>{
         if(!lastMessage) return;
-        switch(lastMessage.type){
-            case 'text': 
+        switch(lastMessage.messageType){
+            case 'MESSAGE': 
             return (<>
                 {/* <b>
                     <span className="peer-title" dir="auto" data-peer-id="1610799485" data-only-first-name="1">Mon</span>: 
                 </b> */}
-                <span dangerouslySetInnerHTML={{__html: lastMessage.messageBubble.message}}></span>
+                <span dangerouslySetInnerHTML={{__html: lastMessage.message}}></span>
             </>)
-            break;
-            case 'image': 
+            case 'MEDIA_IMAGE': 
             return(<>
                 <span className="user-last-message" dir="auto">
-                    <div className="dialog-subtitle-media media-container">
-                        <img className="media-photo" src={lastMessage.messageList[0].content}/>
+                    <div className="dialog-subtitle-media media-container" dangerouslySetInnerHTML={{__html: lastMessage.message}}>
+                        {/* <img className="media-photo" src={lastMessage.message[0].content}/> */}
                     </div>
                     <i><span className="i18n">Photo</span></i>
                 </span>
             </>)
-            break;
         }
     }
 
