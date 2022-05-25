@@ -5,19 +5,24 @@ const MESSAGE_TYPE = {
     MESSAGE_AND_EMOJI: 'MESSAGE_AND_EMOJI',
     EMOJI_1X: 'EMOJI_1X',
     EMOJI_2X: 'EMOJI_2X',
-    EMOJI_3X: 'EMOJI_3X'
+    EMOJI_3X: 'EMOJI_3X',
+    MEDIA_IMAGE: 'MEDIA_IMAGE',
+    MEDIA_VIDEO: 'MEDIA_VIDEO',
+    MEDIA_ALBUM: 'MEDIA_ALBUM',
+    STICKER: 'STICKER'
 }
 function Bubble({dataBubble}){
     const renderBubble = () =>{
         switch(dataBubble.messageType){
-            case 'MESSAGE': return renderMessage(); break;
-            case 'MESSAGE_AND_EMOJI': return renderMessage(); break;
-            case 'EMOJI_1X': return renderEmoji1X(); break;
-            case 'EMOJI_2X': return renderEmoji2X(); break;
-            case 'EMOJI_3X': return renderEmoji3X(); break;
-            case 'MEDIA_IMAGE': return renderImage(); break;
-            case 'MEDIA_VIDEO': return renderEmoji3X(); break;
-            case 'MEDIA_ALBUM': return renderEmoji3X(); break;
+            case MESSAGE_TYPE.MESSAGE: return renderMessage();
+            case MESSAGE_TYPE.MESSAGE_AND_EMOJI: return renderMessage();
+            case MESSAGE_TYPE.EMOJI_1X: return renderEmoji1X();
+            case MESSAGE_TYPE.EMOJI_2X: return renderEmoji2X();
+            case MESSAGE_TYPE.EMOJI_3X: return renderEmoji3X();
+            case MESSAGE_TYPE.MEDIA_IMAGE: return renderImage();
+            case MESSAGE_TYPE.MEDIA_VIDEO: return renderEmoji3X();
+            case MESSAGE_TYPE.MEDIA_ALBUM: return renderEmoji3X();
+            case MESSAGE_TYPE.STICKER: return renderSticker();
         }
     }
 
@@ -127,6 +132,28 @@ function Bubble({dataBubble}){
                     </div>
                 </div>
             )
+    }
+    const renderSticker = () => {
+        return (
+            <div className={`bubble is-read is-message-empty sticker just-media ${dataBubble.isOut ? "is-out" : "is-in"} ${dataBubble.isHideName ? "hide-name" : ""} is-group-first is-group-last`}>
+                <div className="bubble-content-wrapper">
+                    <div className="bubble-content" style={{width: "200px", height: "200px"}}>
+                        <div className="message" dir="auto">
+                            <span className="time tgico">
+                                <span className="i18n">{dataBubble.sendTime}</span>
+                                <div className="inner tgico" title="20 May 2022, 12:45:12">
+                                    <span className="i18n">{dataBubble.sendTime}</span>
+                                </div>
+                            </span>
+                        </div>
+                        <div className="attachment media-sticker-wrapper" data-doc-id="1592756632805186062" 
+                            style={{width: "200px", height: "200px"}}
+                            dangerouslySetInnerHTML={{__html: dataBubble.message}}>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
     }
     if(!dataBubble) return(<></>);
     return (<>{renderBubble()}</>

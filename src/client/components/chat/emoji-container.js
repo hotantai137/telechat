@@ -1,9 +1,38 @@
 import React, { useEffect, useState } from "react";
 import CONSTANTS from '../../../common/constants.json';
 import stickerIcon from '../../assets/image/sticker-icon.png';
-import { ReactComponent as StickerIcon } from '../../assets/svg/sticker-icon.svg';
+import { GiphyFetch } from "@giphy/js-fetch-api";
+// import { IGif } from "@giphy/js-types";
+import {
+  Gif,
+  Grid
+} from "@giphy/react-components";
+import ResizeObserver from "react-resize-observer";
 
-function EmojiContainer(){
+function EmojiContainer(props){
+    const [modalGif, setModalGif] = useState();
+    const giphyFetch = new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh");
+    function GridDemo({ onGifClick }) {
+        const fetchGifs = (offset) =>
+          giphyFetch.trending({ offset, limit: 10 });
+        const [width, setWidth] = useState(window.innerWidth);
+        return (
+          <>
+            <Grid
+              onGifClick={onGifClick}
+              fetchGifs={fetchGifs}
+              width={width}
+              columns={3}
+              gutter={6}
+            />
+            <ResizeObserver
+              onResize={({ width }) => {
+                setWidth(width);
+              }}
+            />
+          </>
+        );
+      }
     function selectEmoji(emojiName){
         let input = document.getElementById('input-message');
         let imgEmoji = document.createElement('img');
@@ -16,11 +45,15 @@ function EmojiContainer(){
 
     function selectEmojiMenu(className){
         document.querySelectorAll('.emoji-container .tabs-container .tabs-tab').forEach(e => {
-            e.classList.remove('acrive');
+            e.classList.remove('active');
           });
 
         let menu = document.getElementsByClassName(className)[0];
         if(menu) menu.classList.add('active');
+    }
+
+    function selectSticker(path){
+        props.selectSticker(path);
     }
 
     return <>
@@ -202,7 +235,8 @@ function EmojiContainer(){
                                             {
                                                 [...Array(119).keys()].map(emojiName => {
                                                     return (
-                                                        <div className="grid-item super-sticker media-sticker-wrapper" key={emojiName}>
+                                                        <div className="grid-item super-sticker media-sticker-wrapper" key={emojiName}
+                                                            onClick={()=>selectSticker("/stickers/mochimochicats_png/" + emojiName + ".png")}>
                                                             <img src={"/stickers/mochimochicats_png/" + emojiName + ".png" } className="media-sticker"/>
                                                         </div>
                                                         )
@@ -216,7 +250,8 @@ function EmojiContainer(){
                                             {
                                                 [...Array(68).keys()].map(emojiName => {
                                                     return (
-                                                        <div className="grid-item super-sticker media-sticker-wrapper">
+                                                        <div className="grid-item super-sticker media-sticker-wrapper" key={emojiName}
+                                                            onClick={()=>selectSticker("/stickers/duckduck2_png/" + emojiName + ".png")}>
                                                             <img src={"/stickers/duckduck2_png/" + emojiName + ".png" } className="media-sticker"/>
                                                         </div>
                                                         )
@@ -228,20 +263,42 @@ function EmojiContainer(){
                             </div>
                         </div>
                     </div>
+                    <div className="tabs-tab gifs-padding">
+                    <GridDemo
+                                    onGifClick={(gif, e) => {
+                                    console.log("gif", gif);
+                                    e.preventDefault();
+                                    setModalGif(gif);
+                                    }}
+                                />
+                        {/* <div className="emoticons-content" id="content-gifs">
+                            <div className="scrollable scrollable-y">
+                                <div className="gifs-masonry">
+                                <GridDemo
+                                    onGifClick={(gif, e) => {
+                                    console.log("gif", gif);
+                                    e.preventDefault();
+                                    setModalGif(gif);
+                                    }}
+                                />
+                                </div>
+                            </div>
+                        </div> */}
+                    </div>
                 </div>
             </div>
             <div className="emoji-tabs menu-horizontal-div no-stripe">
                 <button className="menu-horizontal-div-item emoji-tabs-search justify-self-start btn-icon tgico-search rp hide" data-tab="-1">
                     <div className="c-ripple"><i className="far fa-smile"></i></div>
                 </button>
-                <button className="menu-horizontal-div-item emoji-tabs-emoji btn-icon tgico-smile rp active" data-tab="0" onClick={selectEmojiMenu('emoji-padding')}>
-                    <div className="c-ripple"><i className="far fa-smile"></i></div>
+                <button className="menu-horizontal-div-item emoji-tabs-emoji btn-icon tgico-smile rp active" data-tab="0">
+                    <div className="c-ripple" onClick={()=>selectEmojiMenu('emoji-padding')}><i className="far fa-smile"></i></div>
                 </button>
-                <button className="menu-horizontal-div-item emoji-tabs-stickers btn-icon tgico-stickers rp" data-tab="1" onClick={selectEmojiMenu('stickers-padding')}>
-                    <div className="c-ripple" onClick={selectEmojiMenu('stickers-padding')}><img src={stickerIcon}/></div>
+                <button className="menu-horizontal-div-item emoji-tabs-stickers btn-icon tgico-stickers rp" data-tab="1">
+                    <div className="c-ripple" onClick={()=>selectEmojiMenu('stickers-padding')}><img src={stickerIcon}/></div>
                 </button>
                 <button className="menu-horizontal-div-item emoji-tabs-gifs btn-icon tgico-gifs rp" data-tab="2">
-                    <div className="c-ripple"><i className="fa-light fa-gif"></i></div>
+                    <div className="c-ripple" onClick={()=>selectEmojiMenu('gifs-padding')}><i className="fa-light fa-gif"></i></div>
                 </button>
                 <button className="menu-horizontal-div-item emoji-tabs-delete justify-self-end btn-icon tgico-deleteleft rp" data-tab="-1">
                     <div className="c-ripple"><i className="far fa-smile"></i></div>
@@ -251,3 +308,87 @@ function EmojiContainer(){
 }
 
 export default EmojiContainer;
+
+// import { GiphyFetch } from "@giphy/js-fetch-api";
+// import { IGif } from "@giphy/js-types";
+// import {
+//   Gif,
+//   Grid
+// } from "@giphy/react-components";
+// import React, { useState } from "react";
+// import { useAsync } from "react-async-hook";
+// import { render } from "react-dom";
+// import ResizeObserver from "react-resize-observer";
+
+// const giphyFetch = new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh");
+
+// // function GifDemo() {
+// //   const [gif, setGif] = useState<IGif | null>(null);
+// //   useAsync(async () => {
+// //     const { data } = await giphyFetch.gif("fpXxIjftmkk9y");
+// //     setGif(data);
+// //   }, []);
+// //   return gif && <Gif gif={gif} width={200} />;
+// // }
+
+// function GridDemo({ onGifClick }) {
+//   const fetchGifs = (offset) =>
+//     giphyFetch.trending({ offset, limit: 10 });
+//   const [width, setWidth] = useState(window.innerWidth);
+//   return (
+//     <>
+//       <Grid
+//         onGifClick={onGifClick}
+//         fetchGifs={fetchGifs}
+//         width={width}
+//         columns={3}
+//         gutter={6}
+//       />
+//       <ResizeObserver
+//         onResize={({ width }) => {
+//           setWidth(width);
+//         }}
+//       />
+//     </>
+//   );
+// }
+
+// function App() {
+//   const [modalGif, setModalGif] = useState();
+//   return (
+//     <>
+//       <h4>Grid</h4>
+//       <GridDemo
+//         onGifClick={(gif, e) => {
+//           console.log("gif", gif);
+//           e.preventDefault();
+//           setModalGif(gif);
+//         }}
+//       />
+//       {modalGif && (
+//         <div
+//           style={{
+//             position: "fixed",
+//             top: 0,
+//             left: 0,
+//             right: 0,
+//             bottom: 0,
+//             display: "flex",
+//             justifyContent: "center",
+//             alignItems: "center",
+//             background: "rgba(0, 0, 0, .8)"
+//           }}
+//           onClick={(e) => {
+//             e.preventDefault();
+//             setModalGif(undefined);
+//           }}
+//         >
+//           <Gif gif={modalGif} width={200} />
+//         </div>
+//       )}
+//     </>
+//   );
+// }
+
+// const rootElement = document.getElementById("root");
+// render(<App />, rootElement);

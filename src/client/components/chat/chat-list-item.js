@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import messageUtils from '../../../common/message.utils';
  
 function ChatListItem(props){
     const [lastMessage, setLastMessage] = useState({
@@ -19,6 +20,14 @@ function ChatListItem(props){
             if(props.socket) props.socket.off('lastMessageReceived', lastMessageListner);
         };
       }, [props.socket]);
+    
+      useEffect(() => {
+          if(props.lastMessages && props.lastMessages.length > 0 && props.chatItem){
+            let lastMsg = props.lastMessages.filter(x => x.chatRoomId === props.chatItem.roomId);
+            if(lastMsg && lastMsg.length > 0) setLastMessage(messageUtils.generateMessageBubble(lastMsg[0]));
+          }
+      }, [props.lastMessages, props.chatItem]);
+
     const renderLastMessage = () =>{
         if(!lastMessage) return;
         switch(lastMessage.messageType){
@@ -27,7 +36,7 @@ function ChatListItem(props){
                 {/* <b>
                     <span className="peer-title" dir="auto" data-peer-id="1610799485" data-only-first-name="1">Mon</span>: 
                 </b> */}
-                <span dangerouslySetInnerHTML={{__html: lastMessage.message}}></span>
+                <span className="user-last-message" dangerouslySetInnerHTML={{__html: lastMessage.message}}></span>
             </>)
             case 'MEDIA_IMAGE': 
             return(<>
@@ -35,9 +44,18 @@ function ChatListItem(props){
                     <div className="dialog-subtitle-media media-container" dangerouslySetInnerHTML={{__html: lastMessage.message}}>
                         {/* <img className="media-photo" src={lastMessage.message[0].content}/> */}
                     </div>
-                    <i><span className="i18n">Photo</span></i>
+                    <i><span className="i18n">&nbsp;Photo</span></i>
                 </span>
             </>)
+            case 'STICKER':
+                return(<>
+                    <span className="user-last-message" dir="auto">
+                        <span>
+                            <i><img src={lastMessage.filePath} className="emoji" alt="💨"/></i>
+                            <i><span className="i18n">&nbsp;Sticker</span></i>
+                        </span>
+                    </span>
+                </>)
         }
     }
 

@@ -144,6 +144,34 @@ function ChatInput(props){
         props.socket.emit('pushMessageToServer', data);
     }
 
+    function sendSticker(filePath, type){        
+        let bubble = {
+            userName: userInfo.fullName,
+            message: '',
+            sendTime: new Date(),
+            isOut: true,
+            isGroupFirst: true,
+            isGroupLast: true,
+            isHideName: false
+        }
+        let messageList = [
+            {
+                content: filePath,
+                index: 0,
+                contentType: 'sticker'
+            }
+        ]
+        let data = {
+            messageBubble: bubble,
+            message: messageList,
+            type: 'sticker',
+            socketId: props.socket.id,
+            roomId: contact.roomId,
+            userId: userInfo._id
+        }
+        props.socket.emit('pushMessageToServer', data);
+    }
+
     function splitMessage(){
         let messageList = [];
         let input = document.getElementById('input-message');
@@ -237,6 +265,11 @@ function ChatInput(props){
         });
     }
 
+    function selectSticker(path){
+        console.log(path);
+        sendSticker(path, 'sticker');
+    }
+
     return <div className="chat-input">
         <div className="chat-input-container">
             <div className="rows-wrapper-wrapper">
@@ -316,7 +349,7 @@ function ChatInput(props){
         <div className="emoji-dropdown" id="emoji-dropdown"
         onMouseLeave={onCloseEmoji}>
             <Suspense fallback={<div>Loading Emoji...</div>}>
-                <EmojiContainer />
+                <EmojiContainer selectSticker={selectSticker}/>
             </Suspense>
         </div>        
     </div>

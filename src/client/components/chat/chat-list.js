@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import ChatListItem from './chat-list-item';
 import userService from '../../../api/services/user.js';
+import messageService from '../../../api/services/message.js';
  
 function ChatList(props){
     const [chatList, setChatList] = useState([]);
     const [selectedId, setSelectedId] = useState('');
+    const [lastMessages, setLastMessages] = useState([]);
     const getContacts = () => {
         let userInfo = JSON.parse(localStorage.getItem('contactList'));
         setChatList(userInfo);
@@ -17,8 +19,16 @@ function ChatList(props){
         // })
       }
 
+    const getLastMessages = () => {
+        messageService.getLastMessage()
+        .then(messages => {
+            setLastMessages(messages);
+        })
+    }
+
     useEffect(() => {
         getContacts();//Get contact list of current user
+        getLastMessages();
         //join all chat rooms of current user
     }, []);
 
@@ -74,6 +84,7 @@ function ChatList(props){
                         chatItem={item} 
                         isSelected={selectedId === item._id ? true : false}
                         selectChatItem={selectChatItem}
+                        lastMessages={lastMessages}
                         socket={props.socket}
                         />
                     })

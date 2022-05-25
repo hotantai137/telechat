@@ -3,6 +3,7 @@ import BubblesDateGroup from "./bubbles-date-group";
 import _ from 'lodash';
 import chatRoomService from '../../../api/services/chat-room.js';
 import moment from "moment";
+import messageUtils from '../../../common/message.utils';
 
 function Bubbles(props){
     const [dataBubbles, setDataBubbles] = useState([]);
@@ -63,7 +64,7 @@ function Bubbles(props){
         }
 
         let bubbles = data.map(item => {
-            return generateMessageReceived(item);
+            return messageUtils.generateMessageBubble(item);
         });
 
         // let bubble = Object.assign({}, bubbles[0]);
@@ -74,68 +75,11 @@ function Bubbles(props){
         return bubbles;
     }
 
-    const generateMessageReceived = (data) => {
-        let user = userInfo;
-        if(!user){
-            user = JSON.parse(localStorage.getItem('userInfo'));
-        }
-
-        let sendTime = moment(data.sendTime).format('LT');
-        let isOut = data.userId === user._id ? true : false;
-        let isContentImage = data.type === 'text' && data.message.some(e => e.contentType === 'image') ? true : false;
-        let isContentText = data.type === 'text' && data.message.some(e => e.contentType === 'text') ? true : false;
-        let messageText = '';
-        let messageType = data.type === 'image' ? 'MEDIA_IMAGE' : '';
-        if(isContentText && isContentImage){
-            messageType = 'MESSAGE_AND_EMOJI';
-        }else if(isContentText){
-            messageType = 'MESSAGE';
-        }else if(isContentImage){
-            if(data.message.length === 1){
-                messageType = 'EMOJI_1X';
-            }else if(data.message.length === 2){
-                messageType = 'EMOJI_2X';
-            }else if(data.message.length === 3){
-                messageType = 'EMOJI_3X';
-            }else{
-                messageType = 'MESSAGE_AND_EMOJI';
-            }
-        }
-
-        if(messageType === 'MESSAGE'){
-            messageText = data.message[0].content;
-        }else if(messageType === 'MEDIA_IMAGE'){
-            messageText = `<img class="media-photo" src="${data.message[0].content}">`;
-        }else{
-            data.message.map(messageItem => {
-                if(messageItem.contentType === 'text'){
-                    messageText += messageItem.content;
-                }else if(messageItem.contentType === 'image'){
-                    messageText += `<img src="/${messageItem.content}" alt="🙄" class="emoji" loading="lazy"/>`;
-                }
-            });
-        }
-
-        let bubble = {
-            date: moment(data.sendTime).format('LL'),
-            userName: data.userName,
-            message: messageText,
-            messageType: messageType,
-            sendTime: moment(data.sendTime).format('LT'),
-            isOut: isOut,
-            isGroupFirst: true,
-            isGroupLast: true,
-            isHideName: false
-        };
-
-        return bubble;
-    }
-
     const messageListener = (message) => {
         let currentContact = getContact();
         if(currentContact && currentContact.roomId === message.roomId){
             let newData = dataBubbles;
-            let messageBubble = generateMessageReceived(message);
+            let messageBubble = messageUtils.generateMessageBubble(message);
             newData.push(messageBubble);
             setData(groupDataBubbles(dataBubbles));
             let dataLastMessage = {
