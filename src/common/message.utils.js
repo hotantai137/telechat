@@ -30,6 +30,8 @@ export default{
             }
         }else if(data.type === 'sticker'){
             messageType = 'STICKER';
+        }else if(data.type === 'gif'){
+            messageType = 'GIF';
         }
 
         if(messageType === 'MESSAGE'){
@@ -40,6 +42,8 @@ export default{
         }else if(messageType === 'STICKER'){
             messageText = `<img class="media-sticker" src="${data.message[0].content}"/>`;
             filePath = data.message[0].content;
+        }else if(messageType === 'GIF'){
+            messageText = data.message[0].content;
         }else{
             data.message.map(messageItem => {
                 if(messageItem.contentType === 'text'){

@@ -7,15 +7,16 @@ import {
   Gif,
   Grid
 } from "@giphy/react-components";
-import ResizeObserver from "react-resize-observer";
+// import ResizeObserver from "react-resize-observer";
 
 function EmojiContainer(props){
     const [modalGif, setModalGif] = useState();
     const giphyFetch = new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh");
     function GridDemo({ onGifClick }) {
         const fetchGifs = (offset) =>
-          giphyFetch.trending({ offset, limit: 10 });
-        const [width, setWidth] = useState(window.innerWidth);
+          giphyFetch.trending({ offset, limit: 2 });
+        // const [width, setWidth] = useState(window.innerWidth);
+        const [width, setWidth] = useState(372);
         return (
           <>
             <Grid
@@ -25,11 +26,11 @@ function EmojiContainer(props){
               columns={3}
               gutter={6}
             />
-            <ResizeObserver
+            {/* <ResizeObserver
               onResize={({ width }) => {
                 setWidth(width);
               }}
-            />
+            /> */}
           </>
         );
       }
@@ -54,6 +55,10 @@ function EmojiContainer(props){
 
     function selectSticker(path){
         props.selectSticker(path);
+    }
+
+    function selectGIF(id){
+        props.selectGIF(id);
     }
 
     return <>
@@ -264,26 +269,27 @@ function EmojiContainer(props){
                         </div>
                     </div>
                     <div className="tabs-tab gifs-padding">
-                    <GridDemo
+                    {/* <GridDemo
                                     onGifClick={(gif, e) => {
                                     console.log("gif", gif);
                                     e.preventDefault();
                                     setModalGif(gif);
                                     }}
-                                />
-                        {/* <div className="emoticons-content" id="content-gifs">
+                                /> */}
+                        <div className="emoticons-content" id="content-gifs">
                             <div className="scrollable scrollable-y">
                                 <div className="gifs-masonry">
                                 <GridDemo
                                     onGifClick={(gif, e) => {
                                     console.log("gif", gif);
                                     e.preventDefault();
-                                    setModalGif(gif);
+                                    // setModalGif(gif);
+                                    selectGIF(gif.id);
                                     }}
                                 />
                                 </div>
                             </div>
-                        </div> */}
+                        </div>
                     </div>
                 </div>
             </div>

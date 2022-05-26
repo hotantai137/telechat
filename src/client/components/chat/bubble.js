@@ -1,4 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
+import { GiphyFetch } from "@giphy/js-fetch-api";
+import { useAsync } from "react-async-hook";
+// import { IGif } from "@giphy/js-types";
+import {
+  Gif,
+  Grid
+} from "@giphy/react-components";
 
 const MESSAGE_TYPE = {
     MESSAGE: 'MESSAGE',
@@ -9,9 +16,20 @@ const MESSAGE_TYPE = {
     MEDIA_IMAGE: 'MEDIA_IMAGE',
     MEDIA_VIDEO: 'MEDIA_VIDEO',
     MEDIA_ALBUM: 'MEDIA_ALBUM',
-    STICKER: 'STICKER'
+    STICKER: 'STICKER',
+    GIF: 'GIF'
 }
 function Bubble({dataBubble}){
+    const giphyFetch = new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh");
+    const GifComp = () => {        
+        const [gif, setGif] = useState(null);
+        useAsync(async () => {
+        //   const { data } = await giphyFetch.gif("fpXxIjftmkk9y");
+        const { data } = await giphyFetch.gif(dataBubble.message);
+          setGif(data);
+        }, []);
+        return gif && <Gif gif={gif} width={200} />;
+    }
     const renderBubble = () =>{
         switch(dataBubble.messageType){
             case MESSAGE_TYPE.MESSAGE: return renderMessage();
@@ -20,12 +38,12 @@ function Bubble({dataBubble}){
             case MESSAGE_TYPE.EMOJI_2X: return renderEmoji2X();
             case MESSAGE_TYPE.EMOJI_3X: return renderEmoji3X();
             case MESSAGE_TYPE.MEDIA_IMAGE: return renderImage();
+            case MESSAGE_TYPE.GIF: return renderGif();
             case MESSAGE_TYPE.MEDIA_VIDEO: return renderEmoji3X();
             case MESSAGE_TYPE.MEDIA_ALBUM: return renderEmoji3X();
             case MESSAGE_TYPE.STICKER: return renderSticker();
         }
     }
-
     const renderMessage = () =>{
         return (
             <div className={`bubble is-read ${dataBubble.isOut ? "is-out" : "is-in"} ${dataBubble.isHideName ? "hide-name" : ""} can-have-tail is-group-first is-group-last`} data-mid="8144224255" data-peer-id="520885308" data-timestamp="1604477469">
@@ -154,6 +172,37 @@ function Bubble({dataBubble}){
                 </div>
             </div>
         )
+    }
+    const renderGif = () => {
+        return(<>
+            <div className={`bubble is-read is-message-empty video ${dataBubble.isOut ? "is-out" : "is-in"} ${dataBubble.isHideName ? "hide-name" : ""} is-group-first is-group-last`}>
+                <div className="bubble-content-wrapper">
+                    <div className="bubble-content" style={{width: "200px", height: "200px"}}>
+                        <div className="message" dir="auto">
+                            <span className="time tgico">
+                                <span className="i18n">{dataBubble.sendTime}</span>
+                                <div className="inner tgico" title="20 May 2022, 12:45:12">
+                                    <span className="i18n">{dataBubble.sendTime}</span>
+                                </div>
+                            </span>
+                        </div>
+                        <div className="attachment media-container" data-doc-id="1592756632805186062" 
+                            style={{width: "200px", height: "214px"}}>
+                            <span className="video-time">GIF</span>
+                            <GifComp/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {/* <a href="https://giphy.com/gifs/fpXxIjftmkk9y" className="giphy-gif  css-16k37tz" style="width: 200px; height: 214px;">
+                <div style="width: 200px; height: 214px; position: relative;">
+                    <picture>
+                        <source type="image/webp" srcset="https://media4.giphy.com/media/fpXxIjftmkk9y/200w.webp?cid=9f0f6425cd984b54ff35f0a11beaa0b933262df678d2cc51&amp;rid=200w.webp&amp;ct=g"/>
+                            <img className="giphy-gif-img giphy-img-loaded" src="https://media4.giphy.com/media/fpXxIjftmkk9y/200w.gif?cid=9f0f6425cd984b54ff35f0a11beaa0b933262df678d2cc51&amp;rid=200w.gif&amp;ct=g" width="200" height="214" alt="Oh My God Reaction GIF" style="background: rgb(255, 102, 102);"/>
+                    </picture>
+                </div>
+            </a> */}
+        </>)
     }
     if(!dataBubble) return(<></>);
     return (<>{renderBubble()}</>

@@ -56,6 +56,14 @@ function ChatListItem(props){
                         </span>
                     </span>
                 </>)
+            case 'GIF':
+                return(<>
+                    <span className="user-last-message" dir="auto">
+                        <span>
+                            <i><span className="i18n">&nbsp;GIF</span></i>
+                        </span>
+                    </span>
+                </>)
         }
     }
 

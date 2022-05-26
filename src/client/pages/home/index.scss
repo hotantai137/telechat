@@ -3002,6 +3002,32 @@ html.is-safari .bubble:not(.round) img:not(.emoji),html.is-safari .bubble:not(.r
                 height: 100%;
                 max-width: 100%;
                 max-height: 100%}
+                .bubble .video-time,.bubble .video-play {
+                    pointer-events: none}
+                .bubble .video-time {
+                    position: absolute;
+                    top: 3px;
+                    left: 3px;
+                    border-radius: 12px;
+                    background-color: rgba(0, 0, 0, .35);
+                    background-color: var(--message-time-background);
+                    padding: 0px 6px 0px 6px;
+                    z-index: 2;
+                    font-size: 12px;
+                    color: #fff;
+                    display: flex;
+                    align-items: center;
+                    -webkit-user-select: none;
+                    -moz-user-select: none;
+                    -ms-user-select: none;
+                    user-select: none;
+                    height: 1.125rem;
+                    line-height: 1}
+                .bubble .video-time.can-autoplay:after {
+                    content: "";
+                    padding: 0 1px 0 3px;
+                    font-size: 1.25rem;
+                    color: #fff}
                 // .grid {
                 //     width: 100%;
                 //     display: grid;
