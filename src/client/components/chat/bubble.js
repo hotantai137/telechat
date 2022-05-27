@@ -21,14 +21,18 @@ const MESSAGE_TYPE = {
 }
 function Bubble({dataBubble}){
     const giphyFetch = new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh");
+    const {heightGIF, setHeightGIF} = useState('200px');
+    const {widthGIF, setWidthGIF} = useState('200px');
     const GifComp = () => {        
         const [gif, setGif] = useState(null);
         useAsync(async () => {
         //   const { data } = await giphyFetch.gif("fpXxIjftmkk9y");
         const { data } = await giphyFetch.gif(dataBubble.message);
           setGif(data);
+          setHeightGIF(gif.images.fixed_height.height + 'px');
+          setWidthGIF(gif.images.fixed_height.width + 'px');
         }, []);
-        return gif && <Gif gif={gif} width={200} />;
+        return gif && <Gif gif={gif} width={gif.images.fixed_height.width} height={gif.images.fixed_height.height} />;
     }
     const renderBubble = () =>{
         switch(dataBubble.messageType){
@@ -177,7 +181,7 @@ function Bubble({dataBubble}){
         return(<>
             <div className={`bubble is-read is-message-empty video ${dataBubble.isOut ? "is-out" : "is-in"} ${dataBubble.isHideName ? "hide-name" : ""} is-group-first is-group-last`}>
                 <div className="bubble-content-wrapper">
-                    <div className="bubble-content" style={{width: "200px", height: "200px"}}>
+                    <div className="bubble-content" style={{width: widthGIF, height: heightGIF}}>
                         <div className="message" dir="auto">
                             <span className="time tgico">
                                 <span className="i18n">{dataBubble.sendTime}</span>
@@ -187,7 +191,7 @@ function Bubble({dataBubble}){
                             </span>
                         </div>
                         <div className="attachment media-container" data-doc-id="1592756632805186062" 
-                            style={{width: "200px", height: "214px"}}>
+                            style={{width: widthGIF, height: heightGIF}}>
                             <span className="video-time">GIF</span>
                             <GifComp/>
                         </div>
