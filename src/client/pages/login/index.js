@@ -19,17 +19,15 @@ function Login() {
     }    
 
     async function onLogin(){
-        try{
-            console.log(password);
-            const hashedPassword = window.btoa(password);
-           
-            const res = await authService.login(email, hashedPassword);
-            if(!res.success) return;
+        try{           
+            const res = await authService.login(email, password);
+            var data = res.data;
+            if(!data || data.code != 1) return;
   
             var today = new Date();   
             var tomorrow = new Date();
             tomorrow.setDate(today.getDate()+1);
-            setCookieUser('user-token', res.token, {
+            setCookieUser('user-token', data.accessToken, {
             expires: tomorrow,
             // maxAge: 3600 // Will expire after 1hr (value is in number of sec.)
             });
