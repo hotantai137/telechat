@@ -21,16 +21,19 @@ function Login() {
     async function onLogin(){
         try{           
             const res = await authService.login(email, password);
-            var data = res.data;
-            if(!data || data.code != 1) return;
+            if(!res || res.code != 1) return;
+
+            console.log(res);
+            localStorage.setItem('userInfo', JSON.stringify(res.data.user));
+            localStorage.setItem('accessToken', JSON.stringify(res.data.accessToken));
   
-            var today = new Date();   
-            var tomorrow = new Date();
-            tomorrow.setDate(today.getDate()+1);
-            setCookieUser('user-token', data.accessToken, {
-            expires: tomorrow,
-            // maxAge: 3600 // Will expire after 1hr (value is in number of sec.)
-            });
+            // var today = new Date();   
+            // var tomorrow = new Date();
+            // tomorrow.setDate(today.getDate()+1);
+            // setCookieUser('user-token', res.data.accessToken, {
+            // expires: tomorrow,
+            // // maxAge: 3600 // Will expire after 1hr (value is in number of sec.)
+            // });
             // this.props.history.push('/');
             navigate("/");
         }catch(error){

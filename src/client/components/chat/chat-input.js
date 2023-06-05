@@ -3,6 +3,7 @@ import sentIcon from '../../assets/image/sent-icon.png';
 import moment from 'moment';
 import imageService from '../../../api/services/image.js';
 import s3Service from '../../../api/services/s3.js';
+import messageService from '../../../api/services/message.js';
 
 const EmojiContainer = lazy(() => import("./emoji-container"));
 
@@ -16,8 +17,8 @@ function ChatInput(props){
     const [isShowMenuAttachment, setIsShowMenuAttachment] = useState(false);
 
     useEffect(()=>{
-        let contactList = JSON.parse(localStorage.getItem('contactList'));
-        let currentContact = contactList.find(x => x._id === props.selectedChatId);
+        let contactList = JSON.parse(localStorage.getItem('chatRoomList'));
+        let currentContact = contactList.find(x => x.chatRoomId === props.selectedChatId);
         setContact(currentContact);
 
     }, [props.selectedChatId]);
@@ -45,15 +46,15 @@ function ChatInput(props){
 
     function onInput(event){
         setIsTyping(event.target.innerHTML ? true : false);
-        let data = {
-            userName: userInfo.fullName,
-            socketId: props.socket.id,
-            roomId: contact.roomId
-        }
+        // let data = {
+        //     userName: userInfo.fullName,
+        //     socketId: props.socket.id,
+        //     roomId: contact.roomId
+        // }
         if(event.target.innerHTML.length > 0){
-            props.socket.emit('typing', data);
+            props.hubConnection.invoke("StartTyping", contact.userId, contact.chatRoomId);
         }else{
-            props.socket.emit('stopTyping', data);
+            props.hubConnection.invoke("StopTyping", contact.userId, contact.chatRoomId);
         }
     }
 
@@ -71,6 +72,18 @@ function ChatInput(props){
     }
 
     function onSend(input){
+        let inputEle = document.getElementById('input-message');
+        messageService.sendMessage({
+            ChatRoomId: contact.chatRoomId,
+            Type: getTypeMessage(inputEle.innerHTML),
+            Message: inputEle.innerHTML,
+            userId: contact.userId
+        });
+        input.textContent  = '';
+        setmessageContentList([]);
+        setIsTyping(false);
+        props.hubConnection.invoke("StopTyping", contact.userId, contact.chatRoomId);
+        input.focus();
         // let bubble = {
         //     date: moment().format('LL'),
         //     userName: userInfo.fullName,
@@ -90,58 +103,68 @@ function ChatInput(props){
         //     userId: userInfo._id
         // }
         if(input.innerHTML){
-            let data = {
-                message: splitMessage(),
-                type: 'text',
-                socketId: props.socket.id,
-                roomId: contact.roomId,
-                userId: userInfo._id,
-                userName: userInfo.fullName,
-                sendTime: new Date(),
-            }
+            // let data = {
+            //     message: splitMessage(),
+            //     type: 'text',
+            //     socketId: props.socket.id,
+            //     roomId: contact.roomId,
+            //     userId: userInfo._id,
+            //     userName: userInfo.fullName,
+            //     sendTime: new Date(),
+            // }
 
-            props.socket.emit('pushMessageToServer', data);
-            input.textContent  = '';
-            setmessageContentList([]);
-            setIsTyping(false);
-            input.focus();
+            // props.socket.emit('pushMessageToServer', data);
+            // input.textContent  = '';
+            // setmessageContentList([]);
+            // setIsTyping(false);
+            // input.focus();
 
-            let dataTyping = {
-                userName: userInfo.fullName,
-                socketId: props.socket.id,
-                roomId: contact.roomId
-            }
-            props.socket.emit('stopTyping', dataTyping);
+            // let dataTyping = {
+            //     userName: userInfo.fullName,
+            //     socketId: props.socket.id,
+            //     roomId: contact.roomId
+            // }
+            // props.socket.emit('stopTyping', dataTyping);
         }
     }
 
     function sendFile(filePath, type){        
-        let bubble = {
-            // date: moment().format('LL'),
-            userName: userInfo.fullName,
-            message: '',
-            sendTime: new Date(),
-            isOut: true,
-            isGroupFirst: true,
-            isGroupLast: true,
-            isHideName: false
-        }
-        let messageList = [
-            {
-                content: filePath,
-                index: 0,
-                contentType: type
-            }
-        ]
-        let data = {
-            messageBubble: bubble,
-            message: messageList,
-            type: 'image',
-            socketId: props.socket.id,
-            roomId: contact.roomId,
-            userId: userInfo._id
-        }
-        props.socket.emit('pushMessageToServer', data);
+        // let bubble = {
+        //     // date: moment().format('LL'),
+        //     userName: userInfo.fullName,
+        //     message: '',
+        //     sendTime: new Date(),
+        //     isOut: true,
+        //     isGroupFirst: true,
+        //     isGroupLast: true,
+        //     isHideName: false
+        // }
+        // let messageList = [
+        //     {
+        //         content: filePath,
+        //         index: 0,
+        //         contentType: type
+        //     }
+        // ]
+        // let data = {
+        //     messageBubble: bubble,
+        //     message: messageList,
+        //     type: 'image',
+        //     socketId: props.socket.id,
+        //     roomId: contact.roomId,
+        //     userId: userInfo._id
+        // }
+        // props.socket.emit('pushMessageToServer', data);
+
+        let urls = [];
+        urls.push(filePath);
+        messageService.sendMessage({
+            ChatRoomId: contact.chatRoomId,
+            Type: 3,
+            Message: '',
+            Urls: urls,
+            userId: contact.userId
+        });
     }
 
     function sendSticker(filePath, type){        
@@ -228,6 +251,22 @@ function ChatInput(props){
         }
 
         return messageList;
+    }
+
+    function getTypeMessage(message){
+        const arrEmoji = message.match(/<img[^>]*src="([^"]+)"[^>]*>/gm);
+        let messageText = message;
+        if(!arrEmoji || arrEmoji.length == 0) return 0;
+
+        arrEmoji.forEach(emoji => {
+            messageText = messageText.replace(emoji, '');
+        });
+
+        messageText = messageText.replace(' ', '');
+
+        if(messageText.length == 0) return 2;
+
+        return 1;
     }
 
     function onShowEmoji(){

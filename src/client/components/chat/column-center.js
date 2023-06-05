@@ -65,11 +65,11 @@ function ColumnCenter(props){
                         <SideBarHeaderMain 
                         removeSelectedChat={props.removeSelectedChat}
                         selectedChatId={props.selectedChatId}
-                        socket={props.socket}
+                        hubConnection={props.hubConnection}
                         />
-                        <Bubbles socket={props.socket}
+                        <Bubbles hubConnection={props.hubConnection}
                         selectedChatId={props.selectedChatId}/>
-                        <ChatInput socket={props.socket}
+                        <ChatInput hubConnection={props.hubConnection}
                         selectedChatId={props.selectedChatId}/>
                         </>
                     )

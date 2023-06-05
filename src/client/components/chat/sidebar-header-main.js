@@ -14,16 +14,17 @@ function SideBarHeaderMain(props){
         return contact;
     }
 
-    const isTypingListener = (data) => {
+    const isTypingListener = (roomId, userId) => {
         let currentContact = getContact();
-        if(currentContact && currentContact.roomId === data.roomId){
+        if(currentContact && currentContact.chatRoomId === roomId && currentContact.userId != userId){
             setIsTyping(true);
-            setTypingName(data.userName);
+            setTypingName('taiht');
         }        
       };
 
-    const isStopTypingListener = (data) => {
-        if(contact.roomId === data.roomId){
+    const isStopTypingListener = (roomId, userId) => {
+        let currentContact = getContact();
+        if(currentContact && currentContact.chatRoomId === roomId){
             setIsTyping(false);
             setTypingName('');
         }      
@@ -31,20 +32,23 @@ function SideBarHeaderMain(props){
 
     useEffect(() => {
         if(contact){
-            if(props.socket) props.socket.on('isTyping', isTypingListener);
-            if(props.socket) props.socket.on('stopTyping', isStopTypingListener);
+            props.hubConnection.off("StartTyping");
+            props.hubConnection.off("StopTyping");
+            props.hubConnection.on("StartTyping", (chatRoomId, userId) => {
+                isTypingListener(chatRoomId, userId);
+            });
+            props.hubConnection.on("StopTyping", (chatRoomId, userId) => {
+                isStopTypingListener(chatRoomId, userId);
+            });
         }
-    
-        return () => {
-            if(props.socket) props.socket.off('isTyping', isTypingListener);
-            if(props.socket) props.socket.off('stopTyping', isStopTypingListener);
-        };
-      }, [props.socket, contact]);
+      }, [contact]);
 
     const getCurrentContact = () => {
         if(!props.selectedChatId) return null;
-        let contactList = JSON.parse(localStorage.getItem('contactList'));
-        let currentContact = contactList.find(x => x._id === props.selectedChatId);
+        let chatRoomList = JSON.parse(localStorage.getItem('chatRoomList'));
+        // let contactList = JSON.parse(localStorage.getItem('contactList'));
+        let currentContact = chatRoomList.find(x => x.chatRoomId === props.selectedChatId);
+
         return currentContact;
     }
     const bottomInfo = () => {
@@ -56,12 +60,13 @@ function SideBarHeaderMain(props){
                             <span className="peer-typing-text-dot"></span>
                         </span>
                         <span className="i18n peer-typing-description">
-                            <span className="peer-title" dir="auto" data-peer-id="1659502781" data-only-first-name="1">{typingName}</span> 
-                            <>&nbsp;</> is typing
+                            {/* <span className="peer-title" dir="auto" data-peer-id="1659502781" data-only-first-name="1">{typingName}</span>  */}
+                            {/* <>&nbsp;</>  */}
+                            is typing
                         </span>
                     </span>)
         }else{
-            if(contact && contact.roomType === 'personal'){
+            if(contact && contact.chatRoomType === 0){
                 return (<><span className="i18n">last seen just now</span></>);
             }else{
                 return (<span>
@@ -87,7 +92,7 @@ function SideBarHeaderMain(props){
                     <div className="content">
                         <div className="top">
                             <div className="user-title">
-                                <span className="peer-title" dir="auto" data-peer-id="-1583302793" data-dialog="1">{contact ? contact.contactName : ''}</span>
+                                <span className="peer-title" dir="auto" data-peer-id="-1583302793" data-dialog="1">{contact ? contact.contactFirstName + ' ' + contact.contactLastName : ''}</span>
                             </div>
                         </div>
                         <div className="bottom">

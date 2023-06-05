@@ -81,8 +81,10 @@ function ColumnLeft(props){
                                     <div className='folders-tabs-scrollable menu-horizontal-scrollable hide'></div>
                                     <div className='tabs-container' id='folders-container' data-animation="tabs">
                                         <div className='scrollable scrollable-y tabs-tab chatlist-parts active' data-filter-id="0">
-                                            <ChatList socket={props.socket}
-                                                selectChatItem={selectChatItem}/>
+                                            {/* <ChatList socket={props.socket}
+                                                selectChatItem={selectChatItem}/> */}
+                                            <ChatList hubConnection={props.hubConnection}
+                                                selectChatItem={selectChatItem}/>                                                
                                         </div>
                                     </div>
                                 </div>

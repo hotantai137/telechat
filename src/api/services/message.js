@@ -1,22 +1,4 @@
-
-// Example POST method implementation:
-async function postData(url = '', data = {}, method = 'POST') {
-    // Default options are marked with *
-    const response = await fetch(url, {
-      method: 'POST', // *GET, POST, PUT, DELETE, etc.
-      mode: 'cors', // no-cors, *cors, same-origin
-      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: 'same-origin', // include, *same-origin, omit
-      headers: {
-        'Content-Type': 'application/json'
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      redirect: 'follow', // manual, *follow, error
-      referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-      body: JSON.stringify(data) // body data type must match "Content-Type" header
-    });
-    return response.json(); // parses JSON response into native JavaScript objects
-}
+import instance from '../api.js';
 
 const SERVER_HOSTNAME = window.location.hostname;
 const SERVER_PORT = 3000;
@@ -25,9 +7,21 @@ export default{
   // getConversationByRoomId: async (roomId) => {
   //       return await postData(`http://localhost:3000/room/${roomId}`, { messageText: message, userId: userId});
   //   },
-  getLastMessage: async () => {
-      const res = await fetch(`${SERVER_URL}/message/last-messages`);
-      let data = await res.json();
-      return data.messages;
+  // getLastMessage: async () => {
+  //     const res = await fetch(`${SERVER_URL}/message/last-messages`);
+  //     let data = await res.json();
+  //     return data.messages;
+  // }
+  getLastMessage: async (chatRoomId) => {
+    const url = `message/last-message?chatRoomId=${chatRoomId}`
+      var res = await instance.get(url);
+      return res.data;
+  },
+
+  sendMessage: async (data) => {
+    const url = 'message'
+    var res = await instance.post(url, data);
+    
+    return res.data;
   }
 }

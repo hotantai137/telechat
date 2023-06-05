@@ -9,7 +9,7 @@ function Bubbles(props){
     const [dataBubbles, setDataBubbles] = useState([]);
     const [data, setData] = useState([]);
     const messagesEndRef = useRef(null);
-    const [contact, setContact] = useState(null);
+    const [chatRoom, setChatRoom] = useState(null);
     const [userInfo, setUserInfo] = useState(null);
 
     const scrollToBottom = () => {
@@ -25,23 +25,19 @@ function Bubbles(props){
                 .value();
     }
 
-    const getContact = () => {
-        return contact;
-    }
-
-    const getCurrentContact = () => {
+    const getCurrentChatRoom = () => {
         if(!props.selectedChatId) return null;
-        let contactList = JSON.parse(localStorage.getItem('contactList'));
-        let currentContact = contactList.find(x => x._id === props.selectedChatId);
-        return currentContact;
+        let chatRoomList = JSON.parse(localStorage.getItem('chatRoomList'));
+        let currentChatRoom = chatRoomList.find(x => x.chatRoomId === props.selectedChatId);
+        return currentChatRoom;
     }
 
     const getConversationByRoom = (roomId) => {
         let preloaderElement = document.querySelector('.preloader-container.preloader-swing');
         preloaderElement.classList.add('is-visible');
-        chatRoomService.getConversationByRoomId(roomId)
+        chatRoomService.getChatRoomConversation(roomId)
         .then(res => {
-            return res.conversation;
+            return res.data;
         })
         .then(data => {
             let newDataBubbles = generateMessageBubbles(data);
@@ -49,10 +45,11 @@ function Bubbles(props){
             setData(groupDataBubbles(newDataBubbles));
             let dataLastMessage = {
                 messageBubble: newDataBubbles[newDataBubbles.length - 1],
-                socketId: props.socket.id,
+                // socketId: props.socket.id,
                 roomId: roomId
             }
-            props.socket.emit('lastMessageReceived', dataLastMessage);
+            // props.socket.emit('lastMessageReceived', dataLastMessage);
+            // props.hubConnection.invoke("ReceiveLastMessage", roomId, newDataBubbles[newDataBubbles.length - 1]);
             preloaderElement.classList.remove('is-visible');
         })
     }
@@ -75,36 +72,49 @@ function Bubbles(props){
         return bubbles;
     }
 
+    const listenerReceiveMessage = () => {
+        if(props.hubConnection){
+            props.hubConnection.off("ReceiveMessage");
+            props.hubConnection.on("ReceiveMessage", message => {
+                messageListener(message);
+              });
+        }
+    }
+
     const messageListener = (message) => {
-        let currentContact = getContact();
-        if(currentContact && currentContact.roomId === message.roomId){
-            let newData = dataBubbles;
-            let messageBubble = messageUtils.generateMessageBubble(message);
-            newData.push(messageBubble);
-            setData(groupDataBubbles(dataBubbles));
-            let dataLastMessage = {
-                messageBubble: messageBubble,
-                socketId: props.socket.id,
-                roomId: contact.roomId
-            }
-            props.socket.emit('lastMessageReceived', dataLastMessage);
+        let newData = dataBubbles;
+        let messageBubble = messageUtils.generateMessageBubbleFromServer(message);
+        newData.push(messageBubble);
+        setDataBubbles(newData);
+        setData(groupDataBubbles(newData));
+        props.hubConnection.invoke("ReceiveLastMessage", message.chatRoomId, messageBubble);
+        if(chatRoom && chatRoom.chatRoomId === message.chatRoomId){            
+            // let dataLastMessage = {
+            //     messageBubble: messageBubble,
+            //     socketId: props.socket.id,
+            //     roomId: chatRoom.chatRoomId
+            // }
+            // props.socket.emit('lastMessageReceived', dataLastMessage);
         }            
     };
 
-    useEffect(async ()=>{
-        let currentContact = await getCurrentContact();
-        setContact(currentContact);
-        getConversationByRoom(currentContact.roomId);
+    useEffect(() => {
+        listenerReceiveMessage();
+    }, [chatRoom, dataBubbles, data]);
+
+    useEffect(()=>{
+        let currentChatRoom = getCurrentChatRoom();
+        setChatRoom(currentChatRoom);        
+        getConversationByRoom(currentChatRoom.chatRoomId);
     }, [props.selectedChatId]);
 
     useEffect(() => {
         let user = JSON.parse(localStorage.getItem('userInfo'));
         setUserInfo(user);
-        setData(groupDataBubbles(dataBubbles));
     }, []);
 
     useEffect(() => {
-      
+        listenerReceiveMessage();      
         // const deleteMessageListener = (messageID) => {
         //   setMessages((prevMessages) => {
         //     const newMessages = {...prevMessages};
@@ -113,15 +123,15 @@ function Bubbles(props){
         //   });
         // };
       
-        if(props.socket) props.socket.on('receivedMessage', messageListener);
+        // if(props.socket) props.socket.on('receivedMessage', messageListener);
         // socket.on('deleteMessage', deleteMessageListener);
         // socket.emit('getMessages');
     
         return () => {
-            if(props.socket) props.socket.off('receivedMessage', messageListener);
+            // if(props.socket) props.socket.off('receivedMessage', messageListener);
             // props.socket.off('deleteMessage', deleteMessageListener);
         };
-      }, [props.socket, contact, dataBubbles]);
+      }, [props.hubConnection]);
 
     return <div className="bubbles scrolled-down">
         <div className="scrollable scrollable-y">
