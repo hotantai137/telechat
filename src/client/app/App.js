@@ -12,7 +12,7 @@ import bgAnimals from './../assets/image/bg-animals.png';
 function App() {
   console.log(routes);
   return (
-    <div className="App">
+    <>
       <Router>
         <Routes>
             {
@@ -27,7 +27,7 @@ function App() {
             }
         </Routes>
       </Router>      
-    </div>
+    </>
   );
 }
 

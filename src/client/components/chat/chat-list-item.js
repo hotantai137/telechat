@@ -72,32 +72,24 @@ function ChatListItem(props){
 
     const renderLastMessage = () =>{
         if(!lastMessage) return;
-        switch(lastMessage.type){
+        switch(lastMessage.messageType){
             case 'MEDIA_IMAGE': 
             return(<>
-                <span className="user-last-message" dir="auto">
-                    <div className="dialog-subtitle-media media-container" dangerouslySetInnerHTML={{__html: lastMessage.message}}>
-                        {/* <img className="media-photo" src={lastMessage.message[0].content}/> */}
-                    </div>
-                    <i><span className="i18n">&nbsp;Photo</span></i>
+                <div className="dialog-subtitle-media media-container" dangerouslySetInnerHTML={{__html: lastMessage.message}}></div>
+                <span>
+                    <span className="i18n">Photo</span>
                 </span>
             </>)
-            case 'STICKER':
+            case 'MESSAGE':
                 return(<>
-                    <span className="user-last-message" dir="auto">
-                        <span>
-                            <i><img src={lastMessage.filePath} className="emoji" alt="💨"/></i>
-                            <i><span className="i18n">&nbsp;Sticker</span></i>
-                        </span>
-                    </span>
+                    {lastMessage.message}
                 </>)
-            case 'GIF':
+            case 'MESSAGE_AND_EMOJI':
+            case 'EMOJI_1X':
+            case 'EMOJI_2X':
+            case 'EMOJI_3X':
                 return(<>
-                    <span className="user-last-message" dir="auto">
-                        <span>
-                            <i><span className="i18n">&nbsp;GIF</span></i>
-                        </span>
-                    </span>
+                    <div className="row-subtitle no-wrap" dangerouslySetInnerHTML={{__html: lastMessage.message}}></div>
                 </>)
             // case 'MESSAGE': 
             // case MESSAGE_TYPE.MESSAGE:
@@ -111,12 +103,39 @@ function ChatListItem(props){
         }
     }
 
- return <li className={`chatlist-chat rp is-muted ${props.isSelected ? "active" : ""}`} data-peer-id="-1583302793">
+ return <a className={`row no-wrap row-with-padding row-clickable hover-effect rp chatlist-chat chatlist-chat-bigger row-big ${props.isSelected ? "active" : ""}`} data-peer-id="-1583302793">
             <div className="c-ripple" onClick={() => {props.selectChatItem(props.chatItem.chatRoomId)}}></div>
-            <avatar-element dialog="1" peer="-1583302793" data-color="" className="avatar-relative dialog-avatar avatar-54">
+            <div className="row-row row-subtitle-row dialog-subtitle">
+                <div className="row-subtitle no-wrap" dir="auto">
+                    {renderLastMessage()}
+                </div>
+            </div>
+            <div className="row-row row-title-row dialog-title">
+                <div className="row-title no-wrap user-title tgico" dir="auto">
+                    <span className="peer-title" dir="auto" data-peer-id="777000" data-from-name="0" data-dialog="1" data-only-first-name="0" data-with-icons="1" data-thread-id="0">
+                        {props.chatItem.contactFirstName + " " + props.chatItem.contactLastName}
+                        {/* <span className="peer-title-inner" dir="auto">{props.chatItem.contactFirstName + " " + props.chatItem.contactLastName}</span>
+                        <span className="verified-icon tgico">
+                            <svg viewBox="0 0 26 26" width="26" height="26" className="verified-icon-svg">
+                                <use href="#verified-icon-check" className="verified-icon-check"></use>
+                                <use href="#verified-icon-background" className="verified-icon-background"></use>
+                            </svg>
+                        </span> */}
+                    </span>
+                </div>
+                <div className="row-title row-title-right row-title-right-secondary dialog-title-details">
+                    <span className="message-status sending-status">
+                        <i className="sending-status-icon tgico-checks"></i>
+                    </span>
+                    <span className="message-time">
+                        <span className="i18n" dir="auto">11:44 AM</span>
+                    </span>
+                </div>
+            </div>
+            <avatar-element dialog="1" peer="-1583302793" class="avatar-like dialog-avatar avatar-54 row-media row-media-bigger avatar-relative">
                 <img className="avatar-photo" src="https://www.thestreet.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cq_auto:good%2Cw_1200/MTgxNjM5MTEyMzM0MjU1ODg1/binance_logo2.png"/>
             </avatar-element>
-            <div className="user-caption">
+            {/* <div className="user-caption">
                 <p className="dialog-title">
                     <span className="user-title tgico">
                         <span className="peer-title" dir="auto" data-peer-id="-1583302793" data-from-name="0" data-dialog="1" data-only-first-name="0" data-plain-text="0">{props.chatItem.contactFirstName + " " + props.chatItem.contactLastName}</span>
@@ -132,8 +151,8 @@ function ChatListItem(props){
                     {renderLastMessage()}
                     <div className="dialog-subtitle-badge badge badge-24 is-visible unread">1451</div>
                 </div>
-            </div>
-        </li>
+            </div> */}
+        </a>
 }
  
 export default ChatListItem;

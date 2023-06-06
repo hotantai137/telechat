@@ -354,7 +354,7 @@ function ChatInput(props){
                     <div className="new-message-wrapper">
                         <button className="btn-icon tgico-none toggle-emoticons"
                         onClick={onShowEmoji}>
-                            <i className="far fa-smile"></i>
+                            {/* <i className="far fa-smile"></i> */}
                         </button>
                         <div className="input-message-container">
                             <div className="input-message-input scrollable scrollable-y i18n no-scrollbar"
@@ -368,19 +368,19 @@ function ChatInput(props){
                         </div>
                         <div className={`btn-icon btn-menu-toggle attach-file tgico-attach ${isShowMenuAttachment ? "menu-open" : ""}`}
                         onClick={onToggleMenuAttachMent}>
-                            <i className="far fa-paperclip"></i>
+                            {/* <i className="far fa-paperclip"></i> */}
                             {
                                 isShowMenuAttachment && (<div className="btn-menu-overlay"></div>)
                             }
                             
                             <div className={`btn-menu top-left ${isShowMenuAttachment ? "active" : ""}`}>
                                 <div className="btn-menu-item rp-overflow tgico-image rp" onClick={attachImage}>
-                                    <i className="fas fa-image"></i>
+                                    {/* <i className="fas fa-image"></i> */}
                                     <div className="c-ripple"></div>
                                     <span className="i18n btn-menu-item-text">Photo or Video</span>
                                 </div>
                                 <div className="btn-menu-item rp-overflow tgico-document rp">
-                                    <i className="fas fa-file"></i>
+                                    {/* <i className="fas fa-file"></i> */}
                                     <div className="c-ripple"></div>
                                     <span className="i18n btn-menu-item-text">Document</span>
                                 </div>
@@ -397,10 +397,12 @@ function ChatInput(props){
                 <div className="record-ripple"></div>
                 <button className={`btn-icon tgico-none btn-circle z-depth-1 btn-send animated-button-icon rp ${isTyping ? "send" : "record"}`}
                 onClick={onSend}>
-                    <span className="tgico tgico-send"><img src={sentIcon} style={{with: "24px", height: "24px", marginLeft: "5px"}}></img></span>
+                    <span className="tgico tgico-send">
+                        {/* <img src={sentIcon} style={{with: "24px", height: "24px", marginLeft: "5px"}}></img> */}
+                    </span>
                     <span className="tgico tgico-schedule"></span>
                     <span className="tgico tgico-check"></span>
-                    <span className="tgico tgico-microphone"><i className="fal fa-microphone"></i></span>
+                    <span class="tgico tgico-microphone_filled"></span>
                     <div className="c-ripple"></div>
                 </button>
                 {/* <div className="btn-menu menu-send top-left">

@@ -11,7 +11,8 @@ ReactDOM.render(
       <App />
     </React.Suspense>
   </React.Fragment>,
-  document.getElementById('root')
+  document.getElementsByClassName('animation-level-2')[0]
+  // document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function

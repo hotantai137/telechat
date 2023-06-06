@@ -7,7 +7,7 @@ const MESSAGE_TYPE = {
     EMOJI_1X: 'EMOJI_1X',
     EMOJI_2X: 'EMOJI_2X',
     EMOJI_3X: 'EMOJI_3X',
-    MEDIA_IMAGE: 'MEDIA_IMAGE',
+    MEDIA_IMAGE: 3,
     MEDIA_VIDEO: 'MEDIA_VIDEO',
     MEDIA_ALBUM: 'MEDIA_ALBUM',
     STICKER: 'STICKER',
@@ -16,7 +16,7 @@ const MESSAGE_TYPE = {
 const userInfo = JSON.parse(localStorage.getItem('userInfo'));
 export default{
     generateMessageBubble: (data) => {
-        if(!data || !data.message) return;
+        if(!data) return;
         if(!userInfo){
             userInfo = JSON.parse(localStorage.getItem('userInfo'));
         }
@@ -24,16 +24,16 @@ export default{
         let isOut = data.userId === userInfo.id ? true : false;
         // let isContentImage = data.type === MESSAGE.MESSAGE_TYPE.MESSAGE && data.message.some(e => e.contentType === 'image') ? true : false;
         // let isContentText = data.type === MESSAGE.MESSAGE_TYPE.MESSAGE && data.message.some(e => e.contentType === 'text') ? true : false;
-        let isContentImage = [MESSAGE_TYPE.MESSAGE_AND_EMOJI, MESSAGE_TYPE.EMOJI, MESSAGE_TYPE.MEDIA_IMAGE].includes(data.type) ? true : false;
+        let isContentEmoji = [MESSAGE_TYPE.MESSAGE_AND_EMOJI, MESSAGE_TYPE.EMOJI].includes(data.type) ? true : false;
         let isContentText = [MESSAGE_TYPE.MESSAGE_AND_EMOJI, MESSAGE_TYPE.MESSAGE].includes(data.type) ? true : false;
         let messageText = '';
-        let messageType = data.type === 'image' ? 'MEDIA_IMAGE' : '';
+        let messageType = data.type === MESSAGE_TYPE.MEDIA_IMAGE ? 'MEDIA_IMAGE' : '';
         let filePath = '';
-        if(isContentText && isContentImage){
+        if(isContentText && isContentEmoji){
             messageType = 'MESSAGE_AND_EMOJI';
         }else if(isContentText){
             messageType = 'MESSAGE';
-        }else if(isContentImage){
+        }else if(isContentEmoji){
             // const myRex = /<emoji\s*.*>\s*.*<\/emoji>/gm;
             // const myRex = /<img.*?src=[^\>]+>/gm;
             const myArray = data.message.match(/<img[^>]*src="([^"]+)"[^>]*>/gm);
@@ -55,8 +55,14 @@ export default{
         if(messageType === 'MESSAGE'){
             messageText = data.message;
         }else if(messageType === 'MEDIA_IMAGE'){
-            messageText = `<img class="media-photo" src="${data.message[0].content}">`;
-            filePath = data.message[0].content;
+            const arrImg = data.urls.split(';');
+            arrImg.forEach(imgUrl => {
+                if(imgUrl){
+                    messageText += `<img class="media-photo" src="${imgUrl}">`;
+                }
+            });
+            // messageText = `<img class="media-photo" src="${data.message[0].content}">`;
+            // filePath = data.message[0].content;
         }else if(messageType === 'STICKER'){
             messageText = `<img class="media-sticker" src="${data.message[0].content}"/>`;
             filePath = data.message[0].content;
@@ -91,22 +97,22 @@ export default{
         return bubble;
     },
     generateMessageBubbleFromServer: (data) => {
-        if(!data || !data.message) return;
+        if(!data) return;
         if(!userInfo){
             userInfo = JSON.parse(localStorage.getItem('userInfo'));
         }
 
         let isOut = data.userId === userInfo.id ? true : false;
-        let isContentImage = [MESSAGE_TYPE.MESSAGE_AND_EMOJI, MESSAGE_TYPE.EMOJI, MESSAGE_TYPE.MEDIA_IMAGE].includes(data.messageType) ? true : false;
+        let isContentEmoji = [MESSAGE_TYPE.MESSAGE_AND_EMOJI, MESSAGE_TYPE.EMOJI].includes(data.messageType) ? true : false;
         let isContentText = [MESSAGE_TYPE.MESSAGE_AND_EMOJI, MESSAGE_TYPE.MESSAGE].includes(data.messageType) ? true : false;
         let messageText = '';
-        let messageType = data.messageType === 'image' ? 'MEDIA_IMAGE' : '';
+        let messageType = data.messageType === MESSAGE_TYPE.MEDIA_IMAGE ? 'MEDIA_IMAGE' : '';
         let filePath = '';
-        if(isContentText && isContentImage){
+        if(isContentText && isContentEmoji){
             messageType = 'MESSAGE_AND_EMOJI';
         }else if(isContentText){
             messageType = 'MESSAGE';
-        }else if(isContentImage){
+        }else if(isContentEmoji){
             // const myRex = /<emoji\s*.*>\s*.*<\/emoji>/gm;
             // const myRex = /<img[^>]*src="([^"]+)"[^>]*>/gm;
             // const myArray = data.message.match(/<img [^>]*src="[^"]*"[^>]*>/gm);
@@ -129,8 +135,13 @@ export default{
         if(messageType === 'MESSAGE'){
             messageText = data.message;
         }else if(messageType === 'MEDIA_IMAGE'){
-            messageText = `<img class="media-photo" src="${data.message[0].content}">`;
-            filePath = data.message[0].content;
+            data.filePath.foreach(imgUrl => {
+                if(imgUrl){
+                    messageText += `<img class="media-photo" src="${imgUrl}">`;
+                }
+            });
+            // messageText = `<img class="media-photo" src="${data.message[0].content}">`;
+            // filePath = data.message[0].content;
         }else if(messageType === 'STICKER'){
             messageText = `<img class="media-sticker" src="${data.message[0].content}"/>`;
             filePath = data.message[0].content;
