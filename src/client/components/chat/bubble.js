@@ -34,17 +34,24 @@ function Bubble({dataBubble}){
         }, []);
         return gif && <Gif gif={gif} width={gif.images.fixed_height.width} height={gif.images.fixed_height.height} />;
     }
+    const calSizeEmoji = () => {
+        if(dataBubble.emojiCount <= 3){
+            return 96 - 6 * (dataBubble.emojiCount - 1);
+        }else if(dataBubble.emojiCount <= 6){
+            return 96 - 6 * 4 - 12 * (dataBubble.emojiCount - 4);
+        }else return 36;
+    }
     const renderBubble = () =>{
         switch(dataBubble.messageType){
             case MESSAGE_TYPE.MESSAGE: return renderMessage();
             case MESSAGE_TYPE.MESSAGE_AND_EMOJI: return renderMessage();
-            case MESSAGE_TYPE.EMOJI_1X: return renderEmoji1X();
-            case MESSAGE_TYPE.EMOJI_2X: return renderEmoji2X();
-            case MESSAGE_TYPE.EMOJI_3X: return renderEmoji3X();
+            case MESSAGE_TYPE.EMOJI_1X:
+            case MESSAGE_TYPE.EMOJI_2X:
+            case MESSAGE_TYPE.EMOJI_3X: return renderEmoji();
             case MESSAGE_TYPE.MEDIA_IMAGE: return renderImage();
             case MESSAGE_TYPE.GIF: return renderGif();
-            case MESSAGE_TYPE.MEDIA_VIDEO: return renderEmoji3X();
-            case MESSAGE_TYPE.MEDIA_ALBUM: return renderEmoji3X();
+            case MESSAGE_TYPE.MEDIA_VIDEO: return renderEmoji();
+            case MESSAGE_TYPE.MEDIA_ALBUM: return renderEmoji();
             case MESSAGE_TYPE.STICKER: return renderSticker();
         }
     }
@@ -78,12 +85,13 @@ function Bubble({dataBubble}){
                 </div>
             )
     }
-    const renderEmoji1X = () => {
+    const renderEmoji = () => {
         return (
-            <div className={`bubble emoji-1x is-message-empty emoji-big is-read can-have-big-emoji just-media ${dataBubble.isOut ? "is-out" : "is-in"} ${dataBubble.isHideName ? "hide-name" : ""} `} data-mid="8144224255" data-peer-id="520885308" data-timestamp="1604477469">
+            <div className={`bubble is-message-empty emoji-big is-read can-have-big-emoji just-media ${dataBubble.isOut ? "is-out" : "is-in"} ${dataBubble.isHideName ? "hide-name" : ""} `}
+            style={{"--emoji-size": calSizeEmoji().toString() + "px"}} data-mid="8144224255" data-peer-id="520885308" data-timestamp="1604477469">
                     <div className="bubble-content-wrapper">
-                        <div className="bubble-content">
-                            <div className="message" dir="auto">
+                        <div className="bubble-content" style={dataBubble.emojiCount == 1 ? {minWidth: "112px", minHeight: "112px"} : {}}>
+                            <div className="message spoilers-container" dir="auto">
                                 <span className="time tgico">
                                     <span className="i18n">{dataBubble.sendTime}</span>
                                     <div className="inner tgico" title="4 November 2020, 15:11:09">
@@ -91,45 +99,7 @@ function Bubble({dataBubble}){
                                     </div>
                                 </span>
                             </div>
-                            <div className="attachment" dangerouslySetInnerHTML={{__html: dataBubble.message}}></div>
-                        </div>
-                    </div>
-                </div>
-            )
-    }
-    const renderEmoji2X = () => {
-        return (
-            <div className={`bubble emoji-2x is-message-empty emoji-big is-read can-have-big-emoji just-media ${dataBubble.isOut ? "is-out" : "is-in"} ${dataBubble.isHideName ? "hide-name" : ""} `} data-mid="8144224255" data-peer-id="520885308" data-timestamp="1604477469">
-                    <div className="bubble-content-wrapper">
-                        <div className="bubble-content">
-                            <div className="message" dir="auto">
-                                <span className="time tgico">
-                                    <span className="i18n">{dataBubble.sendTime}</span>
-                                    <div className="inner tgico" title="4 November 2020, 15:11:09">
-                                        <span className="i18n">{dataBubble.sendTime}</span>
-                                    </div>
-                                </span>
-                            </div>
-                            <div className="attachment" dangerouslySetInnerHTML={{__html: dataBubble.message}}></div>
-                        </div>
-                    </div>
-                </div>
-            )
-    }
-    const renderEmoji3X = () => {
-        return (
-            <div className={`bubble emoji-3x is-message-empty emoji-big is-read can-have-big-emoji just-media ${dataBubble.isOut ? "is-out" : "is-in"} ${dataBubble.isHideName ? "hide-name" : ""} `} data-mid="8144224255" data-peer-id="520885308" data-timestamp="1604477469">
-                    <div className="bubble-content-wrapper">
-                        <div className="bubble-content">
-                            <div className="message" dir="auto">
-                                <span className="time tgico">
-                                    <span className="i18n">{dataBubble.sendTime}</span>
-                                    <div className="inner tgico" title="4 November 2020, 15:11:09">
-                                        <span className="i18n">{dataBubble.sendTime}</span>
-                                    </div>
-                                </span>
-                            </div>
-                            <div className="attachment" dangerouslySetInnerHTML={{__html: dataBubble.message}}></div>
+                            <div className="attachment spoilers-container" dangerouslySetInnerHTML={{__html: dataBubble.message}} style={dataBubble.emojiCount == 1 ? {width: "112px", height: "112px"} : {}}></div>
                         </div>
                     </div>
                 </div>

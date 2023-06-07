@@ -41,7 +41,7 @@ function EmojiContainer(props){
         imgEmoji.classList.add('emoji');
         if(input){
             input.appendChild(imgEmoji);
-        }                
+        }
     }
 
     function selectEmojiMenu(className){
@@ -59,6 +59,13 @@ function EmojiContainer(props){
 
     function selectGIF(id){
         props.selectGIF(id);
+    }
+
+    function deleteEmoji(){
+        let input = document.getElementById('input-message');
+        if(input && input.hasChildNodes()){
+            input.removeChild(input.lastChild);
+        }
     }
 
     return <>
@@ -218,9 +225,9 @@ function EmojiContainer(props){
                         </div>
                     </div>
                     <div className="tabs-tab stickers-padding">
-                        <div className="menu-wrapper">
+                        <div className="menu-wrapper emoticons-menu-wrapper">
                             <div className="scrollable scrollable-x">
-                                <nav className="menu-horizontal-div no-stripe justify-start">
+                                <nav className="menu-horizontal-div no-stripe justify-start emoticons-menu">
                                     <button className="menu-horizontal-div-item btn-icon tgico-recent"></button>
                                     <button className="btn-icon menu-horizontal-div-item media-sticker-wrapper active" data-doc-id="5987542576536750131">
                                         <img src="/stickers/duckduck2_png/29.png" className="media-sticker"/>
@@ -233,36 +240,34 @@ function EmojiContainer(props){
                         </div>
                         <div className="emoticons-content" id="content-stickers">
                             <div className="scrollable scrollable-y">
-                                <div className="stickers-categories">
-                                    <div className="sticker-category">
-                                        <div className="category-title">Mochi Cats @Angelsofdevils</div>
-                                        <div className="category-items super-stickers">
-                                            {
-                                                [...Array(119).keys()].map(emojiName => {
-                                                    return (
-                                                        <div className="grid-item super-sticker media-sticker-wrapper" key={emojiName}
-                                                            onClick={()=>selectSticker("/stickers/mochimochicats_png/" + emojiName + ".png")}>
-                                                            <img src={"/stickers/mochimochicats_png/" + emojiName + ".png" } className="media-sticker"/>
-                                                        </div>
-                                                        )
-                                                })
-                                            }
-                                        </div>
+                                <div className="emoji-category">
+                                    <div className="category-title">Mochi Cats @Angelsofdevils</div>
+                                    <div className="category-items super-stickers">
+                                        {
+                                            [...Array(119).keys()].map(emojiName => {
+                                                return (
+                                                    <div className="grid-item super-sticker media-sticker-wrapper" key={emojiName}
+                                                        onClick={()=>selectSticker("/stickers/mochimochicats_png/" + emojiName + ".png")}>
+                                                        <img src={"/stickers/mochimochicats_png/" + emojiName + ".png" } className="media-sticker"/>
+                                                    </div>
+                                                    )
+                                            })
+                                        }
                                     </div>
-                                    <div className="sticker-category">
-                                        <div className="category-title">Duck Duck by @susuimut</div>
-                                        <div className="category-items super-stickers">
-                                            {
-                                                [...Array(68).keys()].map(emojiName => {
-                                                    return (
-                                                        <div className="grid-item super-sticker media-sticker-wrapper" key={emojiName}
-                                                            onClick={()=>selectSticker("/stickers/duckduck2_png/" + emojiName + ".png")}>
-                                                            <img src={"/stickers/duckduck2_png/" + emojiName + ".png" } className="media-sticker"/>
-                                                        </div>
-                                                        )
-                                                })
-                                            }
-                                        </div>
+                                </div>
+                                <div className="emoji-category">
+                                    <div className="category-title">Duck Duck by @susuimut</div>
+                                    <div className="category-items super-stickers">
+                                        {
+                                            [...Array(68).keys()].map(emojiName => {
+                                                return (
+                                                    <div className="grid-item super-sticker media-sticker-wrapper" key={emojiName}
+                                                        onClick={()=>selectSticker("/stickers/duckduck2_png/" + emojiName + ".png")}>
+                                                        <img src={"/stickers/duckduck2_png/" + emojiName + ".png" } className="media-sticker"/>
+                                                    </div>
+                                                    )
+                                            })
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -292,8 +297,15 @@ function EmojiContainer(props){
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="emoji-tabs menu-horizontal-div no-stripe">
+        </div>
+        <div className="emoji-tabs menu-horizontal-div emoticons-menu no-stripe">
+            <button className="menu-horizontal-div-item emoji-tabs-search justify-self-start btn-icon tgico-search hide" data-tab="-1"></button>
+            <button className="menu-horizontal-div-item emoji-tabs-emoji btn-icon tgico-smile active" data-tab="0" onClick={()=>selectEmojiMenu('emoji-padding')}></button>
+            <button className="menu-horizontal-div-item emoji-tabs-stickers btn-icon tgico-stickers_face" data-tab="1" onClick={()=>selectEmojiMenu('stickers-padding')}></button>
+            <button className="menu-horizontal-div-item emoji-tabs-gifs btn-icon tgico-gifs" data-tab="2" onClick={()=>selectEmojiMenu('gifs-padding')}></button>
+            <button className="menu-horizontal-div-item emoji-tabs-delete justify-self-end btn-icon tgico-deleteleft" data-tab="-1" onClick={()=>deleteEmoji('gifs-padding')}></button>
+        </div>
+            {/* <div className="emoji-tabs menu-horizontal-div no-stripe">
                 <button className="menu-horizontal-div-item emoji-tabs-search justify-self-start btn-icon tgico-search rp hide" data-tab="-1">
                     <div className="c-ripple"><i className="far fa-smile"></i></div>
                 </button>
@@ -309,7 +321,7 @@ function EmojiContainer(props){
                 <button className="menu-horizontal-div-item emoji-tabs-delete justify-self-end btn-icon tgico-deleteleft rp" data-tab="-1">
                     <div className="c-ripple"><i className="far fa-smile"></i></div>
                 </button>
-            </div>
+            </div> */}
     </>
 }
 

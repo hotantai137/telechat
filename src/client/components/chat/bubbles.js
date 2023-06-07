@@ -33,7 +33,7 @@ function Bubbles(props){
     }
 
     const getConversationByRoom = (roomId) => {
-        let preloaderElement = document.querySelector('.preloader-container.preloader-swing');
+        let preloaderElement = document.querySelector('.bubbles .preloader-container.preloader-swing');
         preloaderElement.classList.add('is-visible');
         chatRoomService.getChatRoomConversation(roomId)
         .then(res => {

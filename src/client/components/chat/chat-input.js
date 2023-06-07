@@ -168,59 +168,47 @@ function ChatInput(props){
     }
 
     function sendSticker(filePath, type){        
-        let bubble = {
-            userName: userInfo.fullName,
-            message: '',
-            sendTime: new Date(),
-            isOut: true,
-            isGroupFirst: true,
-            isGroupLast: true,
-            isHideName: false
-        }
-        let messageList = [
-            {
-                content: filePath,
-                index: 0,
-                contentType: 'sticker'
-            }
-        ]
-        let data = {
-            messageBubble: bubble,
-            message: messageList,
-            type: 'sticker',
-            socketId: props.socket.id,
-            roomId: contact.roomId,
-            userId: userInfo._id
-        }
-        props.socket.emit('pushMessageToServer', data);
+        // let bubble = {
+        //     userName: userInfo.fullName,
+        //     message: '',
+        //     sendTime: new Date(),
+        //     isOut: true,
+        //     isGroupFirst: true,
+        //     isGroupLast: true,
+        //     isHideName: false
+        // }
+        // let messageList = [
+        //     {
+        //         content: filePath,
+        //         index: 0,
+        //         contentType: 'sticker'
+        //     }
+        // ]
+        // let data = {
+        //     messageBubble: bubble,
+        //     message: messageList,
+        //     type: 'sticker',
+        //     socketId: props.socket.id,
+        //     roomId: contact.roomId,
+        //     userId: userInfo._id
+        // }
+        // props.socket.emit('pushMessageToServer', data);
+
+        messageService.sendMessage({
+            ChatRoomId: contact.chatRoomId,
+            Type: 4,
+            Message: filePath,
+            userId: contact.userId
+        });
     }
 
     function sendGIF(gifId, type){        
-        let bubble = {
-            userName: userInfo.fullName,
-            message: '',
-            sendTime: new Date(),
-            isOut: true,
-            isGroupFirst: true,
-            isGroupLast: true,
-            isHideName: false
-        }
-        let messageList = [
-            {
-                content: gifId,
-                index: 0,
-                contentType: 'gif'
-            }
-        ]
-        let data = {
-            messageBubble: bubble,
-            message: messageList,
-            type: 'gif',
-            socketId: props.socket.id,
-            roomId: contact.roomId,
-            userId: userInfo._id
-        }
-        props.socket.emit('pushMessageToServer', data);
+        messageService.sendMessage({
+            ChatRoomId: contact.chatRoomId,
+            Type: 5,
+            Message: gifId,
+            userId: contact.userId
+        });
     }
 
     function splitMessage(){

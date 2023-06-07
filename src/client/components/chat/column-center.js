@@ -4,6 +4,7 @@ import { Cookies } from 'react-cookie';
 import SideBarHeaderMain from './sidebar-header-main';
 import Bubbles from './bubbles';
 import ChatInput from './chat-input';
+import MenuContext from './menu-context';
 import bgImage from './../../assets/image/bg-minimum.png';
 import bgAnimals from './../../assets/image/bg-animals.png';
 import bgNight from './../../assets/image/bg-night.png';
@@ -71,6 +72,7 @@ function ColumnCenter(props){
                         selectedChatId={props.selectedChatId}/>
                         <ChatInput hubConnection={props.hubConnection}
                         selectedChatId={props.selectedChatId}/>
+                        <MenuContext/>
                         </>
                     )
                 }

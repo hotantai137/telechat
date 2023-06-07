@@ -10,8 +10,8 @@ const MESSAGE_TYPE = {
     MEDIA_IMAGE: 3,
     MEDIA_VIDEO: 'MEDIA_VIDEO',
     MEDIA_ALBUM: 'MEDIA_ALBUM',
-    STICKER: 'STICKER',
-    GIF: 'GIF'
+    STICKER: 4,
+    GIF: 5
 }
 const userInfo = JSON.parse(localStorage.getItem('userInfo'));
 export default{
@@ -21,6 +21,7 @@ export default{
             userInfo = JSON.parse(localStorage.getItem('userInfo'));
         }
 
+        let emojiCount = 0;
         let isOut = data.userId === userInfo.id ? true : false;
         // let isContentImage = data.type === MESSAGE.MESSAGE_TYPE.MESSAGE && data.message.some(e => e.contentType === 'image') ? true : false;
         // let isContentText = data.type === MESSAGE.MESSAGE_TYPE.MESSAGE && data.message.some(e => e.contentType === 'text') ? true : false;
@@ -37,18 +38,11 @@ export default{
             // const myRex = /<emoji\s*.*>\s*.*<\/emoji>/gm;
             // const myRex = /<img.*?src=[^\>]+>/gm;
             const myArray = data.message.match(/<img[^>]*src="([^"]+)"[^>]*>/gm);
-            if(myArray.length === 1){
-                messageType = 'EMOJI_1X';
-            }else if(myArray.length === 2){
-                messageType = 'EMOJI_2X';
-            }else if(myArray.length === 3){
-                messageType = 'EMOJI_3X';
-            }else{
-                messageType = 'MESSAGE_AND_EMOJI';
-            }
-        }else if(data.type === 'sticker'){
+            emojiCount = myArray.length;
+            messageType = 'EMOJI_1X';
+        }else if(data.type == MESSAGE_TYPE.STICKER){
             messageType = 'STICKER';
-        }else if(data.type === 'gif'){
+        }else if(data.type === MESSAGE_TYPE.GIF){
             messageType = 'GIF';
         }
 
@@ -64,10 +58,9 @@ export default{
             // messageText = `<img class="media-photo" src="${data.message[0].content}">`;
             // filePath = data.message[0].content;
         }else if(messageType === 'STICKER'){
-            messageText = `<img class="media-sticker" src="${data.message[0].content}"/>`;
-            filePath = data.message[0].content;
+            messageText = `<img class="media-sticker" src="${data.message}"/>`;
         }else if(messageType === 'GIF'){
-            messageText = data.message[0].content;
+            messageText = data.message;
         }else{
             // let message = data.message.replace('<emoji>', '').replace('</emoji>', '');
             // messageText += `<img src="/emoji/${message}" alt="🙄" class="emoji" loading="lazy"/>`;
@@ -91,7 +84,8 @@ export default{
             isOut: isOut,
             isGroupFirst: true,
             isGroupLast: true,
-            isHideName: false
+            isHideName: false,
+            emojiCount: emojiCount
         };
 
         return bubble;
@@ -102,6 +96,7 @@ export default{
             userInfo = JSON.parse(localStorage.getItem('userInfo'));
         }
 
+        let emojiCount = 0;
         let isOut = data.userId === userInfo.id ? true : false;
         let isContentEmoji = [MESSAGE_TYPE.MESSAGE_AND_EMOJI, MESSAGE_TYPE.EMOJI].includes(data.messageType) ? true : false;
         let isContentText = [MESSAGE_TYPE.MESSAGE_AND_EMOJI, MESSAGE_TYPE.MESSAGE].includes(data.messageType) ? true : false;
@@ -117,18 +112,11 @@ export default{
             // const myRex = /<img[^>]*src="([^"]+)"[^>]*>/gm;
             // const myArray = data.message.match(/<img [^>]*src="[^"]*"[^>]*>/gm);
             const myArray = data.message.match(/<img[^>]*src="([^"]+)"[^>]*>/gm);
-            if(myArray.length === 1){
-                messageType = 'EMOJI_1X';
-            }else if(myArray.length === 2){
-                messageType = 'EMOJI_2X';
-            }else if(myArray.length === 3){
-                messageType = 'EMOJI_3X';
-            }else{
-                messageType = 'MESSAGE_AND_EMOJI';
-            }
-        }else if(data.messageType === 'sticker'){
+            emojiCount = myArray.length;
+            messageType = 'EMOJI_1X';
+        }else if(data.messageType == MESSAGE_TYPE.STICKER){
             messageType = 'STICKER';
-        }else if(data.messageType === 'gif'){
+        }else if(data.messageType === MESSAGE_TYPE.GIF){
             messageType = 'GIF';
         }
 
@@ -143,10 +131,9 @@ export default{
             // messageText = `<img class="media-photo" src="${data.message[0].content}">`;
             // filePath = data.message[0].content;
         }else if(messageType === 'STICKER'){
-            messageText = `<img class="media-sticker" src="${data.message[0].content}"/>`;
-            filePath = data.message[0].content;
+            messageText = `<img class="media-sticker" src="${data.message}"/>`;
         }else if(messageType === 'GIF'){
-            messageText = data.message[0].content;
+            messageText = data.message;
         }else{
             messageText += data.message;
             // let message = data.message.replace('<emoji>', '').replace('</emoji>', '');
@@ -170,7 +157,8 @@ export default{
             isOut: isOut,
             isGroupFirst: true,
             isGroupLast: true,
-            isHideName: false
+            isHideName: false,
+            emojiCount: emojiCount
         };
 
         return bubble;

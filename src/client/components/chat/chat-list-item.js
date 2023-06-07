@@ -11,7 +11,7 @@ const MESSAGE_TYPE = {
     MEDIA_IMAGE: 'MEDIA_IMAGE',
     MEDIA_VIDEO: 'MEDIA_VIDEO',
     MEDIA_ALBUM: 'MEDIA_ALBUM',
-    STICKER: 'STICKER',
+    STICKER: 4,
     GIF: 'GIF'
 }
 
@@ -83,6 +83,14 @@ function ChatListItem(props){
             case 'MESSAGE':
                 return(<>
                     {lastMessage.message}
+                </>)
+            case 'STICKER':
+                return(<>
+                    Sticker
+                </>)
+            case 'GIF':
+                return(<>
+                    GIF
                 </>)
             case 'MESSAGE_AND_EMOJI':
             case 'EMOJI_1X':
