@@ -55,9 +55,26 @@ function Bubble({dataBubble}){
             case MESSAGE_TYPE.STICKER: return renderSticker();
         }
     }
+    const showBubleContextmenu = (e) => {
+        var rightclick;
+        var e = window.event;
+        if (e.which) rightclick = (e.which == 3);
+        else if (e.button) rightclick = (e.button == 2);
+
+        if(rightclick){
+            let bubleContextmenuEle = document.getElementById('bubble-contextmenu');
+            let menuOverlayEle = document.getElementById('btn-menu-overlay');
+            if(bubleContextmenuEle){
+                bubleContextmenuEle.classList.add('active');
+            }
+
+            if(menuOverlayEle) bubleContextmenuEle.classList.add('btn-menu-overlay');
+        }        
+    }
     const renderMessage = () =>{
         return (
-            <div className={`bubble is-read ${dataBubble.isOut ? "is-out" : "is-in"} ${dataBubble.isHideName ? "hide-name" : ""} can-have-tail is-group-first is-group-last`} data-mid="8144224255" data-peer-id="520885308" data-timestamp="1604477469">
+            <div className={`bubble is-read ${dataBubble.isOut ? "is-out" : "is-in"} ${dataBubble.isHideName ? "hide-name" : ""} can-have-tail is-group-first is-group-last`} 
+            data-mid="8144224255" data-peer-id="520885308" data-timestamp="1604477469" onMouseDown={showBubleContextmenu}>
                     <div className="bubble-content-wrapper">
                         <div className="bubble-content">
                             <div className="message" dir="auto" >

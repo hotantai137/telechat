@@ -3,31 +3,31 @@ import {React, useEffect, useRef, useState } from 'react';
 function MenuContext(props){
     return(
         <>
-            <div className="btn-menu-overlay"></div>
-            <div className="btn-menu contextmenu bottom-right active was-open" id="bubble-contextmenu" style={{left: "1113px", top: "187px"}}>
-            <div className="btn-menu-item rp-overflow tgico-reply">
-                <span className="i18n btn-menu-item-text">Reply</span>
+            <div id="btn-menu-overlay"></div>
+            <div className="btn-menu contextmenu bottom-right was-open" id="bubble-contextmenu" style={{left: "1113px", top: "187px"}}>
+                <div className="btn-menu-item rp-overflow tgico-reply">
+                    <span className="i18n btn-menu-item-text">Reply</span>
+                </div>
+                <div className="btn-menu-item rp-overflow tgico-edit">
+                    <span className="i18n btn-menu-item-text">Edit</span>
+                </div>
+                <div className="btn-menu-item rp-overflow tgico-copy">
+                    <span className="i18n btn-menu-item-text">Copy</span>
+                </div>
+                <div className="btn-menu-item rp-overflow tgico-pin">
+                    <span className="i18n btn-menu-item-text">Pin</span>
+                </div>
+                <div className="btn-menu-item rp-overflow tgico-forward">
+                    <span className="i18n btn-menu-item-text">Forward</span>
+                </div>
+                <div className="btn-menu-item rp-overflow tgico-select">
+                    <span className="i18n btn-menu-item-text">Select</span>
+                </div>
+                <div className="btn-menu-item rp-overflow tgico-delete danger">
+                    <span className="i18n btn-menu-item-text">Delete</span>
+                </div>
             </div>
-            <div className="btn-menu-item rp-overflow tgico-edit">
-                <span className="i18n btn-menu-item-text">Edit</span>
-            </div>
-            <div className="btn-menu-item rp-overflow tgico-copy">
-                <span className="i18n btn-menu-item-text">Copy</span>
-            </div>
-            <div className="btn-menu-item rp-overflow tgico-pin">
-                <span className="i18n btn-menu-item-text">Pin</span>
-            </div>
-            <div className="btn-menu-item rp-overflow tgico-forward">
-                <span className="i18n btn-menu-item-text">Forward</span>
-            </div>
-            <div className="btn-menu-item rp-overflow tgico-select">
-                <span className="i18n btn-menu-item-text">Select</span>
-            </div>
-            <div className="btn-menu-item rp-overflow tgico-delete danger">
-                <span className="i18n btn-menu-item-text">Delete</span>
-            </div>
-            </div>
-            <div className="btn-menu-reactions-container btn-menu-reactions-container-vertical" style={{top: "375px", left: "1161px", "--menu-width": "234px"}}>
+            {/* <div className="btn-menu-reactions-container btn-menu-reactions-container-vertical" style={{top: "375px", left: "1161px", "--menu-width": "234px"}}>
             <div className="btn-menu-reactions is-visible">
                 <div className="scrollable scrollable-y no-scrollbar">
                     <div className="btn-menu-reactions-reaction">
@@ -763,7 +763,7 @@ function MenuContext(props){
                 </div>
                 <div className="inner-shadow"></div>
             </div>
-            </div>
+            </div> */}
         </>
     )
 }

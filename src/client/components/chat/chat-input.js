@@ -390,7 +390,7 @@ function ChatInput(props){
                     </span>
                     <span className="tgico tgico-schedule"></span>
                     <span className="tgico tgico-check"></span>
-                    <span class="tgico tgico-microphone_filled"></span>
+                    <span className="tgico tgico-microphone_filled"></span>
                     <div className="c-ripple"></div>
                 </button>
                 {/* <div className="btn-menu menu-send top-left">
